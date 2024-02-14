@@ -2,12 +2,25 @@
 <html>
 <head>
     <title>Chat with AI</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'chat/styles.css' %}">
 </head>
 <body>
-    <form method="post">
-        {% csrf_token %}
-        {{ form }}
-        <button type="submit">Submit</button>
-    </form>
+    <div id="chatbot-container">
+        <div class="chat-header">Carebot</div>
+        <div class="chat-greeting">Hi! I am Carebot. Please let me know any questions you have!</div>
+        <div id="chat-messages">
+        </div>
+        <form method="post" id="chat-form">
+            {% csrf_token %}
+            <div class="form-group">
+                {{ form.query }}
+                <button type="submit" class="btn-send">Send</button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+    </script>
 </body>
 </html>
