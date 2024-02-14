@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Chat with AI</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'chat/styles.css' %}">
+</head>
+<body>
+    <div id="chatbot-container">
+        <div class="chat-header">Carebot</div>
+        <div id="chat-messages">
+        </div>
+        <form method="post" id="chat-form">
+            {% csrf_token %}
+            <div class="form-group">
+                {{ form.query }}
+                <button type="submit" class="btn-send">Send</button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

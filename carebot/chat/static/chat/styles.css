@@ -1,0 +1,56 @@
+body, html {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    font-family: 'Roboto', sans-serif;
+    background-color: #f0f2f5;
+}
+
+#chatbot-container {
+    height: 100vh; /* Make the chat container take up the full viewport height */
+    width: 100vw; /* Make the chat container take up the full viewport width */
+    background-color: #fff;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.chat-header {
+    background-color: #4a76a8;
+    color: white;
+    padding: 20px;
+    font-size: 1.5em;
+}
+
+#chat-messages {
+    padding: 20px;
+    overflow-y: auto;
+    flex-grow: 1; /* Allows this section to expand and fill available space */
+}
+
+.form-group {
+    display: flex;
+    padding: 20px;
+    background-color: #f0f2f5;
+    border-top: 1px solid #ccc;
+}
+
+.form-group input[type="text"] {
+    flex-grow: 1;
+    margin-right: 10px;
+    border: 2px solid #0056b3;
+    border-radius: 20px;
+    padding: 10px;
+}
+
+.btn-send {
+    padding: 10px 15px;
+    border-radius: 20px;
+    background-color: #0056b3;
+    color: white;
+    cursor: pointer;
+}
+
+.btn-send:hover {
+    background-color: #0056b3;
+}
