@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Chat with AI</title>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        .message { margin: 10px; padding: 10px; border-radius: 5px; }
+        .user { background-color: #d1eaff; text-align: right; }
+        .ai { background-color: #f1f0f0; }
+        form { text-align: center; margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <div id="chat-container">
+        {% for message in chat_history %}
+            <div>
+                <p>{{ message.text }}</p>
+            </div>
+        {% endfor %}
+    </div>
+
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Send</button>
+    </form>
+</body>
+</html>
