@@ -1,23 +1,35 @@
+:root {
+    --primary-color: #4a76a8;
+    --accent-color: #0056b3;
+    --text-color: #f0f2f5;
+    --background-color: #fff;
+    --border-color: #ccc;
+    --user-text-color: #fff;
+    --user-bubble-color: var(--accent-color);
+    --ai-bubble-color: #f0f2f5;
+    --ai-text-color: #000;
+}
+
 body, html {
     height: 100%;
     margin: 0;
     padding: 0;
     font-family: 'Roboto', sans-serif;
-    background-color: #f0f2f5;
+    background-color: var(--background-color);
 }
 
 #chatbot-container {
     height: 100vh; /* Make the chat container take up the full viewport height */
     width: 100vw; /* Make the chat container take up the full viewport width */
-    background-color: #fff;
+    background-color: var(--border-color);
     display: flex;
     flex-direction: column;
     overflow: hidden;
 }
 
 .chat-header {
-    background-color: #4a76a8;
-    color: white;
+    background-color: var(--primary-color);
+    color: var(--text-color);
     padding: 20px;
     font-size: 1.5em;
 }
@@ -25,20 +37,42 @@ body, html {
 #chat-messages {
     padding: 20px;
     overflow-y: auto;
-    flex-grow: 1; /* Allows this section to expand and fill available space */
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.user-message {
+    align-self: flex-end;
+    background-color: var(--user-bubble-color);
+    color: var(--user-text-color);
+    margin-bottom: 10px;
+    padding: 10px;
+    border-radius: 10px;
+    margin-right: 4%;
+}
+
+.ai-message {
+    align-self: flex-start;
+    background-color: var(--ai-bubble-color);
+    color: var(--ai-text-color);
+    margin-bottom: 10px;
+    padding: 10px;
+    border-radius: 10px;
+    margin-left: 4%;
 }
 
 .form-group {
     display: flex;
     padding: 20px;
-    background-color: #f0f2f5;
+    background-color: var(--primary-color);
     border-top: 1px solid #ccc;
 }
 
 .form-group input[type="text"] {
     flex-grow: 1;
     margin-right: 10px;
-    border: 2px solid #0056b3;
+    border: 2px solid var(--border-color);
     border-radius: 20px;
     padding: 10px;
 }
@@ -46,11 +80,11 @@ body, html {
 .btn-send {
     padding: 10px 15px;
     border-radius: 20px;
-    background-color: #0056b3;
+    background-color: var(--accent-color);
     color: white;
     cursor: pointer;
 }
 
 .btn-send:hover {
-    background-color: #0056b3;
+    background-color: var(--border-color);
 }

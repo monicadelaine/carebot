@@ -15,4 +15,6 @@ CS 495 Senior Design Project
 7. In your web browser, go to [localhost:8000](localhost:8000).
 
 ## Making Changes
-If you make any changes to the files in or structure of the Django app, most changes will update automatically. Consult the Django documentation for commands to generate static files or make migrations.
+If you make any changes to the files in or structure of the Django app, most changes will update automatically. Consult the Django documentation for commands to generate static files. Use these commands if you alter `models.py`.
+1. Run `python carebot/manage.py makemigrations chat` in your pipenv.
+2. Run `python carebot/manage.py migrate chat` in your pipenv.
