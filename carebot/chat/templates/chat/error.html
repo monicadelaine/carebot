@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Error in Conversation</title>
+    <title>Error</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'chat/styles.css' %}">
 </head>
 <body>
     <p>Error: {{ error }}</p>
-    <a href="/">There was an error with the conversation.</a>
+    <a href="{% url 'home' %}">An error has occured. Click here to go to the homepage.</a>
 </body>
 </html>

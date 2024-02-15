@@ -88,3 +88,35 @@ body, html {
 .btn-send:hover {
     background-color: var(--border-color);
 }
+
+/* Homepage styles */
+#homepage-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background-color: var(--background-color);
+}
+
+.link-button {
+    padding: 10px 20px;
+    border-radius: 20px;
+    background-color: var(--accent-color);
+    color: var(--text-color);
+    /* cursor: pointer; */
+    text-decoration: none;
+    margin-top: 20px;
+}
+
+.link-button {
+    padding: 10px 15px;
+    border-radius: 20px;
+    background-color: var(--accent-color);
+    color: white;
+    cursor: pointer;
+}
+
+.link-button:hover {
+    background-color: var(--border-color);
+}
