@@ -12,6 +12,14 @@ def chat_view(request):
         if form.is_valid():
             client = OpenAI(api_key=settings.OPENAI_API_KEY)
             query = form.cleaned_data['query']
+
+            # If the user sends the same message twice in a row, don't send it to the chatbot.
+            if len(chat_history) >= 2 and query == chat_history[-2].text:
+                # Add the user's message to the chat history and then add the chatbot's last response again.
+                chat_history.append(Message.objects.create(from_user=True, text=query))
+                chat_history.append(Message.objects.create(from_user=False, text=chat_history[-2].text))
+                return render(request, 'chat/chat.html', {'form': form, 'chat_history': chat_history})
+
             try:
                 completion = client.chat.completions.create(
                     model="gpt-3.5-turbo",
@@ -32,5 +40,5 @@ def chat_view(request):
         form = QueryForm()
         
     # Fetch the conversation history, ordering by creation time
-    messages = Message.objects.all().order_by('created_at')
-    return render(request, 'chat/chat.html', {'form': form, 'messages': messages})
+    chat_history.sort(key=lambda x: x.created_at)
+    return render(request, 'chat/chat.html', {'form': form, 'chat_history': chat_history})
