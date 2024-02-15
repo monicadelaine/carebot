@@ -12,7 +12,6 @@ def chat_view(request):
         if form.is_valid():
             client = OpenAI(api_key=settings.OPENAI_API_KEY)
             query = form.cleaned_data['query']
-            print(f"query: {query}")
             try:
                 completion = client.chat.completions.create(
                     model="gpt-3.5-turbo",
@@ -25,16 +24,12 @@ def chat_view(request):
                 return render(request, 'chat/error.html', {'error': str(e)})    # TODO: make a proper error page
             
             chat_history.append(Message.objects.create(from_user=True, text=query))   # log user query
-            ai_response = completion.choices[0].message
+            ai_response = completion.choices[0].message.content
             chat_history.append(Message.objects.create(from_user=False, text=ai_response))   # log chatbot response
 
-            # return render(request, 'chat/response.html', {'response': completion.choices[0].message})
-            # return redirect('chat')
         return render(request, 'chat/chat.html', {'form': form, 'chat_history': chat_history})
     else:
         form = QueryForm()
-
-    # return render(request, 'chat/query.html', {'form': form})
         
     # Fetch the conversation history, ordering by creation time
     messages = Message.objects.all().order_by('created_at')
