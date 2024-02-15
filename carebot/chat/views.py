@@ -8,9 +8,6 @@ chat_history = []
 
 def chat_view(request):
     if request.method == 'POST':
-        # If chat_history is empty, send a welcome message from the chatbot
-        if not chat_history:
-            chat_history.append(Message.objects.create(from_user=False, text="Hello! I'm Carebot, a friendly robot here to help you find healthcare services in your area. What can I help you with today?"))
         form = QueryForm(request.POST)
         if form.is_valid():
             client = OpenAI(api_key=settings.OPENAI_API_KEY)
