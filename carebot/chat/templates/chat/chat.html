@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Chat with AI</title>
+    <title>Chat with Carebot</title>
     {% load static %}
     <link rel="stylesheet" href="{% static 'chat/styles.css' %}">
 </head>
 <body>
     <div id="chatbot-container">
-        <div class="chat-header">Carebot</div>
+        {% include "chat/header.html" %}
         <div id="chat-messages">
             {% for message in chat_history %}
                 {% if message.from_user == True %}

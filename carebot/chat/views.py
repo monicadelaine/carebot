@@ -1,14 +1,21 @@
-from django.shortcuts import render, redirect
-from .forms import QueryForm
-from openai import OpenAI
+from django import forms
 from django.conf import settings
+from django.shortcuts import redirect, render
+from django.template import RequestContext
+from openai import OpenAI
+
+from .forms import QueryForm
 from .models import Message
 
 chat_history = []
 
+class QueryFormNoAutofill(forms.Form):
+    query = forms.CharField(widget=forms.TextInput(attrs={'autocomplete': 'off'}))
+
 def chat_view(request):
     if request.method == 'POST':
-        form = QueryForm(request.POST)
+        form = QueryFormNoAutofill(request.POST)
+        
         if form.is_valid():
             client = OpenAI(api_key=settings.OPENAI_API_KEY)
             query = form.cleaned_data['query']
@@ -23,13 +30,15 @@ def chat_view(request):
             try:
                 completion = client.chat.completions.create(
                     model="gpt-3.5-turbo",
+                    # TODO: have the chatbot remember previous messages
                     messages=[
                         {"role": "system", "content": "You are a friendly assistant that helps connect users to healthcare services in their area based on their needs."},
+                        {"role": "system", "content": "Use only plain text, no HTML, markdown, or other formatting. Do not use \\n or other special characters."},
                         {"role": "user", "content": query}
                     ]
                 )
             except Exception as e:
-                return render(request, 'chat/error.html', {'error': str(e)})    # TODO: make a proper error page
+                return render(request, 'chat/error.html', {'error': "An error has occured."})
             
             chat_history.append(Message.objects.create(from_user=True, text=query))   # log user query
             ai_response = completion.choices[0].message.content
@@ -39,6 +48,22 @@ def chat_view(request):
     else:
         form = QueryForm()
         
-    # Fetch the conversation history, ordering by creation time
-    chat_history.sort(key=lambda x: x.created_at)
     return render(request, 'chat/chat.html', {'form': form, 'chat_history': chat_history})
+
+def error_view(request, *args):
+    return render(request, 'chat/error.html', {'error': 'Page not found.'})
+
+def home_view(request):
+    return render(request, 'chat/home.html')
+
+def dashboard_view(request):
+    return render(request, 'chat/dashboard.html')
+
+def handler404(request, exception, template_name="error.html"):
+    return render('chat/error.html', {'error': 'Page not found.'}, context_instance=RequestContext(request))
+
+def handler500(request, *args, **argv):
+    response = render('500.html', {},
+                                  context_instance=RequestContext(request))
+    response.status_code = 500
+    return response
