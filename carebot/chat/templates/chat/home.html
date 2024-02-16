@@ -5,9 +5,7 @@
     {% load static %}
     <link rel="stylesheet" href="{% static 'chat/styles.css' %}">
 </head>
-<div class="carebot-header">
-    <a href="{% url 'home' %}">Carebot</a>
-</div>
+{% include "chat/header.html" %}
 <body>
     <div id="home-container">
         <div class="home-header">
