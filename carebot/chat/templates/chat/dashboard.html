@@ -1,12 +1,19 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Carebot Homepage</title>
+    <title>Carebot Dashboard</title>
     {% load static %}
     <link rel="stylesheet" href="{% static 'chat/styles.css' %}">
 </head>
+<div class="carebot-header">
+    <a href="{% url 'home' %}">Carebot</a>
+</div>
 <body>
-    <h1>There is no dashboard yet.</h1>
-    <a href="{% url 'home' %}" class="link-button">Return to the homepage</a>
+    <div id="home-container">
+        <div class="home-header">
+            <h1>Dashboard</h1>
+        </div>
+        <p>This page is under construction.</p>
+    </div>
 </body>
 </html>

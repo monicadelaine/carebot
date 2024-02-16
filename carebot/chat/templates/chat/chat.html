@@ -7,7 +7,11 @@
 </head>
 <body>
     <div id="chatbot-container">
-        <div class="chat-header">Carebot</div>
+        <div class="carebot-header">
+            <a href="{% url 'home' %}">
+                Carebot
+            </a>
+        </div>
         <div id="chat-messages">
             {% for message in chat_history %}
                 {% if message.from_user == True %}

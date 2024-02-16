@@ -3,12 +3,17 @@ from .forms import QueryForm
 from openai import OpenAI
 from django.conf import settings
 from .models import Message
+from django import forms
 
 chat_history = []
 
+class QueryFormNoAutofill(forms.Form):
+    query = forms.CharField(widget=forms.TextInput(attrs={'autocomplete': 'off'}))
+
 def chat_view(request):
     if request.method == 'POST':
-        form = QueryForm(request.POST)
+        form = QueryFormNoAutofill(request.POST)
+        
         if form.is_valid():
             client = OpenAI(api_key=settings.OPENAI_API_KEY)
             query = form.cleaned_data['query']
@@ -23,8 +28,10 @@ def chat_view(request):
             try:
                 completion = client.chat.completions.create(
                     model="gpt-3.5-turbo",
+                    # TODO: have the chatbot remember previous messages
                     messages=[
                         {"role": "system", "content": "You are a friendly assistant that helps connect users to healthcare services in their area based on their needs."},
+                        {"role": "system", "content": "Use only plain text, no HTML, markdown, or other formatting. Do not use \\n or other special characters."},
                         {"role": "user", "content": query}
                     ]
                 )
@@ -39,8 +46,6 @@ def chat_view(request):
     else:
         form = QueryForm()
         
-    # Fetch the conversation history, ordering by creation time
-    chat_history.sort(key=lambda x: x.created_at)
     return render(request, 'chat/chat.html', {'form': form, 'chat_history': chat_history})
 
 def home_view(request):

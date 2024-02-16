@@ -1,13 +1,20 @@
 :root {
-    --primary-color: #4a76a8;
-    --accent-color: #0056b3;
-    --text-color: #f0f2f5;
-    --background-color: #fff;
+    --color-1: #f1dac4;
+    --color-2: #a69cac;
+    --color-3: #474973;
+    --color-4: #161b33;
+    --color-5: #0d0c1d;
+    --primary-color: var(--color-3);
+    --secondary-color: var(--color-2);
+    --tertiary-color: var(--color-1);
+    --accent-color: var(--color-4);
+    --text-color: var(--color-5);
+    --background-color: #e8e9ea;
     --border-color: #ccc;
     --user-text-color: #fff;
     --user-bubble-color: var(--accent-color);
-    --ai-bubble-color: #f0f2f5;
-    --ai-text-color: #000;
+    --ai-bubble-color: var(--color-2);
+    --ai-text-color: var(--color-5);
 }
 
 body, html {
@@ -15,23 +22,30 @@ body, html {
     margin: 0;
     padding: 0;
     font-family: 'Roboto', sans-serif;
-    background-color: var(--background-color);
+    background-color: var(--color-1);
 }
 
+.carebot-header {
+    background-color: var(--primary-color);
+    color: white;
+    padding: 20px;
+    font-size: 20pt;
+}
+
+.carebot-header a {
+    /* Remove the default link formatting */
+    color: white;
+    text-decoration: none;
+}
+
+/* Chatbot styles */
 #chatbot-container {
     height: 100vh; /* Make the chat container take up the full viewport height */
     width: 100vw; /* Make the chat container take up the full viewport width */
-    background-color: var(--border-color);
+    background-color: var(--background-color);
     display: flex;
     flex-direction: column;
     overflow: hidden;
-}
-
-.chat-header {
-    background-color: var(--primary-color);
-    color: var(--text-color);
-    padding: 20px;
-    font-size: 1.5em;
 }
 
 #chat-messages {
@@ -46,9 +60,12 @@ body, html {
     align-self: flex-end;
     background-color: var(--user-bubble-color);
     color: var(--user-text-color);
-    margin-bottom: 10px;
+    margin-bottom: 15px;
     padding: 10px;
-    border-radius: 10px;
+    padding-top: 3px;
+    padding-bottom: 3px;
+    border-radius: 15px;
+    margin-right: 10%;
     margin-right: 4%;
 }
 
@@ -56,10 +73,13 @@ body, html {
     align-self: flex-start;
     background-color: var(--ai-bubble-color);
     color: var(--ai-text-color);
-    margin-bottom: 10px;
+    margin-bottom: 15px;
     padding: 10px;
-    border-radius: 10px;
+    padding-top: 3px;
+    padding-bottom: 3px;
+    border-radius: 15px;
     margin-left: 4%;
+    margin-right: 10%;
 }
 
 .form-group {
@@ -89,23 +109,11 @@ body, html {
     background-color: var(--border-color);
 }
 
-/* Homepage styles */
-#home-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
-    width: 100vw;
-    background-color: var(--background-color);
-}
-
 .link-button {
     padding: 10px 20px;
     border-radius: 20px;
     background-color: var(--accent-color);
     color: var(--text-color);
-    /* cursor: pointer; */
     text-decoration: none;
     margin-top: 20px;
 }
@@ -120,4 +128,21 @@ body, html {
 
 .link-button:hover {
     background-color: var(--border-color);
+}
+
+/* Homepage styles */
+#home-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 70vh;
+    width: 100%;
+    background-color: var(--color-1);
+    overflow: auto;
+}
+
+#home-container p {
+    justify-self: center;
+    color: var(--text-color);
 }
