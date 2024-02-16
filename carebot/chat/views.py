@@ -1,9 +1,11 @@
-from django.shortcuts import render, redirect
-from .forms import QueryForm
-from openai import OpenAI
-from django.conf import settings
-from .models import Message
 from django import forms
+from django.conf import settings
+from django.shortcuts import redirect, render
+from django.template import RequestContext
+from openai import OpenAI
+
+from .forms import QueryForm
+from .models import Message
 
 chat_history = []
 
@@ -36,7 +38,7 @@ def chat_view(request):
                     ]
                 )
             except Exception as e:
-                return render(request, 'chat/error.html', {'error': str(e)})    # TODO: make a proper error page
+                return render(request, 'chat/error.html', {'error': "An error has occured."})
             
             chat_history.append(Message.objects.create(from_user=True, text=query))   # log user query
             ai_response = completion.choices[0].message.content
@@ -48,8 +50,20 @@ def chat_view(request):
         
     return render(request, 'chat/chat.html', {'form': form, 'chat_history': chat_history})
 
+def error_view(request, *args):
+    return render(request, 'chat/error.html', {'error': 'Page not found.'})
+
 def home_view(request):
     return render(request, 'chat/home.html')
 
 def dashboard_view(request):
     return render(request, 'chat/dashboard.html')
+
+def handler404(request, exception, template_name="error.html"):
+    return render('chat/error.html', {'error': 'Page not found.'}, context_instance=RequestContext(request))
+
+def handler500(request, *args, **argv):
+    response = render('500.html', {},
+                                  context_instance=RequestContext(request))
+    response.status_code = 500
+    return response

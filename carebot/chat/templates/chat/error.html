@@ -5,8 +5,11 @@
     {% load static %}
     <link rel="stylesheet" href="{% static 'chat/styles.css' %}">
 </head>
+{% include "chat/header.html" %}
 <body>
-    <p>Error: {{ error }}</p>
-    <a href="{% url 'home' %}">An error has occured. Click here to go to the homepage.</a>
+    <div id="home-container">
+        <p>Error: {{ error }}</p>
+        <a href="{% url 'home' %}" class="link-button">An error has occured. Click here to go to the homepage.</a>
+    </div>
 </body>
 </html>
