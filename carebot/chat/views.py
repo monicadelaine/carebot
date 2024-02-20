@@ -17,15 +17,12 @@ from .models import Message
 
 chat_history = []
 
-class QueryFormNoAutofill(forms.Form):
-    query = forms.CharField(widget=forms.TextInput(attrs={'autocomplete': 'off'}))
-
 def chat_view(request):
     # Initialize chat_history_ids from session or start with an empty list
     chat_history_ids = request.session.get('chat_history_ids', [])
 
     if request.method == 'POST':
-        form = QueryFormNoAutofill(request.POST)
+        form = forms.CharField(request.POST)
         
         if form.is_valid():
             client = OpenAI(api_key=settings.OPENAI_API_KEY)
@@ -41,6 +38,7 @@ def chat_view(request):
                     if last_ai_response:
                         return JsonResponse({'query': query, 'response': last_ai_response.text})
                     else:
+                        # This should never occur. It is a fallback.
                         return JsonResponse({'query': query, 'response': "Let's try something new."})
 
 
