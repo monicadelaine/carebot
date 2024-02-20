@@ -183,3 +183,46 @@ body, html {
     animation-delay: 0.6s; 
   }
   
+  .chat-bubble {
+    position: relative;
+    background-color: #f5f5f5;
+    border-radius: 16px;
+    padding: 10px 20px;
+    color: #333;
+    display: inline-block;
+    max-width: 200px;
+  }
+  
+  .elderly-person-bubble::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border: 15px solid transparent;
+    border-top-color: #f5f5f5;
+    border-bottom: 0;
+    margin-left: -15px;
+    margin-bottom: -15px;
+  }
+  
+  .computer-bubble::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    right: 50%;
+    width: 0;
+    height: 0;
+    border: 15px solid transparent;
+    border-top-color: #f5f5f5;
+    border-bottom: 0;
+    margin-right: -15px;
+    margin-bottom: -15px;
+  }
+
+  #elderly-person-image {
+    width: 300px; /* adjust as necessary */
+    margin: 20px 0;
+}
+  
