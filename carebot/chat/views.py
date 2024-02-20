@@ -1,16 +1,11 @@
-from django.http import JsonResponse
-from django.shortcuts import render
-from .forms import QueryForm
-from openai import OpenAI
 from django import forms
 from django.conf import settings
+from django.http import JsonResponse
 from django.shortcuts import redirect, render
 from django.template import RequestContext
-from openai import OpenAI
-from .models import Message
-import json
-from django.views.decorators.http import require_POST
 from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_POST
+from openai import OpenAI
 
 from .forms import QueryForm
 from .models import Message
