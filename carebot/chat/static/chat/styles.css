@@ -29,19 +29,18 @@ body, html {
     background-color: var(--primary-color);
     color: white;
     padding: 20px;
-    font-size: 20pt;
+    font-size: 30pt;
 }
 
 .carebot-header a {
-    /* Remove the default link formatting */
     color: white;
     text-decoration: none;
 }
 
 /* Chatbot styles */
 #chatbot-container {
-    height: 100vh; /* Make the chat container take up the full viewport height */
-    width: 100vw; /* Make the chat container take up the full viewport width */
+    height: 100vh; 
+    width: 100vw; 
     background-color: var(--background-color);
     display: flex;
     flex-direction: column;
@@ -146,3 +145,41 @@ body, html {
     justify-self: center;
     color: var(--text-color);
 }
+
+.dot {
+    display: inline-block;
+    width: 15px; 
+    height: 15px;
+    border-radius: 50%; 
+    background-color: var(--user-bubble-color);
+    margin: 0 5px; 
+  }
+  
+  /* Animation for the bouncing effect */
+  @keyframes bounce {
+    0%, 100% {
+      transform: translateY(0);
+      opacity: 0.8;
+    }
+    50% {
+      transform: translateY(-13px); 
+      opacity: 0.4;
+    }
+  }
+  
+  .dot:nth-child(1) {
+    animation: bounce 1.2s infinite;
+    animation-delay: 0.2s; 
+
+  }
+  
+  .dot:nth-child(2) {
+    animation: bounce 1.2s infinite;
+    animation-delay: 0.4s; 
+  }
+  
+  .dot:nth-child(3) {
+    animation: bounce 1.2s infinite;
+    animation-delay: 0.6s; 
+  }
+  

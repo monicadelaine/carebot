@@ -10,15 +10,9 @@
         {% include "chat/header.html" %}
         <div id="chat-messages">
             {% for message in chat_history %}
-                {% if message.from_user == True %}
-                    <div class="user-message">
-                        <p>{{ message.text }}</p>
-                    </div>
-                {% else %}
-                    <div class="ai-message">
-                        <p>{{ message.text }}</p>
-                    </div>
-                {% endif %}
+            <div class="{{ message.from_user|yesno:'user-message,ai-message' }}">
+                <p>{{ message.text }}</p>
+            </div>
             {% endfor %}
         </div>
         <form method="post" id="chat-form">
@@ -28,6 +22,23 @@
                 <button type="submit" class="btn-send">Send</button>
             </div>
         </form>
+        <div id="loading" style="display: none;">
+            <p><span class="dot"></span><span class="dot"></span><span class="dot"></span></p>
+        </div>
     </div>
+    <script src="{% static 'chat/chat.js' %}"></script>
+    <script>
+        window.addEventListener('beforeunload', function (e) {
+            // Cancel the event as stated by the standard.
+            e.preventDefault();
+        
+            // Chrome requires returnValue to be set.
+            e.returnValue = '';
+        
+            // Asynchronously clear the session
+            navigator.sendBeacon('/clear-session/', '');
+        });
+        </script>
+        
 </body>
 </html>

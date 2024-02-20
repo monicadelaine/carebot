@@ -1,8 +1,16 @@
+from django.http import JsonResponse
+from django.shortcuts import render
+from .forms import QueryForm
+from openai import OpenAI
 from django import forms
 from django.conf import settings
 from django.shortcuts import redirect, render
 from django.template import RequestContext
 from openai import OpenAI
+from .models import Message
+import json
+from django.views.decorators.http import require_POST
+from django.views.decorators.csrf import csrf_exempt
 
 from .forms import QueryForm
 from .models import Message
@@ -13,6 +21,9 @@ class QueryFormNoAutofill(forms.Form):
     query = forms.CharField(widget=forms.TextInput(attrs={'autocomplete': 'off'}))
 
 def chat_view(request):
+    # Initialize chat_history_ids from session or start with an empty list
+    chat_history_ids = request.session.get('chat_history_ids', [])
+
     if request.method == 'POST':
         form = QueryFormNoAutofill(request.POST)
         
@@ -20,12 +31,18 @@ def chat_view(request):
             client = OpenAI(api_key=settings.OPENAI_API_KEY)
             query = form.cleaned_data['query']
 
-            # If the user sends the same message twice in a row, don't send it to the chatbot.
-            if len(chat_history) >= 2 and query == chat_history[-2].text:
-                # Add the user's message to the chat history and then add the chatbot's last response again.
-                chat_history.append(Message.objects.create(from_user=True, text=query))
-                chat_history.append(Message.objects.create(from_user=False, text=chat_history[-2].text))
-                return render(request, 'chat/chat.html', {'form': form, 'chat_history': chat_history})
+            chat_history = Message.objects.filter(id__in=chat_history_ids).order_by('created_at')
+
+            # check for the last user query and AI response
+            if chat_history.exists():
+                last_user_message = chat_history.filter(from_user=True).last()
+                if last_user_message and query == last_user_message.text:
+                    last_ai_response = chat_history.filter(id__gt=last_user_message.id, from_user=False).first()
+                    if last_ai_response:
+                        return JsonResponse({'query': query, 'response': last_ai_response.text})
+                    else:
+                        return JsonResponse({'query': query, 'response': "Let's try something new."})
+
 
             try:
                 completion = client.chat.completions.create(
@@ -37,18 +54,38 @@ def chat_view(request):
                         {"role": "user", "content": query}
                     ]
                 )
+                ai_response = completion.choices[0].message.content
             except Exception as e:
-                return render(request, 'chat/error.html', {'error': "An error has occured."})
-            
-            chat_history.append(Message.objects.create(from_user=True, text=query))   # log user query
-            ai_response = completion.choices[0].message.content
-            chat_history.append(Message.objects.create(from_user=False, text=ai_response))   # log chatbot response
+                return JsonResponse({'error': str(e)}, status=500)
 
-        return render(request, 'chat/chat.html', {'form': form, 'chat_history': chat_history})
+            # create Messages objects for the user query and AI response
+            user_message = Message.objects.create(from_user=True, text=query)
+            ai_message = Message.objects.create(from_user=False, text=ai_response)
+
+            # append the new message IDs to chat_history_ids and save it back to the session
+            chat_history_ids.extend([user_message.id, ai_message.id])
+            request.session['chat_history_ids'] = chat_history_ids
+
+            return JsonResponse({'query': query, 'response': ai_response})
+
+        else:
+            return JsonResponse({'error': 'Form validation failed'}, status=400)
     else:
         form = QueryForm()
-        
+
+    # fetch the conversation history as Message objects from the database
+    chat_history = Message.objects.filter(id__in=chat_history_ids).order_by('created_at')
+
     return render(request, 'chat/chat.html', {'form': form, 'chat_history': chat_history})
+
+
+
+@require_POST
+@csrf_exempt
+def clear_session(request):
+    # clear the session
+    request.session.flush()
+    return JsonResponse({'status': 'session_cleared'})
 
 def error_view(request, *args):
     return render(request, 'chat/error.html', {'error': 'Page not found.'})
