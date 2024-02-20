@@ -134,11 +134,11 @@ body, html {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    height: 70vh;
+    justify-content: flex-start;
+    min-height: 100vh;
     width: 100%;
     background-color: var(--color-1);
-    overflow: auto;
+    overflow: auto; 
 }
 
 #home-container p {
