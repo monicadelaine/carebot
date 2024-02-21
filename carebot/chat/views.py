@@ -109,11 +109,10 @@ def home_view(request):
 def dashboard_view(request):
     return render(request, 'chat/dashboard.html')
 
-def handler404(request, exception, template_name="error.html"):
-    return render('chat/error.html', {'error': 'Page not found.'}, context_instance=RequestContext(request))
+# unused
+def handler404(request, *args):
+    return render(request, 'chat/error.html', {'error': 'Page not found.'})
 
-def handler500(request, *args, **argv):
-    response = render('500.html', {},
-                                  context_instance=RequestContext(request))
-    response.status_code = 500
-    return response
+# unused
+def handler500(request, *args):
+    return render(request, 'chat/error.html', {'error': 'An unknown error has occurred.'})

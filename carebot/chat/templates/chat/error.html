@@ -8,7 +8,7 @@
 {% include "chat/header.html" %}
 <body>
     <div id="home-container">
-        <p>Error: {{ error }}</p>
+        <!-- Do not display the specific error to the user. -->
         <a href="{% url 'home' %}" class="link-button">An error has occured. Click here to go to the homepage.</a>
     </div>
 </body>
