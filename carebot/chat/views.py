@@ -8,7 +8,7 @@ from django.views.decorators.http import require_POST
 from openai import OpenAI
 
 from .forms import QueryForm
-from .models import Message
+from .models import Message, MessageType
 
 chat_history = []
 
@@ -30,9 +30,9 @@ def chat_view(request):
 
             # check for the last user query and AI response
             if chat_history.exists():
-                last_user_message = chat_history.filter(from_user=True).last()
+                last_user_message = chat_history.filter(message_type=MessageType.USER).last()
                 if last_user_message and query == last_user_message.text:
-                    last_ai_response = chat_history.filter(id__gt=last_user_message.id, from_user=False).first()
+                    last_ai_response = chat_history.filter(id__gt=last_user_message.id, message_type=MessageType.CHATBOT).first()
                     if last_ai_response:
                         return JsonResponse({'query': query, 'response': last_ai_response.text})
                     else:
@@ -47,14 +47,15 @@ def chat_view(request):
             if chat_history.exists():   # add the previous 6 messages to the messages_parameter, limiting token usage
                 for message in chat_history.order_by('created_at').reverse()[:6][::-1]: # a very ugly way to reverse the last 6 messages
                     # TODO: update when error messages are saved in chat history
-                    if message.from_user:
+                    if message.message_type == MessageType.USER:
                         messages_parameter.append({"role": "user", "content": message.text})
-                    else:
+                    elif message.message_type == MessageType.CHATBOT:
                         messages_parameter.append({"role": "assistant", "content": message.text})
+                    # leave out system messages
 
             messages_parameter.append({"role": "user", "content": query})
             # create Messages object for the user query
-            user_message = Message.objects.create(from_user=True, text=query)   # this must be done before the AI response is generated to maintain the order of messages
+            user_message = Message.objects.create(message_type=MessageType.USER, text=query)   # this must be done before the AI response is generated to maintain the order of messages
 
             try:
                 completion = client.chat.completions.create(
@@ -63,19 +64,27 @@ def chat_view(request):
                 )
                 ai_response = completion.choices[0].message.content
             except Exception as e:
-                return JsonResponse({'error': str(e)}, status=500)
+                # create Messages object for the error
+                error_message = Message.objects.create(message_type=MessageType.SYSTEM, text="There was an error processing your request. Please try again.")
+                chat_history_ids.extend([error_message.id,])
+                print(str(error_message))
+                print(chat_history_ids)
+                request.session['chat_history_ids'] = chat_history_ids + [error_message.id]
+                return JsonResponse({'query': query, 'response': error_message.text})
+                # return JsonResponse({'error': str(e)}, status=500)
 
             # create Messages object for the AI response
-            ai_message = Message.objects.create(from_user=False, text=ai_response)
+            ai_message = Message.objects.create(message_type=MessageType.CHATBOT, text=ai_response)
 
             # append the new message IDs to chat_history_ids and save it back to the session
             chat_history_ids.extend([user_message.id, ai_message.id])
-            request.session['chat_history_ids'] = chat_history_ids
+            request.session['chat_history_ids'] = chat_history_ids + [user_message.id, ai_message.id]
 
             return JsonResponse({'query': query, 'response': ai_response})
 
         else:
             return JsonResponse({'error': 'Form validation failed'}, status=400)
+
     else:
         form = QueryForm()
 
@@ -83,8 +92,6 @@ def chat_view(request):
     chat_history = Message.objects.filter(id__in=chat_history_ids).order_by('created_at')
 
     return render(request, 'chat/chat.html', {'form': form, 'chat_history': chat_history})
-
-
 
 @require_POST
 @csrf_exempt
