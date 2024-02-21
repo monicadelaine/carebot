@@ -37,9 +37,14 @@ document.addEventListener('DOMContentLoaded', function() {
             // remove loading message
             chatMessages.removeChild(loadingMessageDiv);
             
-            // insert AI response message
+            // insert AI or system response message
             const aiMessageDiv = document.createElement('div');
-            aiMessageDiv.className = 'ai-message'; // Adjust this class as needed for styling
+            // TODO: set message class based on the message_type value of the Message model
+            if (data.response === 'There was an error processing your request. Please try again.') {
+                aiMessageDiv.className = 'system-message';
+            } else {
+                aiMessageDiv.className = 'ai-message'; // Adjust this class as needed for styling
+            }
             aiMessageDiv.innerHTML = `<p>${data.response}</p>`;
             chatMessages.appendChild(aiMessageDiv);
         

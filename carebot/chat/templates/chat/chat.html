@@ -10,9 +10,21 @@
         {% include "chat/header.html" %}
         <div id="chat-messages">
             {% for message in chat_history %}
-            <div class="{{ message.from_user|yesno:'user-message,ai-message' }}">
-                <p>{{ message.text }}</p>
-            </div>
+                {% if message.message_type == 0 %}
+                <div class="user-message">
+                    <p>{{ message.text }}</p>
+                </div>
+                {% endif %}
+                {% if message.message_type == 1 %}
+                <div class="ai-message">
+                    <p>{{ message.text }}</p>
+                </div>
+                {% endif %}
+                {% if message.message_type == 2 %}
+                <div class="system-message">
+                    <p>{{ message.text }}</p>
+                </div>
+                {% endif %}
             {% endfor %}
         </div>
         <form method="post" id="chat-form">
