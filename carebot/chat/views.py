@@ -39,23 +39,33 @@ def chat_view(request):
                         # This should never occur. It is a fallback.
                         return JsonResponse({'query': query, 'response': "Let's try something new."})
 
+            messages_parameter = [
+                {"role": "system", "content": "You are a friendly assistant that helps connect users to healthcare services in their area based on their needs."},
+                {"role": "system", "content": "Use only plain text, no HTML, markdown, or other formatting. Do not use \\n or other special characters."},
+                # All additional AI instructions should be added here.
+            ]
+            if chat_history.exists():   # add the previous 6 messages to the messages_parameter, limiting token usage
+                for message in chat_history.order_by('created_at').reverse()[:6][::-1]: # a very ugly way to reverse the last 6 messages
+                    # TODO: update when error messages are saved in chat history
+                    if message.from_user:
+                        messages_parameter.append({"role": "user", "content": message.text})
+                    else:
+                        messages_parameter.append({"role": "assistant", "content": message.text})
+
+            messages_parameter.append({"role": "user", "content": query})
+            # create Messages object for the user query
+            user_message = Message.objects.create(from_user=True, text=query)   # this must be done before the AI response is generated to maintain the order of messages
 
             try:
                 completion = client.chat.completions.create(
                     model="gpt-3.5-turbo",
-                    # TODO: have the chatbot remember previous messages
-                    messages=[
-                        {"role": "system", "content": "You are a friendly assistant that helps connect users to healthcare services in their area based on their needs."},
-                        {"role": "system", "content": "Use only plain text, no HTML, markdown, or other formatting. Do not use \\n or other special characters."},
-                        {"role": "user", "content": query}
-                    ]
+                    messages=messages_parameter,    # uses system directions, previous messages, and the latest user message
                 )
                 ai_response = completion.choices[0].message.content
             except Exception as e:
                 return JsonResponse({'error': str(e)}, status=500)
 
-            # create Messages objects for the user query and AI response
-            user_message = Message.objects.create(from_user=True, text=query)
+            # create Messages object for the AI response
             ai_message = Message.objects.create(from_user=False, text=ai_response)
 
             # append the new message IDs to chat_history_ids and save it back to the session
