@@ -18,6 +18,9 @@ document.addEventListener('DOMContentLoaded', function() {
         loadingMessageDiv.innerHTML = `<p><span class="dot"></span><span class="dot"></span><span class="dot"></span></p>`;
         chatMessages.appendChild(loadingMessageDiv);
         chatMessages.scrollTop = chatMessages.scrollHeight; // Auto-scroll to the latest message
+        // Check for SQL message, kept for dev purposes
+        const isSqlCheckbox = document.getElementById('is_sql');
+        formData.append('is_sql', isSqlCheckbox.checked ? 'True' : 'False');
         
         fetch('/chat/', { 
             method: 'POST',
@@ -36,7 +39,7 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(data => {
             // remove loading message
             chatMessages.removeChild(loadingMessageDiv);
-            
+
             // insert AI or system response message
             const aiMessageDiv = document.createElement('div');
             // TODO: set message class based on the message_type value of the Message model

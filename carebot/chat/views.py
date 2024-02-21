@@ -6,14 +6,18 @@ from django.template import RequestContext
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 from openai import OpenAI
+from django.db import connection
 
 from .forms import QueryForm
 from .models import Message, MessageType
+import logging
 
+logger = logging.getLogger(__name__)
 chat_history = []
 
 class QueryFormNoAutofill(forms.Form):
     query = forms.CharField(widget=forms.TextInput(attrs={'autocomplete': 'off'}))
+    is_sql = forms.BooleanField(required=False, widget=forms.CheckboxInput())
 
 def chat_view(request):
     # Initialize chat_history_ids from session or start with an empty list
@@ -23,6 +27,28 @@ def chat_view(request):
         form = QueryFormNoAutofill(request.POST)
         
         if form.is_valid():
+            query = form.cleaned_data.get('query', '') 
+
+            is_sql = form.cleaned_data.get('is_sql', False)
+            ### Commented out the sql stuff
+            """
+            if is_sql:
+                # do SQL query
+                try:
+                    with connection.cursor() as cursor:
+                        logger.info(f"Executing SQL query: {query}")
+                        cursor.execute(query)
+                        rows = cursor.fetchall()
+                        response_text = str(rows) 
+                        logger.info(f"SQL query result: {response_text}")
+                except Exception as e:
+                    response_text = f"Error executing SQL: {str(e)}"
+                    logger.error(response_text)
+                
+                return JsonResponse({'query': query, 'response': response_text})
+            else:
+            """
+            ###
             client = OpenAI(api_key=settings.OPENAI_API_KEY)
             query = form.cleaned_data['query']
 

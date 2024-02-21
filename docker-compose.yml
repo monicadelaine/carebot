@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  postgis:
+    image: postgis/postgis:latest
+    environment:
+      POSTGRES_DB: carebotdb
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgis_data:/var/lib/postgresql/data
+
+  carebot:
+    build: .
+    command: python carebot/manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+    depends_on:
+      - postgis
+    environment:
+      DATABASE_HOST: postgis
+      DATABASE_NAME: carebotdb
+      DATABASE_USER: user
+      DATABASE_PASSWORD: password
+      DATABASE_PORT: 5432
+
+volumes:
+  postgis_data:

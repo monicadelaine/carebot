@@ -87,10 +87,15 @@ WSGI_APPLICATION = 'carebot.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.contrib.gis.db.backends.postgis',
+        'NAME': os.getenv('DATABASE_NAME', 'carebotdb'),  # Default value if not set
+        'USER': os.getenv('DATABASE_USER', 'user'),  # Default value if not set
+        'PASSWORD': os.getenv('DATABASE_PASSWORD', 'password'),  # Default value if not set
+        'HOST': os.getenv('DATABASE_HOST', 'postgis'),  # Default value if not set
+        'PORT': os.getenv('DATABASE_PORT', '5432'),  # Default value if not set
     }
 }
 
@@ -113,6 +118,22 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'loggers': {
+        'carebot.chat.views': {
+            'handlers': ['console'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+    },
+}
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
