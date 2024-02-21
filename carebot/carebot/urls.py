@@ -21,3 +21,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('chat.urls')),
 ]
+
+handler404 = 'chat.views.error_view'
+handler500 = 'chat.views.error_view'
