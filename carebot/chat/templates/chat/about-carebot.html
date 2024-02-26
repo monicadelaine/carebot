@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>About Carebot</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'chat/styles.css' %}">
+</head>
+{% include "chat/header.html" %}
+<body>
+    <div id="home-container">
+        <div class="home-header">
+            <h1>About Carebot</h1>
+        </div>
+        <a href="{% url 'about-us' %}" class="link-button">About the Carebot Team</a>
+        <a href="{% url 'deliverables' %}" class="link-button">Carebot Team Deliverables</a>
+    </div>
+</body>
+</html>

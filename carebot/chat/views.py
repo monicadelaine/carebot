@@ -40,7 +40,7 @@ def chat_view(request):
                         return JsonResponse({'query': query, 'response': "Let's try something new."})
 
             messages_parameter = [
-                {"role": "system", "content": "You are a friendly assistant that helps connect users to healthcare services in their area based on their needs."},
+                {"role": "system", "content": "You are a friendly assistant that helps connect Alabama residents users to healthcare services in Alabama based on their needs. If the user is looking for healthcare outside of Alabama, tell them you cannot help."},
                 {"role": "system", "content": "Use only plain text, no HTML, markdown, or other formatting. Do not use \\n or other special characters."},
                 # All additional AI instructions should be added here.
             ]
@@ -108,6 +108,15 @@ def home_view(request):
 
 def dashboard_view(request):
     return render(request, 'chat/dashboard.html')
+
+def about_carebot_view(request):
+    return render(request, 'chat/about-carebot.html')
+
+def about_us_view(request):
+    return render(request, 'chat/about-us.html')
+
+def deliverables_view(request):
+    return render(request, 'chat/deliverables.html')
 
 # unused
 def handler404(request, *args):
