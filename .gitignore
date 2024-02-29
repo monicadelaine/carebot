@@ -160,3 +160,4 @@ cython_debug/
 #.idea/
 
 migrate_and_host.bat
+Pipfile.lock

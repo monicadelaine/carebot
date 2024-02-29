@@ -2,20 +2,12 @@
 CS 495 Senior Design Project
 
 ## Prerequisites
-1. Python 3.12+
-2. pipenv
-3. Docker
+1. Docker
 
 ## Setup
 1. Clone the repository.
 2. Create a file called `.env` in the root of the repository.
 3. Add the following text to `.env`. Place your OpenAI API key between the quotation marks. `OPENAI_API_KEY=""`
-4. Set up the pipenv by running `pipenv install` in the root of your repository.
-
-## Hosting Locally without Docker
-1. Enter the virtual environment by running `pipenv shell`. (To exit, type `exit`.)
-2. Run `python carebot/manage.py runserver`.
-3. In your web browser, go to [localhost:8000](localhost:8000).
 
 ## Hosting Locally with Docker
 1. If you have made any changes to the files, you must run this command to create the Docker image again: `docker build -t carebot-app .`

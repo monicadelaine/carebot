@@ -1,5 +1,8 @@
 {% load static %}
 <link rel="stylesheet" href="{% static 'chat/styles.css' %}">
 <div class="carebot-header">
-    <a href="{% url 'home' %}">Carebot</a>
+    <a href="{% url 'home' %}">
+        <img src="/static/chat/home_icon.png" alt="Home Icon" class="home-icon">
+    </a>
+    <h1>Carebot</h1>
 </div>

@@ -138,6 +138,15 @@ def home_view(request):
 def dashboard_view(request):
     return render(request, 'chat/dashboard.html')
 
+def about_carebot_view(request):
+    return render(request, 'chat/about-carebot.html')
+
+def about_us_view(request):
+    return render(request, 'chat/about-us.html')
+
+def deliverables_view(request):
+    return render(request, 'chat/deliverables.html')
+
 # unused
 def handler404(request, *args):
     return render(request, 'chat/error.html', {'error': 'Page not found.'})
