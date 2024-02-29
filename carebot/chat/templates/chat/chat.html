@@ -51,6 +51,7 @@
 
             // Asynchronously clear the session
             navigator.sendBeacon('/clear-session/', data);
+            return  // Do not alert the user about leaving the page
         });
     </script>
         
