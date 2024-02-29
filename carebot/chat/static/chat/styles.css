@@ -39,7 +39,8 @@ footer {
 .carebot-header {
     background-color: var(--primary-color);
     color: white;
-    padding: 20px;
+    padding-top: 20px;
+    padding-bottom: 20px;
     font-size: 40pt;
     width: 100vw;
 }
