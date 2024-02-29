@@ -41,7 +41,7 @@ footer {
     color: white;
     padding-top: 20px;
     padding-bottom: 20px;
-    font-size: 40pt;
+    font-size: 30pt;
     width: 100vw;
 }
 
@@ -58,7 +58,7 @@ footer {
     min-width: 100vw;
     margin-top: auto;
     text-align: center;
-    font-size: 10pt;
+    font-size: 12pt;
 }
 
 .carebot-footer a {
@@ -155,7 +155,7 @@ footer {
     background-color: var(--accent-color);
     color: var(--text-color);
     text-decoration: none;
-    box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.4), -3px -3px 5px rgba(255, 255, 255, 0.3);
+    box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.5), -3px -3px 5px rgba(255, 255, 255, 0.2);
 }
 
 .link-button {
@@ -187,15 +187,14 @@ footer {
     color: var(--text-color);
     padding-left: 50px;
     padding-right: 50px;
-    font-size: 25pt;
+    font-size: 20pt;
     text-align: center;
     font-weight: 300;
 }
 
 #home-container h1 {
     color: var(--accent-color);
-    font-size: 40pt;
-    padding: 10px;
+    font-size: 30pt;
     text-align: center;
     font-weight: bold;
 }
@@ -207,7 +206,7 @@ footer {
     justify-content: flex-start;
     align-items: center;
     gap: 10px;
-    font-size: 20pt;
+    font-size: 15pt;
     margin: 10px
 }
 
@@ -310,7 +309,7 @@ animation-delay: 0.2s;
 
 #elderly-person-image {
     width: 300px; /* adjust as necessary */
-    margin: 20px;
+    margin: 10px;
 }
 
 /* Testing stuff with box shadows */
@@ -320,5 +319,5 @@ animation-delay: 0.2s;
 
 .home-icon {
     filter: invert(100%) brightness(200%) contrast(200%);
-    height: 60px;
+    height: 40px;
 }
