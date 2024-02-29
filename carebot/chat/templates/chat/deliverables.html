@@ -5,17 +5,31 @@
     {% load static %}
     <link rel="stylesheet" href="{% static 'chat/styles.css' %}">
 </head>
-{% include "chat/header.html" %}
 <body>
     <div id="home-container">
+        {% include "chat/header.html" %}
         <h1>Deliverables</h1>
-        <h2>Sprint Presentations</h2>
-        <a href="https://bama365-my.sharepoint.com/:p:/g/personal/saratchford_crimson_ua_edu/Ed14yWWt_eVHjO6gZCZXqIIBM25-ycaYrfJASqXHWfybMA?e=uw8fvy"
-            class="link-button">Sprint 1 Presentation</a>
-        <p></p>
-        <h2>Source Code</h2>
-        <a href="https://github.com/KyberCritter/carebot"
-            class="link-button">GitHub Repository</a>
+        
+        <div id="section">
+            <h2>Sprint Presentations</h2>
+            <div id="button-menu-col">
+                <a href="https://bama365-my.sharepoint.com/:p:/g/personal/saratchford_crimson_ua_edu/Ed14yWWt_eVHjO6gZCZXqIIBM25-ycaYrfJASqXHWfybMA?e=uw8fvy"
+                    class="link-button">Sprint 1 Presentation</a>
+                <a href=""
+                    class="link-button">Sprint 2 Presentation</a>
+                <a href=""
+                    class="link-button">Sprint 3 Presentation</a>
+            </div>
+        </div>
+
+        <div id="section">
+            <h2>Source Code</h2>
+            <div id="button-menu-col">
+                <a href="https://github.com/KyberCritter/carebot"
+                    class="link-button">GitHub Repository</a>
+            </div>
+        </div>
+
     </div>
 </body>
 </html>

@@ -25,14 +25,42 @@ body, html {
     background-color: var(--color-1);
 }
 
+h2 {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    padding-top: 0px;
+    padding-bottom: 0px;
+}
+
+footer {
+    margin-top: auto;
+}
+
 .carebot-header {
     background-color: var(--primary-color);
     color: white;
     padding: 20px;
-    font-size: 30pt;
+    font-size: 40pt;
+    width: 100vw;
 }
 
 .carebot-header a {
+    color: white;
+    text-decoration: none;
+    padding: 30px;
+}
+
+.carebot-footer {
+    background-color: var(--primary-color);
+    color: white;
+    padding: 10px;
+    min-width: 100vw;
+    margin-top: auto;
+    text-align: center;
+    font-size: 10pt;
+}
+
+.carebot-footer a {
     color: white;
     text-decoration: none;
 }
@@ -122,11 +150,11 @@ body, html {
 
 .link-button {
     padding: 10px 20px;
-    border-radius: 20px;
+    border-radius: 10px;
     background-color: var(--accent-color);
     color: var(--text-color);
     text-decoration: none;
-    margin-top: 20px;
+    box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.4), -3px -3px 5px rgba(255, 255, 255, 0.3);
 }
 
 .link-button {
@@ -138,7 +166,8 @@ body, html {
 }
 
 .link-button:hover {
-    background-color: var(--border-color);
+    background-color: var(--primary-color);
+    transform: scale(1.15);
 }
 
 /* Homepage styles */
@@ -148,14 +177,45 @@ body, html {
     align-items: center;
     justify-content: flex-start;
     min-height: 100vh;
-    width: 100%;
+    width: 100vw;
     background-color: var(--color-1);
-    overflow: auto; 
+    overflow: hidden; 
 }
 
 #home-container p {
-    justify-self: center;
     color: var(--text-color);
+    padding-left: 50px;
+    padding-right: 50px;
+    font-size: 25pt;
+    text-align: center;
+    font-weight: 300;
+}
+
+#home-container h1 {
+    color: var(--accent-color);
+    font-size: 40pt;
+    padding: 10px;
+    text-align: center;
+    font-weight: bold;
+}
+
+/* Just makes a thing for multiple buttons vertically */
+#button-menu-col {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 10px;
+    font-size: 20pt;
+    margin: 10px
+}
+
+/* Just a section that separates some stuff */
+#section {
+    padding: 10px;
+    text-align: center;
+    justify-content: center;
+    align-content: center;
 }
 
 /* Message loading dots */
@@ -171,27 +231,40 @@ body, html {
 /* Animation for the bouncing effect */
 @keyframes bounce {
     0%, 100% {
-        transform: translateY(0);
+        transform: translateY(6px);
         opacity: 0.8;
     }
     50% {
-        transform: translateY(-13px); 
+        transform: translateY(-6px); 
         opacity: 0.4;
     }
 }
-  
+/* To hopefully work on safari and such */
+@-webkit-keyframes bounce {
+    0%, 100% {
+        -webkit-transform: translateY(6px);
+        opacity: 0.8;
+    }
+    50% {
+        -webkit-transform: translateY(-6px); 
+        opacity: 0.4;
+    }
+}
+
+.dot:nth-child(1), .dot:nth-child(2), .dot:nth-child(3) {
+    animation: bounce 1.2s infinite;
+    animation-fill-mode: both; /* Ensure smooth start and end */
+}
+
 .dot:nth-child(1) {
-animation: bounce 1.2s infinite;
 animation-delay: 0.2s;
 }
   
 .dot:nth-child(2) {
-    animation: bounce 1.2s infinite;
     animation-delay: 0.4s;
 }
   
 .dot:nth-child(3) {
-    animation: bounce 1.2s infinite;
     animation-delay: 0.6s;
 }
   
@@ -205,6 +278,7 @@ animation-delay: 0.2s;
     max-width: 200px;
 }
   
+/* Cute 'lil picture */
 .elderly-person-bubble::after {
     content: '';
     position: absolute;
@@ -235,6 +309,15 @@ animation-delay: 0.2s;
 
 #elderly-person-image {
     width: 300px; /* adjust as necessary */
-    margin: 20px 0;
+    margin: 20px;
 }
-  
+
+/* Testing stuff with box shadows */
+.box {
+    box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.3), -3px -3px 5px rgba(255, 255, 255, 0.5);
+}
+
+.home-icon {
+    filter: invert(100%) brightness(200%) contrast(200%);
+    height: 60px;
+}
