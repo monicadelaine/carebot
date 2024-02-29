@@ -23,6 +23,6 @@ RUN pip install -r requirements.txt
 COPY . /app/
 RUN chmod u+x /app/docker-entrypoint.sh
 EXPOSE 8000
-ENTRYPOINT ["/app/docker-entrypoint.sh"]
+ENTRYPOINT ["sh","/app/docker-entrypoint.sh"]
 
 CMD ["python", "carebot/manage.py", "runserver", "0.0.0.0:8000"]
