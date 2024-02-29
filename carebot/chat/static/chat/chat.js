@@ -12,6 +12,10 @@ document.addEventListener('DOMContentLoaded', function() {
         userMessageDiv.innerHTML = `<p>${userMessage}</p>`;
         chatMessages.appendChild(userMessageDiv);
         
+        // Clear the input field right after pushing button
+        const inputField = chatForm.querySelector('input[name="query"]'); // Adjust the selector as needed
+        if (inputField) inputField.value = ''; // Clears the text field
+        
         // insert loading message
         const loadingMessageDiv = document.createElement('div');
         loadingMessageDiv.className = 'ai-message loading-message'; // Use the same class as AI messages for consistency
@@ -54,6 +58,6 @@ document.addEventListener('DOMContentLoaded', function() {
             // optionally handle the loading message in case of error
             chatMessages.removeChild(loadingMessageDiv);
             console.error('Error:', error);
-        });
+        })
     });
 });
