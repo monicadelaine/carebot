@@ -53,6 +53,8 @@
             navigator.sendBeacon('/clear-session/', data);
             return  // Do not alert the user about leaving the page
         });
+        const chat_box = document.getElementById("chat-form");
+        chat_box.autocomplete = "off"
     </script>
         
 </body>
