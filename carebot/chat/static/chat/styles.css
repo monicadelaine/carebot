@@ -37,18 +37,39 @@ footer {
 }
 
 .carebot-header {
+    display: flex;
+    position: relative;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
     background-color: var(--primary-color);
     color: white;
-    padding-top: 20px;
-    padding-bottom: 20px;
+    padding: 10px 0;
     font-size: 30pt;
-    width: 100vw;
+    width: 100%;
+    box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.5);
 }
 
 .carebot-header a {
+    position: absolute;
+    margin: 0 20px;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%); /* Center vertically */
     color: white;
     text-decoration: none;
-    padding: 30px;
+    align-content: left;
+    text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+.carebot-header h1 {
+    margin: 0;
+    text-align: center;
+    width: 100%;
+    color: white;
+    text-decoration: none;
+    font-size: 30pt;
+    text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
 }
 
 .carebot-footer {
@@ -56,9 +77,10 @@ footer {
     color: white;
     padding: 10px;
     min-width: 100vw;
-    margin-top: auto;
+    margin-top: 20px;
     text-align: center;
     font-size: 12pt;
+    box-shadow: 0px -3px 5px rgba(0, 0, 0, 0.5);
 }
 
 .carebot-footer a {
@@ -185,19 +207,20 @@ footer {
 
 #home-container p {
     color: var(--text-color);
+    margin: 15px;
     padding-left: 50px;
     padding-right: 50px;
-    font-size: 20pt;
+    font-size: 18pt;
     text-align: center;
-    font-weight: 300;
 }
 
-#home-container h1 {
+/* #home-container h1 {
     color: var(--accent-color);
     font-size: 30pt;
     text-align: center;
     font-weight: bold;
-}
+    margin: 15px;
+} */
 
 /* Just makes a thing for multiple buttons vertically */
 #button-menu-col {

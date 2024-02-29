@@ -8,18 +8,21 @@
 <body>
     <div id="home-container">
         {% include "chat/header.html" %}
-        <h1>Carebot</h1>
+        <!-- <h1>Carebot</h1> -->
         <img src="{% static 'chat/elderly_person_image.png' %}" alt="Elderly person using computer" id="elderly-person-image">
         
         <p>Carebot is a chatbot that helps connect Alabama residents to healthcare resources in their area. Ask Carebot for helping finding healthcare today!</p>
         
         <div id="button-menu-col">
             <a href="{% url 'chat' %}" 
-                class="link-button">Chat with Carebot</a>
+                class="link-button">Chat with Carebot
+            </a>
             <a href="{% url 'dashboard' %}" 
-                class="link-button">See what others are asking about</a>
+                class="link-button">See what others are asking about
+            </a>
             <a href="{% url 'about-carebot' %}" 
-                class="link-button">About Carebot</a>
+                class="link-button">About Carebot
+            </a>
         </div>
         <footer>
             {% include "chat/footer.html" %}
