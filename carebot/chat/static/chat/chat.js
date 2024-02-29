@@ -23,8 +23,8 @@ document.addEventListener('DOMContentLoaded', function() {
         chatMessages.appendChild(loadingMessageDiv);
         chatMessages.scrollTop = chatMessages.scrollHeight; // Auto-scroll to the latest message
         // Check for SQL message, kept for dev purposes
-        const isSqlCheckbox = document.getElementById('is_sql');
-        formData.append('is_sql', isSqlCheckbox.checked ? 'True' : 'False');
+        //const isSqlCheckbox = document.getElementById('is_sql');
+        //formData.append('is_sql', isSqlCheckbox.checked ? 'True' : 'False');
         
         fetch('/chat/', { 
             method: 'POST',
