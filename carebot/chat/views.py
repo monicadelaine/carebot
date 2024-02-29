@@ -122,12 +122,12 @@ def chat_view(request):
 
     return render(request, 'chat/chat.html', {'form': form, 'chat_history': chat_history})
 
-@require_POST
-@csrf_exempt
 def clear_session(request):
-    # clear the session
-    request.session.flush()
-    return JsonResponse({'status': 'session_cleared'})
+    if request.method == 'POST':
+        request.session.flush()
+        return JsonResponse({'status': 'session_cleared'})
+    else:
+        return JsonResponse({'error': 'Method not allowed'}, status=405)
 
 def error_view(request, *args):
     return render(request, 'chat/error.html', {'error': 'Page not found.'})
