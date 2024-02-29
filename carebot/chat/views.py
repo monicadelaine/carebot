@@ -67,6 +67,7 @@ def chat_view(request):
 
             messages_parameter = [
                 {"role": "system", "content": "You are a friendly assistant that helps connect Alabama residents users to healthcare services in Alabama based on their needs. If the user is looking for healthcare outside of Alabama, tell them you cannot help."},
+                {"role": "system", "content": "Valid types of healthcare include, but are not limited to, mental health, dental, vision, food banks, and general medical care."},
                 {"role": "system", "content": "Use only plain text, no HTML, markdown, or other formatting. Do not use \\n or other special characters."},
                 {"role": "system", "content": "There is a database of healthcare providers in Alabama."},
                 # {"role": "system", "content": "If you can create a valid PostgreSQL query, preface it with 'SQL:' and make it the end of your message."},

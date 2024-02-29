@@ -28,6 +28,10 @@
                 {% endif %}
             {% endfor %}
         </div>
+        <div id="suggested-messages">
+            <button id="suggested_1" type="button" class="btn-send suggested-message" value="Help me find counseling services in my area.">Help me find counseling services in my area.</button>
+            <button id="suggested_2" type="button" class="btn-send suggested-message" value="Help me find food banks in my area.">Help me find food banks in my area.</button>
+        </div>
         <form method="post" id="chat-form">
             {% csrf_token %}
             <div class="form-group">
@@ -44,6 +48,21 @@
     </div>
     <script src="{% static 'chat/chat.js' %}"></script>
     <script>
+        function sendSuggestedMessage(button) {
+            const text = button.value;
+            const form = document.getElementById("chat-form");
+            const input = form.querySelector("input[name='query']");
+            input.value = text;
+        }
+        var suggested_1 = document.getElementById("suggested_1");
+        suggested_1.addEventListener('click', function() {
+            sendSuggestedMessage(suggested_1);
+        });
+        var suggested_2 = document.getElementById("suggested_2");
+        suggested_2.addEventListener('click', function() {
+            sendSuggestedMessage(suggested_2);
+        });
+        
         window.addEventListener('beforeunload', function (e) {
             const csrfToken = getCsrfToken();
             const data = new FormData();
@@ -56,6 +75,5 @@
         const chat_box = document.getElementById("chat-form");
         chat_box.autocomplete = "off"
     </script>
-        
 </body>
 </html>
