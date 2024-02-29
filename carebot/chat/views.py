@@ -6,14 +6,18 @@ from django.template import RequestContext
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 from openai import OpenAI
+from django.db import connection
 
 from .forms import QueryForm
 from .models import Message, MessageType
+import logging
 
+logger = logging.getLogger(__name__)
 chat_history = []
 
 class QueryFormNoAutofill(forms.Form):
     query = forms.CharField(widget=forms.TextInput(attrs={'autocomplete': 'off'}))
+    is_sql = forms.BooleanField(required=False, widget=forms.CheckboxInput())
 
 def chat_view(request):
     # Initialize chat_history_ids from session or start with an empty list
@@ -23,6 +27,28 @@ def chat_view(request):
         form = QueryFormNoAutofill(request.POST)
         
         if form.is_valid():
+            query = form.cleaned_data.get('query', '') 
+
+            is_sql = form.cleaned_data.get('is_sql', False)
+            ### Commented out the sql stuff
+            """
+            if is_sql:
+                # do SQL query
+                try:
+                    with connection.cursor() as cursor:
+                        logger.info(f"Executing SQL query: {query}")
+                        cursor.execute(query)
+                        rows = cursor.fetchall()
+                        response_text = str(rows) 
+                        logger.info(f"SQL query result: {response_text}")
+                except Exception as e:
+                    response_text = f"Error executing SQL: {str(e)}"
+                    logger.error(response_text)
+                
+                return JsonResponse({'query': query, 'response': response_text})
+            else:
+            """
+            ###
             client = OpenAI(api_key=settings.OPENAI_API_KEY)
             query = form.cleaned_data['query']
 
@@ -40,8 +66,11 @@ def chat_view(request):
                         return JsonResponse({'query': query, 'response': "Let's try something new."})
 
             messages_parameter = [
-                {"role": "system", "content": "You are a friendly assistant that helps connect users to healthcare services in their area based on their needs."},
+                {"role": "system", "content": "You are a friendly assistant that helps connect Alabama residents users to healthcare services in Alabama based on their needs. If the user is looking for healthcare outside of Alabama, tell them you cannot help."},
                 {"role": "system", "content": "Use only plain text, no HTML, markdown, or other formatting. Do not use \\n or other special characters."},
+                {"role": "system", "content": "There is a database of healthcare providers in Alabama."},
+                # {"role": "system", "content": "If you can create a valid PostgreSQL query, preface it with 'SQL:' and make it the end of your message."},
+                # {"role": "system", "content": "Here is the list of tables and their columns: county: name, affgeoid, aland, awater, countyfp, countyns, geoid, lsad, ogc_fid, statefp, wkb_geometry. providers: id_cms_other, addr1, addr2, agency_name, city, county, data_source, date_last_updated, default_service_area_type, notes, ownership_type, phone_number, service_area_entities, service_area_polygon, state, website, zip, coordinates. resource_categories: code, apply, description, evaluate, keywords, kinds, link, long_description, payment, process. resource_listing: id_cms_other, resource_type, contact_email, contact_messaging, contact_name, contact_phone, date_added, date_last_verified, service_area, service_area_description, source, notes, verify_method, service_area_type"},
                 # All additional AI instructions should be added here.
             ]
             if chat_history.exists():   # add the previous 6 messages to the messages_parameter, limiting token usage

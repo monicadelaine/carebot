@@ -31,6 +31,9 @@
             {% csrf_token %}
             <div class="form-group">
                 {{ form.query }}
+                <label>
+                   <!-- <input type="checkbox" name="is_sql" id="is_sql"> This is an SQL query -->
+                </label>
                 <button type="submit" class="btn-send">Send</button>
             </div>
         </form>

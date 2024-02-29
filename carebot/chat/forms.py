@@ -5,3 +5,4 @@ class QueryForm(forms.Form):
         max_length=1000,
         widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Type your query here...'})
     )
+    #is_sql = forms.BooleanField(required=False)  # Sql checkbox that can be removed, kept for dev purposes
