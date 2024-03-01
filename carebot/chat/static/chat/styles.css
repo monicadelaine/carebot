@@ -86,6 +86,11 @@ footer {
 .carebot-footer a {
     color: white;
     text-decoration: none;
+    
+}
+
+.carebot-footer a:hover {
+    color: #6bc1f0;
 }
 
 /* Chat page styles */
