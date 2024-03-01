@@ -1,8 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
 {% load static %}
 <link rel="stylesheet" href="{% static 'chat/styles.css' %}">
+</head>
+<body>
 <div class="carebot-header">
     <a href="{% url 'home' %}">
         <img src="/static/chat/home_icon.png" alt="Home Icon" class="home-icon">
     </a>
     <h1>Carebot</h1>
+    
+    <div class="caregiver-connect">
+        <a href="https://caregiverconnect.ua.edu/chatbot-home.html">Caregiver Connect</a>
+    </div>
 </div>
+</body>
+</html>
