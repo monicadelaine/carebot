@@ -20,6 +20,7 @@ class QueryFormNoAutofill(forms.Form):
     is_sql = forms.BooleanField(required=False, widget=forms.CheckboxInput())
 
 def chat_view(request):
+    isSql = False
     # Initialize chat_history_ids from session or start with an empty list
     chat_history_ids = request.session.get('chat_history_ids', [])
 
@@ -65,14 +66,17 @@ def chat_view(request):
                         # This should never occur. It is a fallback.
                         return JsonResponse({'query': query, 'response': "Let's try something new."})
 
+
+            # All additional AI instructions should be added here.
             messages_parameter = [
                 {"role": "system", "content": "You are a friendly assistant that helps connect Alabama residents users to healthcare services in Alabama based on their needs. If the user is looking for healthcare outside of Alabama, tell them you cannot help."},
                 {"role": "system", "content": "Valid types of healthcare include, but are not limited to, mental health, dental, vision, food banks, and general medical care."},
                 {"role": "system", "content": "Use only plain text, no HTML, markdown, or other formatting. Do not use \\n or other special characters."},
                 {"role": "system", "content": "There is a database of healthcare providers in Alabama."},
+                {"role": "system", "content": "I want to train you to execute SQL queries. however, you need to understand when to make a query and when to just answer as normal. can you do that? if the user asks something like 'I need help with some medical resources near me' you should answer as normal. but if the user asks something like 'find me ear doctors in jefferson county', you should form a SQL query accordingly. when you make a sql query, only include sql expressions and no other words."},
                 # {"role": "system", "content": "If you can create a valid PostgreSQL query, preface it with 'SQL:' and make it the end of your message."},
-                # {"role": "system", "content": "Here is the list of tables and their columns: county: name, affgeoid, aland, awater, countyfp, countyns, geoid, lsad, ogc_fid, statefp, wkb_geometry. providers: id_cms_other, addr1, addr2, agency_name, city, county, data_source, date_last_updated, default_service_area_type, notes, ownership_type, phone_number, service_area_entities, service_area_polygon, state, website, zip, coordinates. resource_categories: code, apply, description, evaluate, keywords, kinds, link, long_description, payment, process. resource_listing: id_cms_other, resource_type, contact_email, contact_messaging, contact_name, contact_phone, date_added, date_last_verified, service_area, service_area_description, source, notes, verify_method, service_area_type"},
-                # All additional AI instructions should be added here.
+                {"role": "system", "content": "When you are producing any SQL query, don't include the word 'county' in any named field. For example, if the user asks for providers in tuscaloosa county, the county's name field should be 'Tuscaloosa' not 'Tuscaloosa county'."},
+                {"role": "system", "content": "Here is the list of tables and their columns for the database containing the medical information you will query: county: name, affgeoid, aland, awater, countyfp, countyns, geoid, lsad, ogc_fid, statefp, wkb_geometry. providers: id_cms_other, addr1, addr2, agency_name, city, county, data_source, date_last_updated, default_service_area_type, notes, ownership_type, phone_number, service_area_entities, service_area_polygon, state, website, zip, coordinates. resource_categories: code, apply, description, evaluate, keywords, kinds, link, long_description, payment, process. resource_listing: id_cms_other, resource_type, contact_email, contact_messaging, contact_name, contact_phone, date_added, date_last_verified, service_area, service_area_description, source, notes, verify_method, service_area_type"},
             ]
             if chat_history.exists():   # add the previous 6 messages to the messages_parameter, limiting token usage
                 for message in chat_history.order_by('created_at').reverse()[:6][::-1]: # a very ugly way to reverse the last 6 messages
@@ -93,6 +97,23 @@ def chat_view(request):
                     messages=messages_parameter,    # uses system directions, previous messages, and the latest user message
                 )
                 ai_response = completion.choices[0].message.content
+                #if the ai response begins like an sql query, execute the query from the database
+                #Security Risk**
+                if (ai_response[:6]=="SELECT" or ai_response[:6] == "select"):
+                    try:
+                        #make connection with db, send SQL query from chatbot, return output from db
+                        with connection.cursor() as cursor:
+                            logger.info(f"Executing SQL query: {ai_response}")
+                            cursor.execute(ai_response)
+                            rows = cursor.fetchall()
+                            response_text = str(rows) 
+                            logger.info(f"SQL query result: {response_text}")
+                            return JsonResponse({'query': query, 'response': response_text})
+                    except Exception as e:
+                        response_text = f"Error executing SQL: {str(e)}"
+                        logger.error(response_text)
+                        return JsonResponse({'query': query, 'response': response_text})
+            
             except Exception as e:
                 # create Messages object for the error
                 error_message = Message.objects.create(message_type=MessageType.SYSTEM, text="There was an error processing your request. Please try again.")
