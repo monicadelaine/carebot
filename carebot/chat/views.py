@@ -109,8 +109,8 @@ def chat_view(request):
                     try:
                         # make connection with db, send SQL query from chatbot, return output from db
                         with connection.cursor() as cursor:
-                            logger.info(f"Executing SQL query: {sql_statement}")
-                            cursor.execute(sql_statement)
+                            logger.info(f"Executing SQL query: {ai_response}")
+                            cursor.execute(ai_response)
                             rows = cursor.fetchall()
                             response_text = str(rows) 
                             logger.info(f"SQL query result: {response_text}")
