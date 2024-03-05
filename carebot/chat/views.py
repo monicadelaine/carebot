@@ -88,7 +88,7 @@ def chat_view(request):
 
             try:
                 completion = client.chat.completions.create(
-                    model="gpt-4",
+                    model="gpt-3.5-turbo",
                     messages=messages_parameter,    # uses system directions, previous messages, and the latest user message
                 )
                 ai_response = completion.choices[0].message.content
@@ -109,8 +109,8 @@ def chat_view(request):
                     try:
                         # make connection with db, send SQL query from chatbot, return output from db
                         with connection.cursor() as cursor:
-                            logger.info(f"Executing SQL query: {ai_response}")
-                            cursor.execute(ai_response)
+                            logger.info(f"Executing SQL query: {sql_statement}")
+                            cursor.execute(sql_statement)
                             rows = cursor.fetchall()
                             response_text = str(rows) 
                             logger.info(f"SQL query result: {response_text}")
@@ -126,7 +126,7 @@ def chat_view(request):
                         print(f"SQL response: {response_text}")
                         try:
                             completion = client.chat.completions.create(
-                                model="gpt-4",
+                                model="gpt-3.5-turbo",
                                 messages=[{"role": "system", "content": f"Explain the following results of a PostgreSQL query as if you are telling the user about healthcare resources you found in Alabama. If the results are empty, say that you could not find any information on {resource_type} in {city}. If the results are not empty, they will be a list with each element in the following format:\nagency name, address part 1, address part 2, city, id_cms_other (ignore this), resource type\nresults: {response_text}"}],
                             )
                             ai_response = completion.choices[0].message.content
@@ -138,13 +138,14 @@ def chat_view(request):
                             request.session['chat_history_ids'] = chat_history_ids + [error_message.id]
                             return JsonResponse({'query': query, 'response': error_message.text})
                 else:
-                    try:
+                    try:    # explain to the user that the chatbot could not find the healthcare resources (catching some weird bug here)
                         ai_response.upper().find("SQL:")
-                        # error_message = Message.objects.create(message_type=MessageType.SYSTEM, text="There was an error processing your request. Please try again.")
-                        # chat_history_ids.extend([error_message.id,])
-                        # request.session['chat_history_ids'] = chat_history_ids + [error_message.id]
-                        # return JsonResponse({'query': query, 'response': error_message.text})
-                    except Exception as e:
+                        completion = client.chat.completions.create(
+                            model="gpt-3.5-turbo",
+                            messages=[{"role": "system", "content": f"Explain to the user that you could not find {resource_type} healthcare resources in {city}."}],
+                        )
+                        ai_response = completion.choices[0].message.content
+                    except Exception as e:  # no SQL command found
                         pass
             
             except Exception as e:
