@@ -77,6 +77,7 @@ def chat_view(request):
                 # {"role": "system", "content": "If you can create a valid PostgreSQL query, preface it with 'SQL:' and make it the end of your message."},
                 {"role": "system", "content": "When you are producing any SQL query, don't include the word 'county' in any named field. For example, if the user asks for providers in tuscaloosa county, the county's name field should be 'Tuscaloosa' not 'Tuscaloosa county'."},
                 {"role": "system", "content": "Here is the list of tables and their columns for the database containing the medical information you will query: county: name, affgeoid, aland, awater, countyfp, countyns, geoid, lsad, ogc_fid, statefp, wkb_geometry. providers: id_cms_other, addr1, addr2, agency_name, city, county, data_source, date_last_updated, default_service_area_type, notes, ownership_type, phone_number, service_area_entities, service_area_polygon, state, website, zip, coordinates. resource_categories: code, apply, description, evaluate, keywords, kinds, link, long_description, payment, process. resource_listing: id_cms_other, resource_type, contact_email, contact_messaging, contact_name, contact_phone, date_added, date_last_verified, service_area, service_area_description, source, notes, verify_method, service_area_type"},
+                {"role": "system", "content": "Only use tables and column names that are given to you. Do not try to use any other table or column names."}
             ]
             if chat_history.exists():   # add the previous 6 messages to the messages_parameter, limiting token usage
                 for message in chat_history.order_by('created_at').reverse()[:6][::-1]: # a very ugly way to reverse the last 6 messages
@@ -103,7 +104,7 @@ def chat_view(request):
                     try:
                         #make connection with db, send SQL query from chatbot, return output from db
                         with connection.cursor() as cursor:
-                            logger.info(f"Executing SQL query: {ai_response}")
+                            logger.error(f"Executing SQL query: {ai_response}")
                             cursor.execute(ai_response)
                             rows = cursor.fetchall()
                             response_text = str(rows) 
