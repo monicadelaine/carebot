@@ -39,6 +39,7 @@ DEBUG = True
 ALLOWED_HOSTS = [
     'localhost',
     '127.0.0.1',
+    'cs495-spring2024-04.ua.edu',
 ]
 
 # Application definition
