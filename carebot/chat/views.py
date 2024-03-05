@@ -142,7 +142,7 @@ def chat_view(request):
                         ai_response.upper().find("SQL:")
                         completion = client.chat.completions.create(
                             model="gpt-3.5-turbo",
-                            messages=[{"role": "system", "content": f"Explain to the user that you could not find {resource_type} healthcare resources in {city}."}],
+                            messages=[{"role": "system", "content": f"Explain to the user that you could not find the healthcare resources they were looking for."}],
                         )
                         ai_response = completion.choices[0].message.content
                     except Exception as e:  # no SQL command found
