@@ -27,10 +27,21 @@ else
     echo "Database dump has already been loaded."
 fi
 
-echo "Collecting static..."
-python manage.py collectstatic
+if [ "$DEBUG" = "True" ]; then
+    echo "In debug mode..."
+else
+    echo "In production mode..."
+    echo "Collecting static..."
+    python carebot/manage.py collectstatic
+fi
 echo "Applying database migrations..."
 python carebot/manage.py migrate
 
-# Runs app start command
+if [ "$INSECURE_FLAG" = "--insecure" ]; then
+    echo "Hosting locally with --insecure flag..."
+else
+    echo "Hosting remotely..."
+fi
+
+# Execute the command
 exec "$@"
