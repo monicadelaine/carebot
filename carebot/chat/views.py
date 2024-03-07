@@ -150,12 +150,10 @@ def chat_view(request):
                     # make connection with db, send SQL query from chatbot, return output from db
                     with connection.cursor() as cursor:
                         logger.info(f"Executing SQL query: {sql_statement}")
-                        print(f"Executing SQL query: {sql_statement}")
                         cursor.execute(sql_statement)
                         rows = cursor.fetchall()
                         response_text = str(rows) 
                         logger.info(f"SQL query result: {response_text}")
-                        print(f"SQL query result: {response_text}")
                 except Exception as e:
                     response_text = f"Error executing SQL: {str(e)}"
                     logger.error(response_text)
@@ -176,13 +174,9 @@ def chat_view(request):
                             messages=[{"role": "system", "content": f"Explain the following results of a PostgreSQL query as if you are telling the user about healthcare providers you found in Alabama. Do not mention anything related to SQL by name, including row ID values. Mention that you found {len(rows)} results matching the request. Output the first 20 results, at most. Preface each result with a number and period, starting with 1. Each {resource_type} found in {city} is in the following format:\n{columns_to_select}\nresults: {response_text}"}],
                         )
                         ai_response = completion.choices[0].message.content
-                        print(ai_response)
                         # regex to find all instances of a number followed by a period and a space, and add a newline before each one
                         regex_pattern = r'(\d+\.\s)'
-                        modified_response_text = re.sub(regex_pattern, r'<br>\1', ai_response)
-                        # update the response_text with the modified version
-                        ai_response = modified_response_text
-                        print(ai_response)
+                        ai_response = re.sub(regex_pattern, r'<br>\1', ai_response)
                     except Exception as e:
                         error_message = Message.objects.create(message_type=MessageType.SYSTEM, text="There was an error processing your request. Please try again.")
                         chat_history_ids.extend([error_message.id,])
