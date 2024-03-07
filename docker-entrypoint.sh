@@ -27,6 +27,8 @@ else
     echo "Database dump has already been loaded."
 fi
 
+echo "Collecting static files..."
+python carebot/manage.py collectstatic
 echo "Applying database migrations..."
 python carebot/manage.py migrate
 
