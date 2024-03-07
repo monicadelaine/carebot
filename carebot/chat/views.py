@@ -51,7 +51,7 @@ def chat_view(request):
                 {"role": "system", "content": "You assist another program by giving the correct parameters for an SQL query. When appropriate, you can tell the program to execute the SQL query by giving it a command using exactly the following format: SQL: SELECT agency_name, addr1, addr2 FROM providers WHERE resource_type = value\nDo not attempt to select by addr1 or addr2. The program will then execute the SQL query and return the results to the user. You should not execute the SQL query yourself. You should only give the command to the program to execute the SQL query. When doing this, never include any non-SQL text in the same message as the SQL command. The SQL command should be the only content in the message. If you do not have a resource type and city, ask the user for this information. If you have enough information to create the query, DO NOT message the user. Remember to use the data you have to create the query as the instructions require. These are the only resource types you can use: support_groups, food_stamps, training, infrastr_chgs, home_maintain, drug_assist, counseling, reimbursement, medicare, house_cleaning, personal_care, home_meals, daycare, respite_care, incontinence_items, medical_supplies, nursing, medic_alerting, durable_equip, bill_assist, supplier_research, medicare_providers, geriatricians, pyschiatrist, neurologists, specialists, nursing_home, rehabilitation_facility, memory_care, legal_assist, hospice_advd_care, transportation, death_burial, food_pantry, physical_therapy, occupational_therapy, devices_prosthetics, studies_traisl, procedures, illness_disease, vision_aids, hearing_aids, oral_dentures, technology, oxygen, referral, medicare_waivers, food_vouches, activity_enrichment, housing_directory, housing_assistance, veterans_affairs, financial_general, senior_discount, job_training, substance_abuse, pain_management, tax_help, clinics."}
             ]
             if chat_history.exists():   # add the previous 6 messages to the messages_parameter, limiting token usage
-                for message in chat_history.order_by('created_at').reverse()[:6][::-1]: # a very ugly way to reverse the last 6 messages
+                for message in chat_history.order_by('created_at').reverse()[:6][::-1]: # reverse the last 6 messages
                     if message.message_type == MessageType.USER:
                         messages_parameter.append({"role": "user", "content": message.text})
                     elif message.message_type == MessageType.CHATBOT:
@@ -68,7 +68,6 @@ def chat_view(request):
                     messages=messages_parameter,    # uses system directions, previous messages, and the latest user message
                 )
                 ai_response = completion.choices[0].message.content
-
             except Exception as e:
                 # create Messages object for the error
                 error_message = Message.objects.create(message_type=MessageType.SYSTEM, text="There was an error processing your request. Please try again.")
@@ -131,16 +130,13 @@ def chat_view(request):
             
             # create Messages object for the AI response
             ai_message = Message.objects.create(message_type=MessageType.CHATBOT, text=ai_response)
-
             # append the new message IDs to chat_history_ids and save it back to the session
             chat_history_ids.extend([user_message.id, ai_message.id])
             request.session['chat_history_ids'] = chat_history_ids + [user_message.id, ai_message.id]
 
             return JsonResponse({'query': query, 'response': ai_response})
-
         else:
             return JsonResponse({'error': 'Form validation failed'}, status=400)
-
     else:
         form = QueryForm()
 
@@ -150,7 +146,6 @@ def chat_view(request):
     return render(request, 'chat/chat.html', {'form': form, 'chat_history': chat_history})
 
 def clear_session(request):
-
     if request.method == 'POST':
         request.session.flush()
         return JsonResponse({'status': 'session_cleared'})
