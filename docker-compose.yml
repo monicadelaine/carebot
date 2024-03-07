@@ -14,7 +14,7 @@ services:
 
   carebot:
     build: .
-    command: python carebot/manage.py runserver 0.0.0.0:8000
+    command: python carebot/manage.py runserver 0.0.0.0:8000 ${INSECURE_FLAG}
     volumes:
       - .:/app
     ports:
@@ -27,6 +27,7 @@ services:
       DATABASE_USER: user
       DATABASE_PASSWORD: password
       DATABASE_PORT: 5432
+      INSECURE_FLAG: ${INSECURE_FLAG}
 
 volumes:
   postgis_data:

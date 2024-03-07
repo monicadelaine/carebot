@@ -161,3 +161,6 @@ cython_debug/
 
 migrate_and_host.bat
 Pipfile.lock
+
+# collected static files
+carebot/static

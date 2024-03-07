@@ -34,7 +34,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-u-&)&0cj+f9z_m(0=@hleo2f9ck0h0qlnv)sja@qq+wi8!#trz'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = os.getenv("DEBUG", "False") == "True"
 
 ALLOWED_HOSTS = [
     'localhost',
@@ -153,10 +153,20 @@ USE_TZ = True
 
 # These will be used to serve static files in production (DEBUG = False)
 STATIC_URL = "/static/"
-STATIC_ROOT = BASE_DIR / "static/"
-STATICFILE_DIRS = [
-    BASE_DIR / "static",
+STATIC_ROOT = os.path.join(BASE_DIR, "static")
+STATICFILES_DIRS  = [
+    os.path.join(BASE_DIR, "static/chat/"),
 ]
+# print(f"BASE_DIR: {BASE_DIR}")
+# print(f"STATIC_ROOT: {STATIC_ROOT}")
+# # print all static files in STATIC_ROOT
+# for root, dirs, files in os.walk(STATIC_ROOT):
+#     for file in files:
+#         # print(root)
+#         print(os.path.join(root, file))
+#         if root in STATICFILES_DIRS:
+#             print(f"{root} is in STATICFILES_DIRS")
+# print(f"STATICFILES_DIRS: {STATICFILES_DIRS}")
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
