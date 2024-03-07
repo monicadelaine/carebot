@@ -1,16 +1,18 @@
+import logging
+import re
+
 from django import forms
 from django.conf import settings
+from django.db import connection
 from django.http import JsonResponse
 from django.shortcuts import redirect, render
 from django.template import RequestContext
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 from openai import OpenAI
-from django.db import connection
 
 from .forms import QueryForm
 from .models import Message, MessageType
-import logging
 
 logger = logging.getLogger(__name__)
 chat_history = []
@@ -47,8 +49,7 @@ def chat_view(request):
 
             # All additional AI instructions should be added here.
             messages_parameter = [
-                {"role": "system", "content": "You connect Alabama residents users to healthcare services in Alabama based on their needs. If the user is looking for healthcare outside of Alabama, tell them you cannot help. Do not use \\n or other special characters."},
-                {"role": "system", "content": "You assist another program by giving the correct parameters for an SQL query. When appropriate, you can tell the program to execute the SQL query by giving it a command using exactly the following format: SQL: SELECT agency_name, addr1, addr2 FROM providers WHERE resource_type = value\nDo not attempt to select by addr1 or addr2. The program will then execute the SQL query and return the results to the user. You should not execute the SQL query yourself. You should only give the command to the program to execute the SQL query. When doing this, never include any non-SQL text in the same message as the SQL command. The SQL command should be the only content in the message. If you do not have a resource type and city, ask the user for this information. If you have enough information to create the query, DO NOT message the user. Remember to use the data you have to create the query as the instructions require. These are the only resource types you can use: support_groups, food_stamps, training, infrastr_chgs, home_maintain, drug_assist, counseling, reimbursement, medicare, house_cleaning, personal_care, home_meals, daycare, respite_care, incontinence_items, medical_supplies, nursing, medic_alerting, durable_equip, bill_assist, supplier_research, medicare_providers, geriatricians, pyschiatrist, neurologists, specialists, nursing_home, rehabilitation_facility, memory_care, legal_assist, hospice_advd_care, transportation, death_burial, food_pantry, physical_therapy, occupational_therapy, devices_prosthetics, studies_traisl, procedures, illness_disease, vision_aids, hearing_aids, oral_dentures, technology, oxygen, referral, medicare_waivers, food_vouches, activity_enrichment, housing_directory, housing_assistance, veterans_affairs, financial_general, senior_discount, job_training, substance_abuse, pain_management, tax_help, clinics."}
+                {"role": "system", "content": "You connect Alabama residents users to healthcare services in Alabama based on their needs. If the user is looking for healthcare outside of Alabama, tell them you cannot help. Do not use any special characters in your responses except for \\n. You assist another program by giving the correct parameters for an SQL query. When appropriate, you can tell the program to execute the SQL query by giving it a command using exactly the following format: SQL: SELECT * FROM providers WHERE resource_type = value AND city = city_name OR county = county_name\nIf the user leaves out 1 or 2 of those 3 criteria, leave it out of your SQL statement. The program will then execute the SQL query and return the results to the user. You should not execute the SQL query yourself. You should only give the command to the program to execute the SQL query. When doing this, never include any non-SQL text in the same message as the SQL command. The SQL command should be the only content in the message. If you do not have any of these (resource type, city, or county), ask the user for this information. If you have at least one of those, DO NOT message the user. Remember to use the data you have to create the query as the instructions require. These are the only resource types you can use: support_groups, food_stamps, training, infrastr_chgs, home_maintain, drug_assist, counseling, reimbursement, medicare, house_cleaning, personal_care, home_meals, daycare, respite_care, incontinence_items, medical_supplies, nursing, medic_alerting, durable_equip, bill_assist, supplier_research, medicare_providers, geriatricians, pyschiatrist, neurologists, specialists, nursing_home, rehabilitation_facility, memory_care, legal_assist, hospice_advd_care, transportation, death_burial, food_pantry, physical_therapy, occupational_therapy, devices_prosthetics, studies_traisl, procedures, illness_disease, vision_aids, hearing_aids, oral_dentures, technology, oxygen, referral, medicare_waivers, food_vouches, activity_enrichment, housing_directory, housing_assistance, veterans_affairs, financial_general, senior_discount, job_training, substance_abuse, pain_management, tax_help, clinics.\nIf the user asks for all healthcare resources in a particular area, make the query."}
             ]
             if chat_history.exists():   # add the previous 6 messages to the messages_parameter, limiting token usage
                 for message in chat_history.order_by('created_at').reverse()[:6][::-1]: # reverse the last 6 messages
@@ -74,17 +75,74 @@ def chat_view(request):
                 chat_history_ids.extend([error_message.id,])
                 request.session['chat_history_ids'] = chat_history_ids + [error_message.id]
                 return JsonResponse({'query': query, 'response': error_message.text})
-            
+            # extract the parameters for the SQL query from the AI response
+            resource_type = None
+            city = None
+            county = None
             try:
                 resource_type = ai_response[ai_response.lower().find("resource_type = "):][16:].split()[0]
                 resource_type = ''.join(e for e in resource_type if e.isalnum() or e == '_')    # remove all non-alphanumeric characters except for _
                 resource_type = resource_type.lower()
+                is_sql = True
+            except Exception as e:
+                pass
+            try:
                 city = ai_response[ai_response.lower().find("city = "):][7:].split()[0]
                 city = ''.join(e for e in city if e.isalnum() or e == '_') # remove all non-alphanumeric characters except for _
                 city = city.upper()
-                sql_statement = f"SELECT p.agency_name, p.addr1, p.addr2, p.city, p.id_cms_other, r.resource_type FROM providers p JOIN resource_listing r ON p.id_cms_other = r.id_cms_other WHERE p.city = '{city}' AND r.resource_type = '{resource_type}';"
-                is_sql = True
             except Exception as e:
+                pass
+            try:
+                county = ai_response[ai_response.lower().find("county = "):][9:].split()[0]
+                county = ''.join(e for e in county if e.isalnum() or e == '_') # remove all non-alphanumeric characters except for _
+                county = county.upper()
+            except Exception as e:
+                pass
+
+            columns_to_select = "*"
+            """
+            Determine which SQL query to use based on the AI response, if any.
+            0. If the AI response does not contain a resource type, city, or county, do not execute a SQL query.
+            1. If the AI response contains both a resource type and a city, use the following SQL query:
+                f"SELECT p.agency_name, p.addr1, p.addr2, p.city, p.id_cms_other, r.resource_type FROM providers p JOIN resource_listing r ON p.id_cms_other = r.id_cms_other WHERE UPPER(p.city) = '{city}' AND UPPER(r.resource_type) = '{resource_type}';"
+            2. If the AI response contains both a resource type and a county, use the following SQL query:
+                f"SELECT p.agency_name, p.addr1, p.addr2, p.city, p.id_cms_other, r.resource_type FROM providers p JOIN resource_listing r ON p.id_cms_other = r.id_cms_other WHERE UPPER(p.county) = '{county}' AND r.resource_type = '{resource_type}';"
+            3. If the AI response contains only a resource type, use the following SQL query:
+                f"SELECT p.agency_name, p.addr1, p.addr2, p.city, p.id_cms_other, r.resource_type FROM providers p JOIN resource_listing r ON p.id_cms_other = r.id_cms_other WHERE LOWER(r.resource_type) = '{resource_type}';"
+            4. If the AI response contains only a city or county, use the following SQL query:
+                f"SELECT p.agency_name, p.addr1, p.addr2, p.city, p.id_cms_other, r.resource_type FROM providers p WHERE UPPER(p.city) = '{city}';"
+            5. If the AI response contains only a county, use the following SQL query:
+                f"SELECT p.agency_name, p.addr1, p.addr2, p.city, p.id_cms_other, r.resource_type FROM providers p WHERE UPPER(p.county) = '{county}';"
+            """
+            # 0. If the AI response does not contain a resource type, city, or county, do not execute a SQL query.
+            if resource_type is None and city is None and county is None:
+                is_sql = False
+            # 1. If the AI response contains both a resource type and a city
+            elif resource_type is not None and city is not None:
+                columns_to_select = "p.agency_name, p.addr1, p.addr2, p.city, p.county, p.id_cms_other, r.resource_type"
+                sql_statement = f"SELECT {columns_to_select} FROM providers p JOIN resource_listing r ON p.id_cms_other = r.id_cms_other WHERE UPPER(p.city) = '{city}' AND r.resource_type = '{resource_type}';"
+                is_sql = True
+            # 2. If the AI response contains both a resource type and a county
+            elif resource_type is not None and county is not None:
+                columns_to_select = "p.agency_name, p.addr1, p.addr2, p.city, p.county, p.id_cms_other, r.resource_type"
+                sql_statement = f"SELECT {columns_to_select} FROM providers p JOIN resource_listing r ON p.id_cms_other = r.id_cms_other WHERE UPPER(p.county) = '{county}' AND r.resource_type = '{resource_type}';"
+                is_sql = True
+            # 3. If the AI response contains only a resource type
+            elif resource_type is not None and city is None and county is None:
+                columns_to_select = "p.agency_name, p.addr1, p.addr2, p.city, p.county, p.id_cms_other, r.resource_type"
+                sql_statement = f"SELECT {columns_to_select} FROM providers p JOIN resource_listing r ON p.id_cms_other = r.id_cms_other WHERE LOWER(r.resource_type) = '{resource_type}';"
+                is_sql = True
+            # 4. If the AI response does not contain a resource type and contains a city
+            elif resource_type is None and city is not None:
+                columns_to_select = "p.agency_name, p.addr1, p.addr2, p.city, p.county"
+                sql_statement = f"SELECT {columns_to_select} FROM providers p WHERE UPPER(p.city) = '{city}';"
+                is_sql = True
+            # 5. If the AI response does not contain a resource type and contains a county
+            elif resource_type is None and county is not None:
+                columns_to_select = "p.agency_name, p.addr1, p.addr2, p.city, p.county"
+                sql_statement = f"SELECT {columns_to_select} FROM providers p WHERE UPPER(p.county) = '{county}';"
+                is_sql = True
+            else:
                 is_sql = False
 
             if is_sql:
@@ -92,30 +150,39 @@ def chat_view(request):
                     # make connection with db, send SQL query from chatbot, return output from db
                     with connection.cursor() as cursor:
                         logger.info(f"Executing SQL query: {sql_statement}")
+                        print(f"Executing SQL query: {sql_statement}")
                         cursor.execute(sql_statement)
                         rows = cursor.fetchall()
                         response_text = str(rows) 
                         logger.info(f"SQL query result: {response_text}")
+                        print(f"SQL query result: {response_text}")
                 except Exception as e:
                     response_text = f"Error executing SQL: {str(e)}"
-                    # logger.error(response_text)
+                    logger.error(response_text)
                     error_message = Message.objects.create(message_type=MessageType.SYSTEM, text="There was an error processing your request. Please try again.")
                     chat_history_ids.extend([error_message.id,])
                     request.session['chat_history_ids'] = chat_history_ids + [error_message.id]
                     return JsonResponse({'query': query, 'response': error_message.text})
                 finally:    # have the chatbot explain the results
-                    if len(response_text) > 0:
+                    if len(rows) <= 0:
                         completion = client.chat.completions.create(
                             model="gpt-3.5-turbo",
-                            messages=[{"role": "system", "content": f"Explain to the user that you could not find the healthcare resources they were looking for. If they provide both a resource type and a city, you should be able to find the resources."}],
+                            messages=[{"role": "system", "content": f"Explain to the user that you could not find {resource_type if resource_type is not None else "the healthcare resource"} like they were looking for. Tell them that if they provide a resource type, you should be able to find the resources. If they include a city or a county, you should be able to find the resources in that area. If they just include a city or county, you can find all healthcare resources in that area."}],
                         )
                         ai_response = completion.choices[0].message.content
                     try:
                         completion = client.chat.completions.create(
                             model="gpt-3.5-turbo",
-                            messages=[{"role": "system", "content": f"Explain the following results of a PostgreSQL query as if you are telling the user about healthcare resources you found in Alabama. Do not mention anything related to SQL by name. Each {resource_type} found in {city} is in the following format:\nagency name, address part 1, address part 2, city, id_cms_other (ignore this), resource type\nresults: {response_text}"}],
+                            messages=[{"role": "system", "content": f"Explain the following results of a PostgreSQL query as if you are telling the user about healthcare providers you found in Alabama. Do not mention anything related to SQL by name, including row ID values. Mention that you found {len(rows)} results matching the request. Output the first 20 results, at most. Preface each result with a number and period, starting with 1. Each {resource_type} found in {city} is in the following format:\n{columns_to_select}\nresults: {response_text}"}],
                         )
                         ai_response = completion.choices[0].message.content
+                        print(ai_response)
+                        # regex to find all instances of a number followed by a period and a space, and add a newline before each one
+                        regex_pattern = r'(\d+\.\s)'
+                        modified_response_text = re.sub(regex_pattern, r'<br>\1', ai_response)
+                        # update the response_text with the modified version
+                        ai_response = modified_response_text
+                        print(ai_response)
                     except Exception as e:
                         error_message = Message.objects.create(message_type=MessageType.SYSTEM, text="There was an error processing your request. Please try again.")
                         chat_history_ids.extend([error_message.id,])
@@ -124,7 +191,7 @@ def chat_view(request):
             elif ai_response.upper().find("SQL:") != -1:
                 completion = client.chat.completions.create(
                     model="gpt-3.5-turbo",
-                    messages=[{"role": "system", "content": f"Explain to the user that you could not find the healthcare resources they were looking for. If they provide both a resource type and a city, you should be able to find the resources."}],
+                    messages=[{"role": "system", "content": f"Explain to the user that you could not find the healthcare resource {resource_type if resource_type is not None else ''} they were looking for. Tell them that if they provide a resource type, you should be able to find the resources. If they include a city or a county, you should be able to find the resources in that area. If they just include a city or county, you can find all healthcare resources in that area."}],
                 )
                 ai_response = completion.choices[0].message.content
             
