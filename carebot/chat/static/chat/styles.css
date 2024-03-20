@@ -1,6 +1,6 @@
 :root {
     --color-1: #f1dac4;
-    --color-2: #a69cac;
+    --color-2: #928e96;
     --color-3: #474973;
     --color-4: #161b33;
     --color-5: #0d0c1d;
@@ -13,7 +13,7 @@
     --border-color: #ccc;
     --user-text-color: #fff;
     --user-bubble-color: var(--accent-color);
-    --ai-bubble-color: var(--color-2);
+    --ai-bubble-color: #d6d6d6;
     --ai-text-color: var(--color-5);
 }
 
@@ -48,7 +48,10 @@ footer {
     padding: 10px 0;
     font-size: 30pt;
     width: 100%;
-    box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.5);
+    box-shadow: 0px -3px 20px 5px rgba(0, 0, 0, 0.5);
+    position: fixed; 
+    top: 0; 
+    left: 0; 
 }
 
 .carebot-header a {
@@ -70,7 +73,7 @@ footer {
     color: white;
     text-decoration: none;
     font-size: 30pt;
-    text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    text-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
 }
 
 .caregiver-connect {
@@ -93,8 +96,6 @@ footer {
 .caregiver-connect a:hover {
     color: #6bc1f0
 }
-
-
 
 .carebot-footer {
     background-color: var(--primary-color);
@@ -128,12 +129,17 @@ footer {
     overflow: hidden;
 }
 
+#chatbot-container header {
+    margin-top: 60px
+}
+
 #chat-messages {
     padding: 20px;
     overflow-y: auto;
     flex-grow: 1;
     display: flex;
     flex-direction: column;
+    font-size: 20px;
 }
 
 .user-message {
@@ -147,6 +153,7 @@ footer {
     border-radius: 15px;
     margin-right: 10%;
     margin-right: 4%;
+    box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.5), -3px -3px 5px rgba(255, 255, 255, 0.2);
 }
 
 .ai-message {
@@ -160,6 +167,7 @@ footer {
     border-radius: 15px;
     margin-left: 4%;
     margin-right: 10%;
+    box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.5), -3px -3px 5px rgba(255, 255, 255, 0.2);
 }
 
 .system-message {
@@ -178,7 +186,8 @@ footer {
     display: flex;
     padding: 20px;
     background-color: var(--primary-color);
-    border-top: 1px solid #ccc;
+    /* border-top: 1px solid #ccc; */
+    box-shadow: 0px 3px 20px 5px rgba(0, 0, 0, 0.5);
 }
 
 .form-group input[type="text"] {
@@ -187,6 +196,7 @@ footer {
     border: 2px solid var(--border-color);
     border-radius: 20px;
     padding: 10px;
+    font-size: 20px
 }
 
 .btn-send {
@@ -195,6 +205,7 @@ footer {
     background-color: var(--accent-color);
     color: white;
     cursor: pointer;
+    font-size: 20px
 }
 
 .btn-send:hover {
@@ -207,6 +218,7 @@ footer {
     margin-bottom: 8px;
     margin-left: 4px;
     margin-right: 4px;
+    font-size: 20px;
 }
 
 /* first and last messages need distance from screen edge */
@@ -221,20 +233,23 @@ footer {
 /* Generic button styles */
 .link-button {
     padding: 10px 20px;
+    margin: 0px 5px;
     border-radius: 10px;
     background-color: var(--accent-color);
-    color: var(--text-color);
+    color: white;
     text-decoration: none;
+    cursor: pointer;
     box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.5), -3px -3px 5px rgba(255, 255, 255, 0.2);
 }
 
-.link-button {
+/* Is this necessary? */
+/* .link-button {
     padding: 10px 15px;
     border-radius: 20px;
     background-color: var(--accent-color);
     color: white;
     cursor: pointer;
-}
+} */
 
 .link-button:hover {
     background-color: var(--primary-color);
@@ -253,15 +268,6 @@ footer {
     padding-bottom: 1px; 
 }
 
-.home-header {
-    margin: 0;
-    text-align: center;
-    width: 100%;
-    text-decoration: none;
-    font-size: 18pt;
-    text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-}
-
 #home-container p {
     color: var(--text-color);
     margin: 15px;
@@ -272,15 +278,48 @@ footer {
     padding-bottom: 1px; 
 }
 
+#home-container header {
+    margin-top: 70px;
+}
+
+#home-container footer {
+    margin-bottom: 50px;
+}
+
+.home-header {
+    margin: 0;
+    text-align: center;
+    width: 100%;
+    text-decoration: none;
+    font-size: 18pt;
+    /* text-shadow: 0 0 10px rgba(0, 0, 0, 0.3); */
+}
+
 /* Just makes a thing for multiple buttons vertically */
 #button-menu-col {
     display: flex;
     flex-direction: column;
-    justify-content: flex-start;
+    justify-content: center;
     align-items: center;
     gap: 10px;
     font-size: 15pt;
     margin: 10px
+}
+
+#button-menu-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    font-size: 15pt;
+    margin: 0, 10px;
+}
+
+.spacer {
+    flex-grow: 1;
+    flex-shrink: 1;
+    flex-basis: 20px;
 }
 
 /* Just a section that separates some stuff */
