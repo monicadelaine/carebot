@@ -130,7 +130,7 @@ footer {
 }
 
 #chatbot-container header {
-    margin-top: 60px
+    margin-top: auto;
 }
 
 #chat-messages {
@@ -279,11 +279,11 @@ footer {
 }
 
 #home-container header {
-    margin-top: 70px;
+    margin-top: auto;
 }
 
 #home-container footer {
-    margin-bottom: 50px;
+    margin-bottom: auto;
 }
 
 .home-header {
