@@ -84,6 +84,8 @@
             const text = button.value;
             const form = document.getElementById("user-query");
             form.value = text;
+            document.getElementById("send-button").click()
+            form.value='';
             // const input = form.querySelector("input[name='query']");
             // input.value = text;
             //messages disappear after clicking first one
