@@ -45,10 +45,10 @@ footer {
     align-items: center;
     background-color: var(--primary-color);
     color: white;
-    padding: 10px 0;
+    padding: 10px 0px;
     font-size: 30pt;
     width: 100%;
-    box-shadow: 0px -3px 20px 5px rgba(0, 0, 0, 0.5);
+    box-shadow: 0px 0px 20px 5px rgba(0, 0, 0, 0.5);
     position: fixed; 
     top: 0; 
     left: 0; 
@@ -130,7 +130,7 @@ footer {
 }
 
 #chatbot-container header {
-    margin-top: auto;
+    margin-top: 8vh;
 }
 
 #chat-messages {
@@ -279,11 +279,11 @@ footer {
 }
 
 #home-container header {
-    margin-top: auto;
+    margin-top: 100px;
 }
 
 #home-container footer {
-    margin-bottom: auto;
+    margin-bottom: 50px;
 }
 
 .home-header {
