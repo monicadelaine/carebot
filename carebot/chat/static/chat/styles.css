@@ -233,6 +233,8 @@ footer {
 /* Generic button styles */
 .link-button {
     padding: 10px 20px;
+    min-width: 250px;
+    text-align: center;
     margin: 0px 5px;
     border-radius: 10px;
     background-color: var(--accent-color);
