@@ -68,6 +68,7 @@ def chat_view(request):
                     model="gpt-3.5-turbo",
                     messages=messages_parameter,    # uses system directions, previous messages, and the latest user message
                 )
+                
                 ai_response = completion.choices[0].message.content
             except Exception as e:
                 # create Messages object for the error
