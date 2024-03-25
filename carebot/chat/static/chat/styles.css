@@ -175,6 +175,14 @@ footer {
     border-radius: 15px;
 }
 
+textarea {
+    height: 50px;
+    resize: none;
+    overflow-y: auto;
+}
+
+
+
 .form-group {
     display: flex;
     padding: 20px;
@@ -186,17 +194,30 @@ footer {
     flex-grow: 1;
     margin-right: 10px;
     border: 2px solid var(--border-color);
-    border-radius: 20px;
+    border-radius: 200px;
     padding: 10px;
 }
 
+textarea.form-control {
+    height: 35px; /* Set initial height
+    /* min-height: 50px; Set minimum height */
+    /* max-height: 200px; Set maximum height if needed */
+    width: 95%; 
+    text-align: left;
+    font-size: x-large;
+    resize: vertical; /* Allow vertical resizing */
+    overflow-y: hidden; /* Enable vertical scrollbar when needed */
+    font-family: 'Roboto', sans-serif;
+
+}
 
 .btn-send {
-    padding: 10px 15px;
+    padding: 10px 20px;
     border-radius: 20px;
     background-color: var(--accent-color);
     color: white;
     cursor: pointer;
+    margin-left: 10px;
 }
 
 .btn-send:hover {

@@ -39,7 +39,7 @@
                 <label>
                    <!-- <input type="checkbox" name="is_sql" id="is_sql"> This is an SQL query -->
                 </label>
-                <button type="submit" onclick="hideSuggestedMessages()" class="btn-send">Send</button>
+                <button id="send-button" type="submit" onclick="hideSuggestedMessages()" class="btn-send">Send</button>
             </div>
         </form>
         <div id="loading" style="display: none;">
@@ -58,7 +58,7 @@
         function getLatLong(user_position) {
             var user_latitude = user_position.coords.latitude;
             var user_longitude = user_position.coords.longitude;
-            alert("Lat: " + user_latitude + " Long: " + user_longitude);
+            // alert("Lat: " + user_latitude + " Long: " + user_longitude);
         }
 
         function userError(e) {
@@ -82,9 +82,10 @@
 
         function sendSuggestedMessage(button) {
             const text = button.value;
-            const form = document.getElementById("chat-form");
-            const input = form.querySelector("input[name='query']");
-            input.value = text;
+            const form = document.getElementById("user-query");
+            form.value = text;
+            // const input = form.querySelector("input[name='query']");
+            // input.value = text;
             //messages disappear after clicking first one
             hideSuggestedMessages();
         }
@@ -117,7 +118,21 @@
             return  // Do not alert the user about leaving the page
         });
         const chat_box = document.getElementById("chat-form");
-        chat_box.autocomplete = "off"
+        chat_box.autocomplete = "off";
+        //text box expands when user input reaches end of line
+        user_query_box = document.getElementById("user-query");
+        user_query_box.addEventListener('input', function() {
+            this.style.height = 'auto';
+            this.style.height = (this.scrollHeight) + 'px';
+        })
+        user_query_box.addEventListener("keydown", function (key) {
+            if (key.code === "Enter") {
+                key.preventDefault();
+                document.getElementById("send-button").click();
+                user_query_box.value='';
+                
+            }
+        });
         window.onload = function() {
             getUserLocation();
         }
