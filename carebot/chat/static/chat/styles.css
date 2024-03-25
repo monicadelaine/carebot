@@ -73,6 +73,7 @@ footer {
     text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
 }
 
+
 .caregiver-connect {
     color: white;
     position: absolute;
@@ -189,6 +190,7 @@ footer {
     padding: 10px;
 }
 
+
 .btn-send {
     padding: 10px 15px;
     border-radius: 20px;
@@ -198,7 +200,9 @@ footer {
 }
 
 .btn-send:hover {
-    background-color: var(--border-color);
+    /* background-color: var(--border-color); */
+    background-color: #6bc1f0;
+    color: black;
 }
 
 .btn-send.suggested-message {
@@ -211,7 +215,7 @@ footer {
 
 /* first and last messages need distance from screen edge */
 .btn-send.suggested-message:first-child {
-    margin-left: 20px;
+    margin-left: 32.5%;
 }
 
 .btn-send.suggested-message:last-child {

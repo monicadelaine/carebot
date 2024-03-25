@@ -17,6 +17,7 @@ from .models import Message, MessageType
 logger = logging.getLogger(__name__)
 chat_history = []
 
+
 class QueryFormNoAutofill(forms.Form):
     query = forms.CharField(widget=forms.TextInput(attrs={'autocomplete': 'off'}))
     is_sql = forms.BooleanField(required=False, widget=forms.CheckboxInput())

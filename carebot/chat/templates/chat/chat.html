@@ -48,10 +48,38 @@
     </div>
     <script src="{% static 'chat/chat.js' %}"></script>
     <script>
+        function getUserLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(getLatLong, userError)
+            }
+            
+        }
+
+        function getLatLong(user_position) {
+            var user_latitude = user_position.coords.latitude;
+            var user_longitude = user_position.coords.longitude;
+            alert("Lat: " + user_latitude + " Long: " + user_longitude);
+        }
+
+        function userError(e) {
+            switch(e.code) {
+                case e.PERMISSION_DENIED:
+                    alert("Permission Denied");
+                    break;
+                case e.POSITION_UNAVAILABLE:
+                    alert("User Location Unavailable");
+                    break;
+                default:
+                    alert("Unknown error");
+                    break;
+            }
+        }
+
         function hideSuggestedMessages() {
             suggested_1.style.display = "none";
             suggested_2.style.display = "none";
         }
+
         function sendSuggestedMessage(button) {
             const text = button.value;
             const form = document.getElementById("chat-form");
@@ -60,6 +88,7 @@
             //messages disappear after clicking first one
             hideSuggestedMessages();
         }
+
         var suggested_1 = document.getElementById("suggested_1");
         suggested_1.addEventListener('click', function() {
             sendSuggestedMessage(suggested_1);
@@ -89,6 +118,10 @@
         });
         const chat_box = document.getElementById("chat-form");
         chat_box.autocomplete = "off"
+        window.onload = function() {
+            getUserLocation();
+        }
+
     </script>
 </body>
 </html>
