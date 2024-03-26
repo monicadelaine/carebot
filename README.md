@@ -10,8 +10,8 @@ CS 495 Senior Design Project
 3. Add the following text to `.env`. Place your OpenAI API key between the quotation marks. `OPENAI_API_KEY=""`
 
 ## Hosting Locally with Docker
-1. If you have made any changes to the files, you must run this command to create the Docker image again: `docker build -t carebot-app .`
-2. Run `docker run -d -p 8000:8000 carebot-app`
+1. If you have made any changes to the files, you must run this command to create the Docker image again: `docker-compose build.`
+2. Run `docker-compose run`
 3. In your web browser, go to [localhost:8000](localhost:8000).
 
 ## Making Changes to Models
