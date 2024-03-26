@@ -1,17 +1,24 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Carebot Dashboard</title>
+    <meta charset="UTF-8">
+    <title>Chat Request Heatmap</title>
     {% load static %}
     <link rel="stylesheet" href="{% static 'chat/styles.css' %}">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"/>
+    <style>
+        #heatmap { height: 60vh; width: 80vw; margin: auto; margin-top: 20px; border-radius: 15px; box-shadow: var(--box-shadow); }
+    </style>
 </head>
 <body>
-    <div id="home-container">
-        {% include "chat/header.html" %}
-        <div class="home-header">
-            <h1>Dashboard</h1>
-        </div>
-        <p>This page is under construction.</p>
+    {% include "chat/header.html" %}
+    <div id="heatmap"></div>
+    <div style="text-align: center; margin-top: 20px;">
+        <p>This heatmap visualizes chat request locations across the United States. Darker areas indicate a higher concentration of requests.</p>
     </div>
+    {% include "chat/footer.html" %}
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.heat/0.2.0/leaflet-heat.js"></script>
+    <script src="{% static 'chat/dashboard.js' %}"></script>
 </body>
 </html>

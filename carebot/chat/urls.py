@@ -9,4 +9,6 @@ urlpatterns = [
     path('about_carebot/', views.about_carebot_view, name='about-carebot'),
     path('about_us/', views.about_us_view, name='about-us'),
     path('deliverables/', views.deliverables_view, name='deliverables'),
+    path('api/geolocation-data/', views.geolocation_data, name='geolocation_data'),
+
 ]

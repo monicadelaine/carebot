@@ -207,6 +207,32 @@ def chat_view(request):
 
     return render(request, 'chat/chat.html', {'form': form, 'chat_history': chat_history})
 
+
+def geolocation_data(request):
+    test_data = [
+    {"type": "Feature", "properties": {"intensity": 1}, "geometry": {"type": "Point", "coordinates": [-99.1332, 19.4326]}},  # Mexico City
+    {"type": "Feature", "properties": {"intensity": 1}, "geometry": {"type": "Point", "coordinates": [-99.1332, 19.4326]}},  # Mexico City repeated
+    {"type": "Feature", "properties": {"intensity": 1}, "geometry": {"type": "Point", "coordinates": [-74.0060, 40.7128]}},  # New York
+    {"type": "Feature", "properties": {"intensity": 1}, "geometry": {"type": "Point", "coordinates": [-74.0060, 40.7128]}},  # New York repeated
+    {"type": "Feature", "properties": {"intensity": 1}, "geometry": {"type": "Point", "coordinates": [-118.2437, 34.0522]}},  # Los Angeles
+    {"type": "Feature", "properties": {"intensity": 1}, "geometry": {"type": "Point", "coordinates": [-118.2437, 34.0522]}},  # Los Angeles repeated
+    {"type": "Feature", "properties": {"intensity": 1}, "geometry": {"type": "Point", "coordinates": [-122.4194, 37.7749]}},  # San Francisco
+    {"type": "Feature", "properties": {"intensity": 1}, "geometry": {"type": "Point", "coordinates": [-122.4194, 37.7749]}},  # San Francisco repeated
+
+    {"type": "Feature", "properties": {"intensity": 1}, "geometry": {"type": "Point", "coordinates": [-80.1918, 25.7617]}},  # Miami
+    {"type": "Feature", "properties": {"intensity": 1}, "geometry": {"type": "Point", "coordinates": [-87.6298, 41.8781]}},  # Chicago
+    {"type": "Feature", "properties": {"intensity": 1}, "geometry": {"type": "Point", "coordinates": [-95.3698, 29.7604]}},  # Houston
+    {"type": "Feature", "properties": {"intensity": 1}, "geometry": {"type": "Point", "coordinates": [-84.3880, 33.7490]}},  # Atlanta
+    {"type": "Feature", "properties": {"intensity": 1}, "geometry": {"type": "Point", "coordinates": [-71.0589, 42.3601]}},  # Boston
+    {"type": "Feature", "properties": {"intensity": 1}, "geometry": {"type": "Point", "coordinates": [-77.0369, 38.9072]}},  # Washington D.C.
+    {"type": "Feature", "properties": {"intensity": 1}, "geometry": {"type": "Point", "coordinates": [-149.9003, 61.2181]}},  # Anchorage
+    {"type": "Feature", "properties": {"intensity": 1}, "geometry": {"type": "Point", "coordinates": [-157.8583, 21.3069]}},  # Honolulu
+    {"type": "Feature", "properties": {"intensity": 1}, "geometry": {"type": "Point", "coordinates": [-66.1057, 18.4655]}},  # San Juan, Puerto Rico
+    {"type": "Feature", "properties": {"intensity": 1}, "geometry": {"type": "Point", "coordinates": [-106.6504, 35.0844]}},  # Albuquerque
+    {"type": "Feature", "properties": {"intensity": 1}, "geometry": {"type": "Point", "coordinates": [-115.1398, 36.1699]}},  # Las Vegas
+    ]
+    return JsonResponse({"type": "FeatureCollection", "features": test_data}, safe=False)
+
 def clear_session(request):
     if request.method == 'POST':
         request.session.flush()

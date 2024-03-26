@@ -8,7 +8,7 @@ ENV PYTHONUNBUFFERED 1
 WORKDIR /app
 
 # Dependencies for postgres, added for debugging
-RUN apt-get update && apt-get install -y \
+RUN apt-get update --fix-missing && apt-get install -y --fix-missing\
     binutils \
     libproj-dev \
     gdal-bin \

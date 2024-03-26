@@ -409,3 +409,10 @@ animation-delay: 0.2s;
     justify-content: center;
     padding-top: 1px; 
 }
+
+#heatmap {
+    border: 2px solid var(--border-color);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 15px;
+    overflow: hidden; 
+}

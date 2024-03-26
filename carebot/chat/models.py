@@ -14,3 +14,8 @@ class Message(models.Model):
 
     def __str__(self):
         return self.text
+
+class ChatRequestGeoData(models.Model):
+    latitude = models.FloatField()
+    longitude = models.FloatField()
+    request_time = models.DateTimeField(auto_now_add=True)
