@@ -10,12 +10,20 @@ from django.template import RequestContext
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 from openai import OpenAI
+from django.core.serializers import serialize
+import json
 
 from .forms import QueryForm
-from .models import Message, MessageType
+from .models import Message, MessageType, ChatRequestGeoData
 
 logger = logging.getLogger(__name__)
 chat_history = []
+import os
+from django.conf import settings
+
+city_to_county_path = os.path.join(settings.STATIC_ROOT, 'chat/city-to-county.json')
+county_centroids_path = os.path.join(settings.STATIC_ROOT, 'chat/county_centroids.json')
+
 
 class QueryFormNoAutofill(forms.Form):
     query = forms.CharField(widget=forms.TextInput(attrs={'autocomplete': 'off'}))
@@ -153,6 +161,12 @@ def chat_view(request):
                         logger.info(f"Executing SQL query: {sql_statement}")
                         cursor.execute(sql_statement)
                         rows = cursor.fetchall()
+                        for row in rows:
+                            row_with_none = [value if value else None for value in row]
+                            row_with_none += [None] * (7 - len(row_with_none))
+                            agency_name, addr1, addr2, city, county, id_cms_other, resource_type = row_with_none
+                            logger.info(f"Logging location for heatmap: {city}, {county}, {resource_type}")
+                            log_location_for_heatmap(city, county, resource_type)
                         response_text = str(rows) 
                         logger.info(f"SQL query result: {response_text}")
                 except Exception as e:
@@ -208,30 +222,38 @@ def chat_view(request):
     return render(request, 'chat/chat.html', {'form': form, 'chat_history': chat_history})
 
 
-def geolocation_data(request):
-    test_data = [
-    {"type": "Feature", "properties": {"intensity": 1}, "geometry": {"type": "Point", "coordinates": [-99.1332, 19.4326]}},  # Mexico City
-    {"type": "Feature", "properties": {"intensity": 1}, "geometry": {"type": "Point", "coordinates": [-99.1332, 19.4326]}},  # Mexico City repeated
-    {"type": "Feature", "properties": {"intensity": 1}, "geometry": {"type": "Point", "coordinates": [-74.0060, 40.7128]}},  # New York
-    {"type": "Feature", "properties": {"intensity": 1}, "geometry": {"type": "Point", "coordinates": [-74.0060, 40.7128]}},  # New York repeated
-    {"type": "Feature", "properties": {"intensity": 1}, "geometry": {"type": "Point", "coordinates": [-118.2437, 34.0522]}},  # Los Angeles
-    {"type": "Feature", "properties": {"intensity": 1}, "geometry": {"type": "Point", "coordinates": [-118.2437, 34.0522]}},  # Los Angeles repeated
-    {"type": "Feature", "properties": {"intensity": 1}, "geometry": {"type": "Point", "coordinates": [-122.4194, 37.7749]}},  # San Francisco
-    {"type": "Feature", "properties": {"intensity": 1}, "geometry": {"type": "Point", "coordinates": [-122.4194, 37.7749]}},  # San Francisco repeated
+def log_location_for_heatmap(city, county, resource_type):
+    latitude, longitude = geocode_city(city)
+    if latitude is not None and longitude is not None:
+        ChatRequestGeoData.objects.create(latitude=latitude, longitude=longitude)
+        logging.info(f"Logged location for heatmap: {latitude}, {longitude}")
 
-    {"type": "Feature", "properties": {"intensity": 1}, "geometry": {"type": "Point", "coordinates": [-80.1918, 25.7617]}},  # Miami
-    {"type": "Feature", "properties": {"intensity": 1}, "geometry": {"type": "Point", "coordinates": [-87.6298, 41.8781]}},  # Chicago
-    {"type": "Feature", "properties": {"intensity": 1}, "geometry": {"type": "Point", "coordinates": [-95.3698, 29.7604]}},  # Houston
-    {"type": "Feature", "properties": {"intensity": 1}, "geometry": {"type": "Point", "coordinates": [-84.3880, 33.7490]}},  # Atlanta
-    {"type": "Feature", "properties": {"intensity": 1}, "geometry": {"type": "Point", "coordinates": [-71.0589, 42.3601]}},  # Boston
-    {"type": "Feature", "properties": {"intensity": 1}, "geometry": {"type": "Point", "coordinates": [-77.0369, 38.9072]}},  # Washington D.C.
-    {"type": "Feature", "properties": {"intensity": 1}, "geometry": {"type": "Point", "coordinates": [-149.9003, 61.2181]}},  # Anchorage
-    {"type": "Feature", "properties": {"intensity": 1}, "geometry": {"type": "Point", "coordinates": [-157.8583, 21.3069]}},  # Honolulu
-    {"type": "Feature", "properties": {"intensity": 1}, "geometry": {"type": "Point", "coordinates": [-66.1057, 18.4655]}},  # San Juan, Puerto Rico
-    {"type": "Feature", "properties": {"intensity": 1}, "geometry": {"type": "Point", "coordinates": [-106.6504, 35.0844]}},  # Albuquerque
-    {"type": "Feature", "properties": {"intensity": 1}, "geometry": {"type": "Point", "coordinates": [-115.1398, 36.1699]}},  # Las Vegas
-    ]
-    return JsonResponse({"type": "FeatureCollection", "features": test_data}, safe=False)
+def load_json_data(file_path):
+    with open(file_path, 'r') as file:
+        return json.load(file)
+
+def geocode_city(city_name):
+    city_to_county = load_json_data(city_to_county_path)
+    county_centroids = load_json_data(county_centroids_path)
+    county_name = None
+    for city, county in city_to_county.items():
+        if city.lower() == city_name.lower():
+            county_name = county
+            break
+    if not county_name:
+        return None, None
+    
+    centroid = county_centroids.get(county_name)
+    if not centroid:
+        return None, None 
+    
+    return centroid[0], centroid[1]
+
+
+def geolocation_data(request):
+    data = ChatRequestGeoData.objects.all().values('latitude', 'longitude')
+    data_list = list(data)
+    return JsonResponse(data_list, safe=False)  
 
 def clear_session(request):
     if request.method == 'POST':
