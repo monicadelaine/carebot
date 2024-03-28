@@ -241,6 +241,7 @@ def geocode_city(city_name):
             county_name = county
             break
     if not county_name:
+        logging.info(f"County not found for city: {city_name}")
         return None, None
     
     centroid = county_centroids.get(county_name)
