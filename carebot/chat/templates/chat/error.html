@@ -9,7 +9,9 @@
 </head>
 <body>
     <div id="home-container">
-        {% include "chat/header.html" %}
+        <header>
+            {% include "chat/header.html" %}
+        </header>
         <!-- Do not display the specific error to the user. -->
         <a href="{% url 'home' %}" class="link-button">An error has occured. Click here to go to the homepage.</a>
     </div>

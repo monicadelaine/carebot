@@ -32,7 +32,7 @@ if [ "$DEBUG" = "True" ]; then
 else
     echo "In production mode..."
     echo "Collecting static..."
-    python carebot/manage.py collectstatic
+    python carebot/manage.py collectstatic --noinput
 fi
 echo "Applying database migrations..."
 python carebot/manage.py migrate
