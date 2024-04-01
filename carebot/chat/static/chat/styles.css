@@ -188,14 +188,6 @@ textarea {
     border-top: 1px solid #ccc;
 }
 
-.form-group input[type="text"] {
-    flex-grow: 1;
-    margin-right: 10px;
-    border: 2px solid var(--border-color);
-    border-radius: 200px;
-    padding: 10px;
-}
-
 textarea.form-control {
     height: 35px; /* Set initial height */
     width: 95%; 

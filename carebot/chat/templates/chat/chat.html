@@ -45,6 +45,8 @@
     </div>
     <script src="{% static 'chat/chat.js' %}"></script>
     <script>
+        user_query_box = document.getElementById("user-query");
+
         function getUserLocation() {
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(getLatLong, userError)
@@ -54,20 +56,20 @@
         function getLatLong(user_position) {
             var user_latitude = user_position.coords.latitude;
             var user_longitude = user_position.coords.longitude;
-            alert("Lat: " + user_latitude + " Long: " + user_longitude);
+            console.log("User Latitude, Longitude: " + user_latitude + ", " + user_longitude);
             sendUserLocation(user_latitude, user_longitude);
         }
 
         function userError(e) {
             switch(e.code) {
                 case e.PERMISSION_DENIED:
-                    alert("Permission Denied");
+                    console.log("Permission Denied");
                     break;
                 case e.POSITION_UNAVAILABLE:
-                    alert("User Location Unavailable");
+                    console.log("User Location Unavailable");
                     break;
                 default:
-                    alert("Unknown error");
+                    console.log("Unknown error");
                     break;
             }
         }
@@ -79,13 +81,10 @@
 
         function sendSuggestedMessage(button) {
             const text = button.value;
-            const form = document.getElementById("user-query");
-            form.value = text;
+            user_query_box.value = text;
             document.getElementById("send-button").click()
-            form.value='';
-            // const input = form.querySelector("input[name='query']");
-            // input.value = text;
-            //messages disappear after clicking first one
+            user_query_box.value = '';
+            // messages disappear after clicking first one
             hideSuggestedMessages();
         }
 
@@ -115,10 +114,7 @@
             navigator.sendBeacon('/clear-session/', data);
             return  // Do not alert the user about leaving the page
         });
-        const chat_box = document.getElementById("chat-form");
-        chat_box.autocomplete = "off";
         // text box expands when user input reaches end of line
-        user_query_box = document.getElementById("user-query");
         user_query_box.addEventListener('input', function() {
             this.style.height = 'auto';
             this.style.height = (this.scrollHeight) + 'px';
@@ -127,6 +123,7 @@
             if (key.code === "Enter") {
                 key.preventDefault();
                 document.getElementById("send-button").click();
+                this.style.height = 'auto';
                 user_query_box.value='';
             }
         });

@@ -30,7 +30,7 @@ function sendUserLocation(user_latitude, user_longitude) {
         },
     })
     .then(response => {
-        console.log("about to return json");
+        // console.log("about to return json");
         return response.json()
     })
 }
@@ -44,14 +44,16 @@ document.addEventListener('DOMContentLoaded', function() {
         // insert user message immediately
         const chatMessages = document.getElementById('chat-messages');
         const userMessageDiv = document.createElement('div');
-        userMessageDiv.className = 'user-message'; // Adjust this class as needed for styling
-        const userMessage = formData.get('query'); // Adjust 'query' based on your form field's name
+        userMessageDiv.className = 'user-message';
+        const userMessage = formData.get('query');
         userMessageDiv.innerHTML = `<p>${userMessage}</p>`;
         chatMessages.appendChild(userMessageDiv);
         
         // Clear the input field right after pushing button
-        const inputField = chatForm.querySelector('input[name="query"]'); // Adjust the selector as needed
+        const inputField = document.getElementById('user-query');
         if (inputField) inputField.value = ''; // Clears the text field
+        inputField.style.height = 'auto';
+        inputField.style.height = (inputField.style.height) + 'px';
         
         // insert loading message
         const loadingMessageDiv = document.createElement('div');
@@ -59,9 +61,6 @@ document.addEventListener('DOMContentLoaded', function() {
         loadingMessageDiv.innerHTML = `<p><span class="dot"></span><span class="dot"></span><span class="dot"></span></p>`;
         chatMessages.appendChild(loadingMessageDiv);
         chatMessages.scrollTop = chatMessages.scrollHeight; // Auto-scroll to the latest message
-        // Check for SQL message, kept for dev purposes
-        // const isSqlCheckbox = document.getElementById('is_sql');
-        // formData.append('is_sql', isSqlCheckbox.checked ? 'True' : 'False');
         
         fetch('/chat/', { 
             method: 'POST',
@@ -83,7 +82,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
             // insert AI or system response message
             const aiMessageDiv = document.createElement('div');
-            // TODO: set message class based on the message_type value of the Message model
             if (data.response === 'There was an error processing your request. Please try again.') {
                 aiMessageDiv.className = 'system-message';
             } else {
