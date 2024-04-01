@@ -1,6 +1,6 @@
 :root {
     --color-1: #f1dac4;
-    --color-2: #a69cac;
+    --color-2: #928e96;
     --color-3: #474973;
     --color-4: #161b33;
     --color-5: #0d0c1d;
@@ -13,7 +13,7 @@
     --border-color: #ccc;
     --user-text-color: #fff;
     --user-bubble-color: var(--accent-color);
-    --ai-bubble-color: var(--color-2);
+    --ai-bubble-color: #d6d6d6;
     --ai-text-color: var(--color-5);
 }
 
@@ -36,7 +36,6 @@ footer {
     margin-top: auto;
 }
 
-
 .carebot-header {
     display: flex;
     position: relative;
@@ -45,10 +44,13 @@ footer {
     align-items: center;
     background-color: var(--primary-color);
     color: white;
-    padding: 10px 0;
+    padding: 10px 0px;
     font-size: 30pt;
     width: 100%;
-    box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.5);
+    box-shadow: 0px 0px 20px 5px rgba(0, 0, 0, 0.5);
+    position: fixed; 
+    top: 0; 
+    left: 0; 
 }
 
 .carebot-header a {
@@ -70,7 +72,7 @@ footer {
     color: white;
     text-decoration: none;
     font-size: 30pt;
-    text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    text-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
 }
 
 
@@ -95,8 +97,6 @@ footer {
     color: #6bc1f0
 }
 
-
-
 .carebot-footer {
     background-color: var(--primary-color);
     color: white;
@@ -109,6 +109,7 @@ footer {
     bottom: 0; 
     left: 0; 
 }
+
 .carebot-footer a {
     color: white;
     text-decoration: none;
@@ -129,12 +130,17 @@ footer {
     overflow: hidden;
 }
 
+#chatbot-container header {
+    margin-top: 8vh;
+}
+
 #chat-messages {
-    padding: 20px;
+    padding: 2vw;
     overflow-y: auto;
     flex-grow: 1;
     display: flex;
     flex-direction: column;
+    font-size: 20px;
 }
 
 .user-message {
@@ -148,6 +154,7 @@ footer {
     border-radius: 15px;
     margin-right: 10%;
     margin-right: 4%;
+    box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.5), -3px -3px 5px rgba(255, 255, 255, 0.2);
 }
 
 .ai-message {
@@ -161,6 +168,7 @@ footer {
     border-radius: 15px;
     margin-left: 4%;
     margin-right: 10%;
+    box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.5), -3px -3px 5px rgba(255, 255, 255, 0.2);
 }
 
 .system-message {
@@ -185,7 +193,8 @@ textarea {
     display: flex;
     padding: 20px;
     background-color: var(--primary-color);
-    border-top: 1px solid #ccc;
+    /* border-top: 1px solid #ccc; */
+    box-shadow: 0px 3px 20px 5px rgba(0, 0, 0, 0.5);
 }
 
 textarea.form-control {
@@ -224,6 +233,7 @@ textarea.form-control {
     margin-bottom: 8px;
     margin-left: 4px;
     margin-right: 4px;
+    font-size: 20px;
 }
 
 /* first and last messages need distance from screen edge */
@@ -235,23 +245,37 @@ textarea.form-control {
     margin-right: 20px;
 }
 
+.suggested-messages {
+    overflow-x: auto;
+    white-space: nowrap;
+    overflow-y: hidden;
+    min-height: 55px;
+    padding-bottom: 5px;
+    padding-top: 0px;
+}
+
 /* Generic button styles */
 .link-button {
     padding: 10px 20px;
+    min-width: 250px;
+    text-align: center;
+    margin: 0px 5px;
     border-radius: 10px;
     background-color: var(--accent-color);
-    color: var(--text-color);
+    color: white;
     text-decoration: none;
+    cursor: pointer;
     box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.5), -3px -3px 5px rgba(255, 255, 255, 0.2);
 }
 
-.link-button {
+/* Is this necessary? */
+/* .link-button {
     padding: 10px 15px;
     border-radius: 20px;
     background-color: var(--accent-color);
     color: white;
     cursor: pointer;
-}
+} */
 
 .link-button:hover {
     background-color: var(--primary-color);
@@ -270,15 +294,6 @@ textarea.form-control {
     padding-bottom: 1px; 
 }
 
-.home-header {
-    margin: 0;
-    text-align: center;
-    width: 100%;
-    text-decoration: none;
-    font-size: 18pt;
-    text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-}
-
 #home-container p {
     color: var(--text-color);
     margin: 15px;
@@ -289,15 +304,48 @@ textarea.form-control {
     padding-bottom: 1px; 
 }
 
+#home-container header {
+    margin-top: 100px;
+}
+
+#home-container footer {
+    margin-bottom: 50px;
+}
+
+.home-header {
+    margin: 0;
+    text-align: center;
+    width: 100%;
+    text-decoration: none;
+    font-size: 18pt;
+    /* text-shadow: 0 0 10px rgba(0, 0, 0, 0.3); */
+}
+
 /* Just makes a thing for multiple buttons vertically */
 #button-menu-col {
     display: flex;
     flex-direction: column;
-    justify-content: flex-start;
+    justify-content: center;
     align-items: center;
     gap: 10px;
     font-size: 15pt;
     margin: 10px
+}
+
+#button-menu-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    font-size: 15pt;
+    margin: 0, 10px;
+}
+
+.spacer {
+    flex-grow: 1;
+    flex-shrink: 1;
+    flex-basis: 20px;
 }
 
 /* Just a section that separates some stuff */

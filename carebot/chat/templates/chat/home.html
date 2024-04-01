@@ -4,25 +4,31 @@
 <head>
     <title>Carebot Homepage</title>
     <link rel="stylesheet" href="{% static 'chat/styles.css' %}">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
     <div id="home-container">
-        {% include "chat/header.html" %}
+        <header>
+            {% include "chat/header.html" %}
+        </header>
         <!-- <h1>Carebot</h1> -->
         <img src="{% static 'chat/elderly_person_image.png' %}" alt="Elderly person using computer" id="elderly-person-image">
         
-        <p>Carebot is a chatbot that helps connect Alabama residents to healthcare resources in their area. Ask Carebot for helping finding healthcare today!</p>
-        
-        <div id="button-menu-col">
-            <a href="{% url 'chat' %}" 
-                class="link-button">Chat with Carebot
-            </a>
-            <a href="{% url 'dashboard' %}" 
-                class="link-button">See what others are asking about
-            </a>
-            <a href="{% url 'about-carebot' %}" 
-                class="link-button">About Carebot
-            </a>
+        <p>Carebot is a chatbot powered by ChatGPT v3.5 that helps connect Alabama residents to healthcare resources. 
+            Using a database of healthcare providers, the services they offer, their locations, and the users' zip code, the chatbot can connect the user to a healthcare service provider near them. 
+            Carebot asks the user for any information it needs to help them out, and it focuses conversations on finding medical resources in Alabama. 
+            Click the "Chat with Carebot" button to find help healthcare services near you!
+        </p>
+        <div id="button-menu-row">
+            <div id="button-menu-col">
+                <a href="{% url 'chat' %}" class="link-button">Chat with Carebot</a>
+                <a href="{% url 'about-us' %}" class="link-button">About the Team</a>                
+            </div>
+            <div id="button-menu-col">
+                <a href="{% url 'dashboard' %}" class="link-button">See What Others Are Asking</a>
+                <a href="{% url 'deliverables' %}" class="link-button">Project Deliverables</a>
+            </div>
         </div>
         <footer>
             {% include "chat/footer.html" %}
