@@ -181,8 +181,6 @@ textarea {
     overflow-y: auto;
 }
 
-
-
 .form-group {
     display: flex;
     padding: 20px;
@@ -199,16 +197,18 @@ textarea {
 }
 
 textarea.form-control {
-    height: 35px; /* Set initial height
-    /* min-height: 50px; Set minimum height */
-    /* max-height: 200px; Set maximum height if needed */
+    height: 35px; /* Set initial height */
     width: 95%; 
     text-align: left;
     font-size: x-large;
-    resize: vertical; /* Allow vertical resizing */
+    resize: none;   /* Disable manual resizing */
     overflow-y: hidden; /* Enable vertical scrollbar when needed */
     font-family: 'Roboto', sans-serif;
-
+    flex-grow: 1;
+    margin-right: 10px;
+    border: 2px solid var(--border-color);
+    border-radius: 20px;
+    padding: calc(min(0.5vw, 10px));
 }
 
 .btn-send {

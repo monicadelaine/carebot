@@ -19,11 +19,8 @@ logger = logging.getLogger(__name__)
 chat_history = []
 user_coords = []
 
-
 class QueryFormNoAutofill(forms.Form):
     query = forms.CharField(widget=forms.TextInput(attrs={'autocomplete': 'off'}))
-    is_sql = forms.BooleanField(required=False, widget=forms.CheckboxInput())
-
 
 def storeUserLocation(request):
     #grab user's location from ajax function from chat.js

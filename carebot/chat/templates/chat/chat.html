@@ -36,9 +36,6 @@
             {% csrf_token %}
             <div class="form-group">
                 {{ form.query }}
-                <label>
-                   <!-- <input type="checkbox" name="is_sql" id="is_sql"> This is an SQL query -->
-                </label>
                 <button id="send-button" type="submit" onclick="hideSuggestedMessages()" class="btn-send">Send</button>
             </div>
         </form>
@@ -52,7 +49,6 @@
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(getLatLong, userError)
             }
-            
         }
 
         function getLatLong(user_position) {
@@ -115,14 +111,13 @@
             const csrfToken = getCsrfToken();
             const data = new FormData();
             data.append('csrfmiddlewaretoken', csrfToken);
-
             // Asynchronously clear the session
             navigator.sendBeacon('/clear-session/', data);
             return  // Do not alert the user about leaving the page
         });
         const chat_box = document.getElementById("chat-form");
         chat_box.autocomplete = "off";
-        //text box expands when user input reaches end of line
+        // text box expands when user input reaches end of line
         user_query_box = document.getElementById("user-query");
         user_query_box.addEventListener('input', function() {
             this.style.height = 'auto';
@@ -133,13 +128,11 @@
                 key.preventDefault();
                 document.getElementById("send-button").click();
                 user_query_box.value='';
-                
             }
         });
         window.onload = function() {
             getUserLocation();
         }
-
     </script>
 </body>
 </html>
