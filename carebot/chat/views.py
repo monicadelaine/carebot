@@ -1,5 +1,6 @@
 import logging
 import re
+import json
 
 from django import forms
 from django.conf import settings
@@ -16,19 +17,39 @@ from .models import Message, MessageType
 
 logger = logging.getLogger(__name__)
 chat_history = []
+user_coords = []
 
 class QueryFormNoAutofill(forms.Form):
     query = forms.CharField(widget=forms.TextInput(attrs={'autocomplete': 'off'}))
-    is_sql = forms.BooleanField(required=False, widget=forms.CheckboxInput())
+
+def storeUserLocation(request):
+    #grab user's location from ajax function from chat.js
+    try:
+        data = json.loads(request.body.decode('utf-8'))
+        user_latitude = data[0]['user_latitude']
+        user_longitude = data[1]['user_longitude']
+        user_loc = (user_latitude, user_longitude)
+        user_coords.append(user_loc)
+        for coord in user_coords:
+            print(coord)
+        return JsonResponse({'status': 'success'})
+    
+    #catch the exception of "cannot access request body more than once", make sure it does not affect chatbot
+    except Exception as e:
+        # print(e)
+        pass
 
 def chat_view(request):
     # Initialize chat_history_ids from session or start with an empty list
     chat_history_ids = request.session.get('chat_history_ids', [])
 
+    storeUserLocation(request)
+    
     if request.method == 'POST':
         form = QueryFormNoAutofill(request.POST)
-        
+
         if form.is_valid():
+
             query = form.cleaned_data.get('query', '') 
 
             client = OpenAI(api_key=settings.OPENAI_API_KEY)

@@ -21,3 +21,4 @@ sqlparse==0.4.4
 tqdm==4.66.2
 typing_extensions==4.9.0
 tzdata==2024.1
+js2py==0.74

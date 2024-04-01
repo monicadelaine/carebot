@@ -40,10 +40,7 @@
             {% csrf_token %}
             <div class="form-group">
                 {{ form.query }}
-                <label>
-                   <!-- <input type="checkbox" name="is_sql" id="is_sql"> This is an SQL query -->
-                </label>
-                <button type="submit" onclick="hideSuggestedMessages()" class="btn-send">Send</button>
+                <button id="send-button" type="submit" onclick="hideSuggestedMessages()" class="btn-send">Send</button>
             </div>
         </form>
         <div id="loading" style="display: none;">
@@ -52,18 +49,49 @@
     </div>
     <script src="{% static 'chat/chat.js' %}"></script>
     <script>
+        user_query_box = document.getElementById("user-query");
+
+        function getUserLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(getLatLong, userError)
+            }
+        }
+
+        function getLatLong(user_position) {
+            var user_latitude = user_position.coords.latitude;
+            var user_longitude = user_position.coords.longitude;
+            console.log("User Latitude, Longitude: " + user_latitude + ", " + user_longitude);
+            sendUserLocation(user_latitude, user_longitude);
+        }
+
+        function userError(e) {
+            switch(e.code) {
+                case e.PERMISSION_DENIED:
+                    console.log("Permission Denied");
+                    break;
+                case e.POSITION_UNAVAILABLE:
+                    console.log("User Location Unavailable");
+                    break;
+                default:
+                    console.log("Unknown error");
+                    break;
+            }
+        }
+
         function hideSuggestedMessages() {
             suggested_1.style.display = "none";
             suggested_2.style.display = "none";
         }
+
         function sendSuggestedMessage(button) {
             const text = button.value;
-            const form = document.getElementById("chat-form");
-            const input = form.querySelector("input[name='query']");
-            input.value = text;
-            //messages disappear after clicking first one
+            user_query_box.value = text;
+            document.getElementById("send-button").click()
+            user_query_box.value = '';
+            // messages disappear after clicking first one
             hideSuggestedMessages();
         }
+
         var suggested_1 = document.getElementById("suggested_1");
         suggested_1.addEventListener('click', function() {
             sendSuggestedMessage(suggested_1);
@@ -86,13 +114,26 @@
             const csrfToken = getCsrfToken();
             const data = new FormData();
             data.append('csrfmiddlewaretoken', csrfToken);
-
             // Asynchronously clear the session
             navigator.sendBeacon('/clear-session/', data);
             return  // Do not alert the user about leaving the page
         });
-        const chat_box = document.getElementById("chat-form");
-        chat_box.autocomplete = "off"
+        // text box expands when user input reaches end of line
+        user_query_box.addEventListener('input', function() {
+            this.style.height = 'auto';
+            this.style.height = (this.scrollHeight) + 'px';
+        })
+        user_query_box.addEventListener("keydown", function (key) {
+            if (key.code === "Enter") {
+                key.preventDefault();
+                document.getElementById("send-button").click();
+                this.style.height = 'auto';
+                user_query_box.value='';
+            }
+        });
+        window.onload = function() {
+            getUserLocation();
+        }
     </script>
 </body>
 </html>

@@ -75,6 +75,7 @@ footer {
     text-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
 }
 
+
 .caregiver-connect {
     color: white;
     position: absolute;
@@ -182,6 +183,12 @@ footer {
     border-radius: 15px;
 }
 
+textarea {
+    height: 50px;
+    resize: none;
+    overflow-y: auto;
+}
+
 .form-group {
     display: flex;
     padding: 20px;
@@ -190,26 +197,34 @@ footer {
     box-shadow: 0px 3px 20px 5px rgba(0, 0, 0, 0.5);
 }
 
-.form-group input[type="text"] {
+textarea.form-control {
+    height: 35px; /* Set initial height */
+    width: 95%; 
+    text-align: left;
+    font-size: x-large;
+    resize: none;   /* Disable manual resizing */
+    overflow-y: hidden; /* Enable vertical scrollbar when needed */
+    font-family: 'Roboto', sans-serif;
     flex-grow: 1;
     margin-right: 10px;
     border: 2px solid var(--border-color);
     border-radius: 20px;
-    padding: 10px;
-    font-size: 20px
+    padding: calc(min(0.5vw, 10px));
 }
 
 .btn-send {
-    padding: 10px 15px;
+    padding: 10px 20px;
     border-radius: 20px;
     background-color: var(--accent-color);
     color: white;
     cursor: pointer;
-    font-size: 20px
+    margin-left: 10px;
 }
 
 .btn-send:hover {
-    background-color: var(--border-color);
+    /* background-color: var(--border-color); */
+    background-color: #6bc1f0;
+    color: black;
 }
 
 .btn-send.suggested-message {
@@ -223,7 +238,7 @@ footer {
 
 /* first and last messages need distance from screen edge */
 .btn-send.suggested-message:first-child {
-    margin-left: 20px;
+    margin-left: 32.5%;
 }
 
 .btn-send.suggested-message:last-child {
