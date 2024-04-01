@@ -5,6 +5,8 @@
     {% load static %}
     <link rel="stylesheet" href="{% static 'chat/styles.css' %}">
     <meta name="csrf-token" content="{{ csrf_token }}">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
     <div id="chatbot-container">
@@ -30,7 +32,7 @@
                 {% endif %}
             {% endfor %}
         </div>
-        <div id="suggested-messages">
+        <div class="suggested-messages">
             <button id="suggested_1" type="button" class="btn-send suggested-message" value="Help me find counseling services in my area.">Help me find counseling services in my area.</button>
             <button id="suggested_2" type="button" class="btn-send suggested-message" value="Help me find food banks in my area.">Help me find food banks in my area.</button>
         </div>

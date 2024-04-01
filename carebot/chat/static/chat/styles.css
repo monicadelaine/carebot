@@ -36,7 +36,6 @@ footer {
     margin-top: auto;
 }
 
-
 .carebot-header {
     display: flex;
     position: relative;
@@ -109,6 +108,7 @@ footer {
     bottom: 0; 
     left: 0; 
 }
+
 .carebot-footer a {
     color: white;
     text-decoration: none;
@@ -134,7 +134,7 @@ footer {
 }
 
 #chat-messages {
-    padding: 20px;
+    padding: 2vw;
     overflow-y: auto;
     flex-grow: 1;
     display: flex;
@@ -228,6 +228,15 @@ footer {
 
 .btn-send.suggested-message:last-child {
     margin-right: 20px;
+}
+
+.suggested-messages {
+    overflow-x: auto;
+    white-space: nowrap;
+    overflow-y: hidden;
+    min-height: 55px;
+    padding-bottom: 5px;
+    padding-top: 0px;
 }
 
 /* Generic button styles */
