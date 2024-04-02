@@ -40,29 +40,39 @@ footer {
     display: flex;
     position: relative;
     flex-direction: row;
-    justify-content: center;
     align-items: center;
     background-color: var(--primary-color);
     color: white;
     padding: 10px 0px;
-    font-size: 30pt;
+    font-size: xx-large;
     width: 100%;
     box-shadow: 0px 0px 20px 5px rgba(0, 0, 0, 0.5);
     position: fixed; 
-    top: 0; 
-    left: 0; 
+    top: 0;
 }
 
 .carebot-header a {
     position: absolute;
     margin: 0 20px;
-    left: 0;
-    top: 50%;
-    transform: translateY(-50%); /* Center vertically */
     color: white;
     text-decoration: none;
-    align-content: left;
     text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+.carebot-header a.left {
+    left: 0px;
+}
+
+.carebot-header a.right {
+    right: 0px;
+}
+
+@media (max-width: 725px){
+    .carebot-header a.right {
+        color: transparent;
+        text-decoration: none;
+        text-shadow: none;
+    }
 }
 
 .carebot-header h1 {
@@ -71,30 +81,18 @@ footer {
     width: 100%;
     color: white;
     text-decoration: none;
-    font-size: 30pt;
+    font-size: larger;
     text-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
 }
-
 
 .caregiver-connect {
     color: white;
     position: absolute;
-    font-size: 16pt;
-    margin: 0 200px;
-    right: -10px;
-    top: 50%;
-    transform: translateY(-50%); /*Center vertically*/
-    text-align: right;
     box-shadow: 0px -3px 5px rgba(0, 0, 0, 0.5);
 }
 
-.caregiver-connect a {
-    color: white;
-    text-decoration: none;
-}
-
-.caregiver-connect a:hover {
-    color: #6bc1f0
+.carebot-header a:hover {
+    color: #6bc1f0;
 }
 
 .carebot-footer {
@@ -113,7 +111,6 @@ footer {
 .carebot-footer a {
     color: white;
     text-decoration: none;
-    
 }
 
 .carebot-footer a:hover {
@@ -140,7 +137,7 @@ footer {
     flex-grow: 1;
     display: flex;
     flex-direction: column;
-    font-size: 20px;
+    font-size: large;
 }
 
 .user-message {
@@ -198,12 +195,13 @@ textarea {
 }
 
 textarea.form-control {
-    height: 35px; /* Set initial height */
+    height: 35px;
+    max-height: 15vh;
     width: 95%; 
     text-align: left;
     font-size: x-large;
     resize: none;   /* Disable manual resizing */
-    overflow-y: hidden; /* Enable vertical scrollbar when needed */
+    overflow-y: scroll; /* Enable vertical scrollbar when needed */
     font-family: 'Roboto', sans-serif;
     flex-grow: 1;
     margin-right: 10px;
@@ -238,7 +236,7 @@ textarea.form-control {
 
 /* first and last messages need distance from screen edge */
 .btn-send.suggested-message:first-child {
-    margin-left: 32.5%;
+    margin-left: 20px;
 }
 
 .btn-send.suggested-message:last-child {
