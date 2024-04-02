@@ -30,8 +30,8 @@ def storeUserLocation(request):
         user_longitude = data[1]['user_longitude']
         user_loc = (user_latitude, user_longitude)
         user_coords.append(user_loc)
-        for coord in user_coords:
-            print(coord)
+        # for coord in user_coords:
+        #     print(coord)
         return JsonResponse({'status': 'success'})
     
     #catch the exception of "cannot access request body more than once", make sure it does not affect chatbot
