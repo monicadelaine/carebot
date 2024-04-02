@@ -79,8 +79,10 @@
         }
 
         function hideSuggestedMessages() {
-            suggested_1.style.display = "none";
-            suggested_2.style.display = "none";
+            if (user_query_box.value != ""){
+                suggested_1.style.display = "none";
+                suggested_2.style.display = "none";
+            }
         }
 
         function sendSuggestedMessage(button) {
