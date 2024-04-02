@@ -15,6 +15,7 @@
     --user-bubble-color: var(--accent-color);
     --ai-bubble-color: #d6d6d6;
     --ai-text-color: var(--color-5);
+    --mobile-view-max-width: 725px;
 }
 
 body, html {
@@ -23,6 +24,9 @@ body, html {
     padding: 0;
     font-family: 'Roboto', sans-serif;
     background-color: var(--color-1);
+}
+body {
+    padding-top: 10vh 0px;
 }
 
 h2 {
@@ -38,7 +42,7 @@ footer {
 
 .carebot-header {
     display: flex;
-    position: relative;
+    position: fixed;
     flex-direction: row;
     align-items: center;
     background-color: var(--primary-color);
@@ -47,7 +51,6 @@ footer {
     font-size: xx-large;
     width: 100%;
     box-shadow: 0px 0px 20px 5px rgba(0, 0, 0, 0.5);
-    position: fixed; 
     top: 0;
 }
 
@@ -65,14 +68,6 @@ footer {
 
 .carebot-header a.right {
     right: 0px;
-}
-
-@media (max-width: 725px){
-    .carebot-header a.right {
-        color: transparent;
-        text-decoration: none;
-        text-shadow: none;
-    }
 }
 
 .carebot-header h1 {
@@ -98,7 +93,7 @@ footer {
 .carebot-footer {
     background-color: var(--primary-color);
     color: white;
-    padding: 10px;
+    padding: 10px 0px;
     min-width: 100vw;
     text-align: center;
     font-size: 12pt;
@@ -119,7 +114,7 @@ footer {
 
 /* Chat page styles */
 #chatbot-container {
-    height: 100vh; 
+    height: 100vh;
     width: 100vw; 
     background-color: var(--background-color);
     display: flex;
@@ -149,7 +144,7 @@ footer {
     padding-top: 3px;
     padding-bottom: 3px;
     border-radius: 15px;
-    margin-right: 10%;
+    margin-left: 10%;
     margin-right: 4%;
     box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.5), -3px -3px 5px rgba(255, 255, 255, 0.2);
 }
@@ -187,6 +182,7 @@ textarea {
 }
 
 .form-group {
+    bottom: 0px;
     display: flex;
     padding: 20px;
     background-color: var(--primary-color);
@@ -261,19 +257,11 @@ textarea.form-control {
     border-radius: 10px;
     background-color: var(--accent-color);
     color: white;
+    font-size: x-large;
     text-decoration: none;
     cursor: pointer;
     box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.5), -3px -3px 5px rgba(255, 255, 255, 0.2);
 }
-
-/* Is this necessary? */
-/* .link-button {
-    padding: 10px 15px;
-    border-radius: 20px;
-    background-color: var(--accent-color);
-    color: white;
-    cursor: pointer;
-} */
 
 .link-button:hover {
     background-color: var(--primary-color);
@@ -288,8 +276,9 @@ textarea.form-control {
     justify-content: flex-start;
     width: 100vw;
     background-color: var(--color-1);
-    overflow: hidden; 
-    padding-bottom: 1px; 
+    overflow: hidden;
+    padding-top: 8vh;
+    padding-bottom: 8vh;
 }
 
 #home-container p {
@@ -302,14 +291,6 @@ textarea.form-control {
     padding-bottom: 1px; 
 }
 
-#home-container header {
-    margin-top: 100px;
-}
-
-#home-container footer {
-    margin-bottom: 50px;
-}
-
 .home-header {
     margin: 0;
     text-align: center;
@@ -318,27 +299,22 @@ textarea.form-control {
     font-size: 18pt;
     /* text-shadow: 0 0 10px rgba(0, 0, 0, 0.3); */
 }
-
-/* Just makes a thing for multiple buttons vertically */
-#button-menu-col {
-    display: flex;
+/* Lays out buttons in a 2x2 or 1 column based on screen width */
+.button-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100%, 1fr));
+    gap: 10px;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     gap: 10px;
-    font-size: 15pt;
-    margin: 10px
 }
 
-#button-menu-row {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    gap: 10px;
-    font-size: 15pt;
-    margin: 0, 10px;
-}
+@media (min-width: 725px) {
+    .button-container {
+      grid-template-columns: repeat(2, 1fr); /* Creates a 2x2 grid */
+    }
+  }
 
 .spacer {
     flex-grow: 1;
