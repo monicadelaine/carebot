@@ -8,10 +8,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
+    <header>
+        {% include "chat/header.html" %}
+    </header>
     <div id="home-container">
-        <header>
-            {% include "chat/header.html" %}
-        </header>
         <!-- Do not display the specific error to the user. -->
         <a href="{% url 'home' %}" class="link-button">An error has occured. Click here to go to the homepage.</a>
     </div>

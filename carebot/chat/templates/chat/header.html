@@ -4,16 +4,14 @@
 {% load static %}
 <link rel="stylesheet" href="{% static 'chat/styles.css' %}">
 </head>
-<body>
 <div class="carebot-header">
-    <a href="{% url 'home' %}">
+    <a class="left" href="{% url 'home' %}">
         <img src="{% static 'chat/home_icon.png' %}" alt="Home Icon" class="home-icon">
     </a>
     <h1>Carebot</h1>
-    
-    <div class="caregiver-connect">
-        <a href="https://caregiverconnect.ua.edu/chatbot-home.html">Caregiver Connect</a>
-    </div>
+    <!-- <a class="right" href="https://caregiverconnect.ua.edu/chatbot-home.html">Caregiver Connect</a> -->
+    <a class="right" href="https://caregiverconnect.ua.edu/chatbot-home.html">
+        <img src="{% static 'chat/caregiver_connect_icon.svg' %}" alt="Caregiver Connect Icon" class="home-icon">
+    </a>
 </div>
-</body>
 </html>
