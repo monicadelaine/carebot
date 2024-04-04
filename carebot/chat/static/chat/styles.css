@@ -25,9 +25,6 @@ body, html {
     font-family: 'Roboto', sans-serif;
     background-color: var(--color-1);
 }
-body {
-    padding-top: 10vh 0px;
-}
 
 h2 {
     margin-top: 10px;
@@ -300,7 +297,7 @@ textarea.form-control {
     /* text-shadow: 0 0 10px rgba(0, 0, 0, 0.3); */
 }
 /* Lays out buttons in a 2x2 or 1 column based on screen width */
-.button-container {
+.adjusting-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(100%, 1fr));
     gap: 10px;
@@ -311,7 +308,7 @@ textarea.form-control {
 }
 
 @media (min-width: 725px) {
-    .button-container {
+    .adjusting-grid {
       grid-template-columns: repeat(2, 1fr); /* Creates a 2x2 grid */
     }
   }
