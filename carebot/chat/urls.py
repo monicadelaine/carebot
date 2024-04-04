@@ -6,7 +6,6 @@ urlpatterns = [
     path('chat/', views.chat_view, name='chat'),
     path('dashboard/', views.dashboard_view, name='dashboard'),
     path('clear-session/', views.clear_session, name='clear_session'),
-    path('about_carebot/', views.about_carebot_view, name='about-carebot'),
-    path('about_us/', views.about_us_view, name='about-us'),
+    path('about-us/', views.about_us_view, name='about-us'),
     path('deliverables/', views.deliverables_view, name='deliverables'),
 ]
