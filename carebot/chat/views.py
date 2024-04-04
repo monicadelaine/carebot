@@ -10,6 +10,7 @@ from django.shortcuts import redirect, render
 from django.template import RequestContext
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
+from django_ratelimit.decorators import ratelimit
 from openai import OpenAI
 
 from .forms import QueryForm
@@ -39,6 +40,10 @@ def storeUserLocation(request):
         # print(e)
         pass
 
+# def user_rate_key(request):
+#     return request.META['REMOTE_ADDR']
+
+# @ratelimit(key=user_rate_key, rate='2/s')
 def chat_view(request):
     # Initialize chat_history_ids from session or start with an empty list
     chat_history_ids = request.session.get('chat_history_ids', [])
