@@ -54,6 +54,8 @@ def chat_view(request):
 
             client = OpenAI(api_key=settings.OPENAI_API_KEY)
             query = form.cleaned_data['query']
+            if len(query) > 1000:
+                query = query[:1000]    # truncate the query to 1000 characters if it is longer
 
             chat_history = Message.objects.filter(id__in=chat_history_ids).order_by('created_at')
 
