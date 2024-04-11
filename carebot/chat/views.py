@@ -49,6 +49,12 @@ def storeUserLocation(request):
 
 @ratelimit(key='ip', rate='10/m', block=True)
 def chat_view(request):
+    #can return from function, render error page if IP is in blacklist
+    # user_ip = request.META.get['REMOTE_ADDR']
+    # print(user_ip)
+    # if user_ip in blacklist_ips:
+        #return render(request, 'chat/error.html', {'error': 'Blacklisted IP.'})
+
     # Initialize chat_history_ids from session or start with an empty list
     chat_history_ids = request.session.get('chat_history_ids', [])
 
@@ -95,6 +101,7 @@ def chat_view(request):
             # create Messages object for the user query
             user_message = Message.objects.create(message_type=MessageType.USER, text=query)   # this must be done before the AI response is generated to maintain the order of messages
 
+            # rate limit openai API here, can use "with textlimiter.limit(prompt=prompt, max_tokens=max_tokens):"
             try:
                 completion = client.chat.completions.create(
                     model="gpt-3.5-turbo",
