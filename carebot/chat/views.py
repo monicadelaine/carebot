@@ -40,10 +40,14 @@ def storeUserLocation(request):
         # print(e)
         pass
 
-# def user_rate_key(request):
-#     return request.META['REMOTE_ADDR']
+# def limited_chat_view(request):
+#     try:
+#         chat_view(request)
+#     except:
+#         return error_view(request)
 
-# @ratelimit(key=user_rate_key, rate='2/s')
+
+@ratelimit(key='ip', rate='10/m', block=True)
 def chat_view(request):
     # Initialize chat_history_ids from session or start with an empty list
     chat_history_ids = request.session.get('chat_history_ids', [])
