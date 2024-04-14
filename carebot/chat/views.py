@@ -13,12 +13,15 @@ from django.views.decorators.http import require_POST
 from django_ratelimit.decorators import ratelimit
 from openai import OpenAI
 
+
 from .forms import QueryForm
 from .models import Message, MessageType
 
 logger = logging.getLogger(__name__)
 chat_history = []
 user_coords = []
+user_ip_addrs = {}
+blacklist_ips = []
 
 class QueryFormNoAutofill(forms.Form):
     query = forms.CharField(widget=forms.TextInput(attrs={'autocomplete': 'off'}))
@@ -40,26 +43,39 @@ def storeUserLocation(request):
         # print(e)
         pass
 
-# def limited_chat_view(request):
-#     try:
-#         chat_view(request)
-#     except:
-#         return error_view(request)
+def limited_chat_view(request, exception):
+    if isinstance(exception, ratelimit.exceptions.Ratelimited):
+        return rate_limited_error_view(request, exception)
+    else:
+        return chat_view(request)
 
 
 @ratelimit(key='ip', rate='10/m', block=True)
 def chat_view(request):
-    #can return from function, render error page if IP is in blacklist
-    # user_ip = request.META.get['REMOTE_ADDR']
-    # print(user_ip)
-    # if user_ip in blacklist_ips:
-        #return render(request, 'chat/error.html', {'error': 'Blacklisted IP.'})
+    
+    try:
+        user_ip = request.META.get('REMOTE_ADDR')
+
+        if user_ip in blacklist_ips:
+            return render(request, 'chat/error.html', {'error': 'Blacklisted IP.'})
+
+        else:
+            if user_ip not in user_ip_addrs:
+                user_ip_addrs[user_ip] = 1
+            else:
+                user_ip_addrs[user_ip] += 1
+            # for key, value in user_ip_addrs.items():
+            #     print(f'{key}: {value}')
+
+    except Exception as e:
+        print(e)
+
 
     # Initialize chat_history_ids from session or start with an empty list
     chat_history_ids = request.session.get('chat_history_ids', [])
 
     storeUserLocation(request)
-    
+
     if request.method == 'POST':
         form = QueryFormNoAutofill(request.POST)
 
@@ -245,13 +261,17 @@ def chat_view(request):
     chat_history = Message.objects.filter(id__in=chat_history_ids).order_by('created_at')
 
     return render(request, 'chat/chat.html', {'form': form, 'chat_history': chat_history})
-
+    
 def clear_session(request):
     if request.method == 'POST':
         request.session.flush()
         return JsonResponse({'status': 'session_cleared'})
     else:
         return JsonResponse({'error': 'Method not allowed'}, status=405)
+
+def rate_limited_error_view(request):
+    blacklist_ips.append(request.META.get('REMOTE_ADDR'))
+    return render(request, 'chat/error.html', {'error': 'Rate limit reached.'})
 
 def error_view(request, *args):
     return render(request, 'chat/error.html', {'error': 'Page not found.'})

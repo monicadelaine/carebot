@@ -58,7 +58,10 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django_ratelimit.middleware.RatelimitMiddleware'
 ]
+
+RATELIMIT_VIEW = 'chat.views.limited_chat_view'
 
 ROOT_URLCONF = 'carebot.urls'
 
