@@ -117,7 +117,6 @@ def chat_view(request):
             # create Messages object for the user query
             user_message = Message.objects.create(message_type=MessageType.USER, text=query)   # this must be done before the AI response is generated to maintain the order of messages
 
-            # rate limit openai API here, can use "with textlimiter.limit(prompt=prompt, max_tokens=max_tokens):"
             try:
                 completion = client.chat.completions.create(
                     model="gpt-3.5-turbo",
