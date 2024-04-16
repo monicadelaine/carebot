@@ -36,7 +36,7 @@ root
 │       │   urls.py
 │       │   views.py
 |       |
-|       └───migrations (out of scope)
+|       └───migrations (contents are out of scope)
 |       |   |   ...
 |       |
 |       └───static
@@ -74,8 +74,6 @@ root
 | Function Name | Parameters | Return Value | Other Notes |
 | ------------- | ---------- | ------------ | ----------- |
 |               |            |              |             |
-
-Additional notes on the file.
 
 # /
 **Purpose:** This is the root of the repository.
@@ -130,7 +128,7 @@ Additional notes on the file.
 **Purpose:** This folder contains files for Django project (not app) management. It was automatically generated when the Django project was created.
 
 ## /carebot/carebot/\_\_init\_\_.py
-**Purpose:** This file was automatically generated when the Django project was created. It is empty.
+**Purpose:** This file was automatically generated when the Django project was created. It is empty, but it tells Python that the files in this directory should be treated as a package.
 
 ## /carebot/carebot/asgi.py
 **Purpose:** See [Django documentation](https://docs.djangoproject.com/en/5.0/howto/deployment/asgi/).
@@ -144,3 +142,111 @@ Additional notes on the file.
 ## /carebot/carebot/wsgi.py
 **Purpose:** See [Django documentation](https://docs.djangoproject.com/en/5.0/howto/deployment/wsgi/).
 
+# /carebot/chat/
+**Purpose:** This folder contains files for Django app `chat` (not project). It was automatically generated when the Django app was created. The `chat` app is the bulk of the Carebot project.
+
+## /carebot/chat/\_\_init\_\_.py
+**Purpose:** This file was automatically generated when the Django project was created. It is empty, but it tells Python that the files in this directory should be treated as a package.
+
+## /carebot/chat/admin.py
+**Purpose:** This file was automatically generated when the Django app was created. See [Django documentation](https://docs.djangoproject.com/en/5.0/ref/contrib/admin/actions/).
+
+## /carebot/chat/apps.py
+**Purpose:** TODO (Scott)
+
+## /carebot/chat/forms.py
+**Purpose:** TODO (Scott)
+
+## /carebot/chat/models.py
+**Purpose:** TODO (Scott)
+
+## /carebot/chat/tests.py
+**Purpose:** TODO (Kittson)
+
+## /carebot/chat/urls.py
+**Purpose:** TODO (Scott)
+
+## /carebot/chat/views.py
+**Purpose:** TODO (Scott)
+
+# /carebot/chat/migrations/
+**Purpose:** The files in this folder are used by Django to process changes to models. Its contents were automatically generated when changes were made, but migrations can also be manually created. The specific contents of this folder are out of scope for this documentation. See [Django documentation](https://docs.djangoproject.com/en/5.0/topics/migrations/).
+
+# /carebot/chat/static/
+**Purpose:** This folder contains static assets for the Carebot website. See [Django documentation](https://docs.djangoproject.com/en/5.0/howto/static-files/deployment/).
+
+# /carebot/chat/static/chat/
+**Purpose:** This folder contains static assets for the `chat` app of Carebot website. See [Django documentation](https://docs.djangoproject.com/en/5.0/howto/static-files/deployment/).
+
+## /carebot/chat/static/chat/caregiver_connect_icon.svg
+**Purpose:** This file is an icon used for a link to the Caregiver Connect website from `chat.html`.
+
+## /carebot/chat/static/chat/chat.js
+**Purpose:** TODO (Kittson)
+
+| Function Name | Parameters | Return Value | Other Notes |
+| ------------- | ---------- | ------------ | ----------- |
+|               |            |              |             |
+
+## /carebot/chat/static/chat/elderly_person_image.png
+**Purpose:** This file is an eyecatching image used in `home.html`.
+
+## /carebot/chat/static/chat/home_icon.png
+**Purpose:** This file is an icon used for a link to `home.html` from `chat.html`.
+
+## /carebot/chat/static/chat/jake.jpg
+**Purpose:** This file is an image of Jake Schaefers (B.S. in Computer Science, 2024). Jake is a member of the first Carebot senior design team.
+
+## /carebot/chat/static/chat/kittson_short.jpg
+**Purpose:** This file is an image of Kittson Hamill (B.S. in Computer Science, 2024). Kittson is a member of the first Carebot senior design team.
+
+## /carebot/chat/static/chat/q.jpg
+**Purpose:** This file is an image of Quillen Flanigan (B.S. in Computer Science, 2024). Quillen is a member of the first Carebot senior design team.
+
+## /carebot/chat/static/chat/scott.jpg
+**Purpose:** This file is an image of Scott Ratchford (B.S. in Computer Science, 2024). Scott is a member of the first Carebot senior design team.
+
+## /carebot/chat/static/chat/styles.css
+**Purpose:** This file contains nearly all of the CSS styles used throughout the website.
+
+# /carebot/chat/templates/
+**Purpose:** This file contains the Django HTML templates for all the webpages in the project. See [Django documentation](https://docs.djangoproject.com/en/5.0/topics/templates/).
+
+# /carebot/chat/templates/chat/
+**Purpose:** This file contains the Django HTML templates for all the webpages in the app. See [Django documentation](https://docs.djangoproject.com/en/5.0/topics/templates/).
+
+## /carebot/chat/templates/chat/about-us.html
+**Purpose:** This page lists the Carebot team members and their descriptions.
+
+## /carebot/chat/templates/chat/chat.html
+**Purpose:** This is the page for chatting with Carebot, the main portion of the project.
+
+TODO (Scott) Input box resizing and suggested message JS
+TODO (Quillen) Location and suggested message JS
+TODO (Kittson) Other JS
+
+| Function Name | Parameters | Return Value | Other Notes |
+| ------------- | ---------- | ------------ | ----------- |
+|               |            |              |             |
+
+## /carebot/chat/templates/chat/dashboard.html
+**Purpose:** TODO (Kittson)
+
+| Function Name | Parameters | Return Value | Other Notes |
+| ------------- | ---------- | ------------ | ----------- |
+|               |            |              |             |
+
+## /carebot/chat/templates/chat/deliverables.html
+**Purpose:** This page contains deliverables for the Spring 2024 Computer Science senior design Carebot team. The included presentation links are to PowerPoint files on the University of Alabama Sharepoint. The links are viewable by anyone with a UA Microsoft account, but they expire before May 2025. The source code is hosted in a private repository under Scott Ratchford's personal GitHub account.
+
+## /carebot/chat/templates/chat/error.html
+**Purpose:** This is the generic error message page. For security purposes, all types of HTTP/HTTPS errors are directed to this page without exposing the specific error to the user.
+
+## /carebot/chat/templates/chat/footer.html
+**Purpose:** This Django HTML snippet for a footer is included on many pages in the project. It provides a link to the privacy policy.
+
+## /carebot/chat/templates/chat/header.html
+**Purpose:** This Django HTML snippet for a header is included on many pages in the project. It provides links to `home.html` and the Caregiver Connect website.
+
+## /carebot/chat/templates/chat/home.html
+**Purpose:** This is the homepage for the Carebot website.

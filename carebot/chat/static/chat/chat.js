@@ -30,7 +30,6 @@ function sendUserLocation(user_latitude, user_longitude) {
         },
     })
     .then(response => {
-        // console.log("about to return json");
         return response.json()
     })
 }

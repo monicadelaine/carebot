@@ -61,20 +61,16 @@
         function getLatLong(user_position) {
             var user_latitude = user_position.coords.latitude;
             var user_longitude = user_position.coords.longitude;
-            console.log("User Latitude, Longitude: " + user_latitude + ", " + user_longitude);
             sendUserLocation(user_latitude, user_longitude);
         }
 
         function userError(e) {
             switch(e.code) {
                 case e.PERMISSION_DENIED:
-                    console.log("Permission Denied");
                     break;
                 case e.POSITION_UNAVAILABLE:
-                    console.log("User Location Unavailable");
                     break;
                 default:
-                    console.log("Unknown error");
                     break;
             }
         }
