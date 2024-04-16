@@ -152,7 +152,7 @@ root
 **Purpose:** This file was automatically generated when the Django app was created. See [Django documentation](https://docs.djangoproject.com/en/5.0/ref/contrib/admin/actions/).
 
 ## /carebot/chat/apps.py
-**Purpose:** TODO (Scott)
+**Purpose:** This file was automatically generated when the Django app was created. See [Django documentation](https://docs.djangoproject.com/en/5.0/ref/applications/).
 
 ## /carebot/chat/forms.py
 **Purpose:** TODO (Scott)
@@ -164,7 +164,7 @@ root
 **Purpose:** TODO (Kittson)
 
 ## /carebot/chat/urls.py
-**Purpose:** TODO (Scott)
+**Purpose:** This file contains the url patterns for the `chat` Django app. See [Django documentation](https://docs.djangoproject.com/en/5.0/topics/http/urls/).
 
 ## /carebot/chat/views.py
 **Purpose:** TODO (Scott)
