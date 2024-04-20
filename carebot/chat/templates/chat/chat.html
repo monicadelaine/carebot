@@ -52,32 +52,32 @@
     <script>
         user_query_box = document.getElementById("user-query");
 
-        function getUserLocation() {
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(getLatLong, userError)
-            }
-        }
+        // function getUserLocation() {
+        //     if (navigator.geolocation) {
+        //         navigator.geolocation.getCurrentPosition(getLatLong, userError)
+        //     }
+        // }
 
-        function getLatLong(user_position) {
-            var user_latitude = user_position.coords.latitude;
-            var user_longitude = user_position.coords.longitude;
-            console.log("User Latitude, Longitude: " + user_latitude + ", " + user_longitude);
-            sendUserLocation(user_latitude, user_longitude);
-        }
+        // function getLatLong(user_position) {
+        //     var user_latitude = user_position.coords.latitude;
+        //     var user_longitude = user_position.coords.longitude;
+        //     console.log("User Latitude, Longitude: " + user_latitude + ", " + user_longitude);
+        //     sendUserLocation(user_latitude, user_longitude);
+        // }
 
-        function userError(e) {
-            switch(e.code) {
-                case e.PERMISSION_DENIED:
-                    console.log("Permission Denied");
-                    break;
-                case e.POSITION_UNAVAILABLE:
-                    console.log("User Location Unavailable");
-                    break;
-                default:
-                    console.log("Unknown error");
-                    break;
-            }
-        }
+        // function userError(e) {
+        //     switch(e.code) {
+        //         case e.PERMISSION_DENIED:
+        //             console.log("Permission Denied");
+        //             break;
+        //         case e.POSITION_UNAVAILABLE:
+        //             console.log("User Location Unavailable");
+        //             break;
+        //         default:
+        //             console.log("Unknown error");
+        //             break;
+        //     }
+        // }
 
         function hideSuggestedMessages() {
             if (user_query_box.value != ""){
@@ -134,9 +134,9 @@
                 user_query_box.value='';
             }
         });
-        window.onload = function() {
-            getUserLocation();
-        }
+        // window.onload = function() {
+        //     getUserLocation();
+        // }
     </script>
 </body>
 </html>
