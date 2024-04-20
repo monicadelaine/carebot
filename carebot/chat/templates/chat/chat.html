@@ -7,6 +7,7 @@
     <meta name="csrf-token" content="{{ csrf_token }}">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 </head>
 <body>
 
@@ -14,6 +15,12 @@
         <header>
             {% include "chat/header.html" %}
         </header>
+
+        <!-- commented out the popup button used to alert users why we need their location -->
+        <!-- <button class="popup" id="pop-click" onclick="showPopUpMsg()">Wondering why we use your location? Click Here!
+            <span class="popuptext" id="PopUp">We use your general location to study where Carebot is used most. You can see this data for yourself within our Dashboard page!</span>    
+        </button> -->
+        
         <div id="chat-messages">
             {% for message in chat_history %}
                 {% if message.message_type == 0 %}
@@ -58,6 +65,11 @@
         //     }
         // }
 
+        // function showPopUpMsg() {
+        //     var user_location_info_popup = document.getElementById("PopUp");
+        //     user_location_info_popup.classList.toggle("show");
+        // }
+
         // function getLatLong(user_position) {
         //     var user_latitude = user_position.coords.latitude;
         //     var user_longitude = user_position.coords.longitude;
@@ -83,6 +95,8 @@
             if (user_query_box.value != ""){
                 suggested_1.style.display = "none";
                 suggested_2.style.display = "none";
+                var user_location_info_popup = document.getElementById("pop-click");
+                user_location_info_popup.style.display = "none";
             }
         }
 
@@ -134,9 +148,9 @@
                 user_query_box.value='';
             }
         });
-        // window.onload = function() {
-        //     getUserLocation();
-        // }
+        window.onload = function() {
+            getUserLocation();
+        }
     </script>
 </body>
 </html>
