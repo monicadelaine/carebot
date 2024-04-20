@@ -26,22 +26,24 @@ blacklist_ips = []
 class QueryFormNoAutofill(forms.Form):
     query = forms.CharField(widget=forms.TextInput(attrs={'autocomplete': 'off'}))
 
-def storeUserLocation(request):
-    #grab user's location from ajax function from chat.js
-    try:
-        data = json.loads(request.body.decode('utf-8'))
-        user_latitude = data[0]['user_latitude']
-        user_longitude = data[1]['user_longitude']
-        user_loc = (user_latitude, user_longitude)
-        user_coords.append(user_loc)
-        # for coord in user_coords:
-        #     print(coord)
-        return JsonResponse({'status': 'success'})
+
+#function to store user coordinates as tuple in array of coords, can use to populate dashboard heatmap
+# def storeUserLocation(request):
+#     #grab user's location from ajax function from chat.js
+#     try:
+#         data = json.loads(request.body.decode('utf-8'))
+#         user_latitude = data[0]['user_latitude']
+#         user_longitude = data[1]['user_longitude']
+#         user_loc = (user_latitude, user_longitude)
+#         user_coords.append(user_loc)
+#         # for coord in user_coords:
+#         #     print(coord)
+#         return JsonResponse({'status': 'success'})
     
-    #catch the exception of "cannot access request body more than once", make sure it does not affect chatbot
-    except Exception as e:
-        # print(e)
-        pass
+#     #catch the exception of "cannot access request body more than once", make sure it does not affect chatbot
+#     except Exception as e:
+#         # print(e)
+#         pass
 
 def limited_chat_view(request, exception):
     if isinstance(exception, ratelimit.exceptions.Ratelimited):
@@ -53,28 +55,30 @@ def limited_chat_view(request, exception):
 @ratelimit(key='ip', rate='10/m', block=True)
 def chat_view(request):
     
-    try:
-        user_ip = request.META.get('REMOTE_ADDR')
+    #try/except statements to store malicious IPs in blacklisted IPs
+    #also builds a dict of IP: # of queries/IP, need to store in DB for persistance
+    # try:
+    #     user_ip = request.META.get('REMOTE_ADDR')
 
-        if user_ip in blacklist_ips:
-            return render(request, 'chat/error.html', {'error': 'Blacklisted IP.'})
+    #     if user_ip in blacklist_ips:
+    #         return render(request, 'chat/error.html', {'error': 'Blacklisted IP.'})
 
-        else:
-            if user_ip not in user_ip_addrs:
-                user_ip_addrs[user_ip] = 1
-            else:
-                user_ip_addrs[user_ip] += 1
-            # for key, value in user_ip_addrs.items():
-            #     print(f'{key}: {value}')
+    #     else:
+    #         if user_ip not in user_ip_addrs:
+    #             user_ip_addrs[user_ip] = 1
+    #         else:
+    #             user_ip_addrs[user_ip] += 1
+    #         # for key, value in user_ip_addrs.items():
+    #         #     print(f'{key}: {value}')
 
-    except Exception as e:
-        print(e)
+    # except Exception as e:
+    #     print(e)
 
 
     # Initialize chat_history_ids from session or start with an empty list
     chat_history_ids = request.session.get('chat_history_ids', [])
 
-    storeUserLocation(request)
+    # storeUserLocation(request)
 
     if request.method == 'POST':
         form = QueryFormNoAutofill(request.POST)
@@ -269,7 +273,8 @@ def clear_session(request):
         return JsonResponse({'error': 'Method not allowed'}, status=405)
 
 def rate_limited_error_view(request):
-    blacklist_ips.append(request.META.get('REMOTE_ADDR'))
+    #if user is rate limited, they are probably malicious, blacklist their IP
+    # blacklist_ips.append(request.META.get('REMOTE_ADDR'))
     return render(request, 'chat/error.html', {'error': 'Rate limit reached.'})
 
 def error_view(request, *args):
