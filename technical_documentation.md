@@ -235,12 +235,12 @@ TODO (Kittson) Other JS
 
 | Function Name | Parameters | Return Value | Other Notes |
 | ------------- | ---------- | ------------ | ----------- |
-| getUserLocation()              | N/A           |  void            |             |
-| getLatLong()                   | user_position           | void             |             |
-| userError()                    | Exception e           |  void            |             |
-| hideSuggestedMessages()        | N/A           | void             |             |
-| sendSuggestedMessage()         | HTML button - suggested message object           | void             |             |
-| showPopUpMsg()                 | N/A            |  void            |             |
+| getUserLocation()              | N/A           |  void            | Triggers `navigator.geolocation.GetCurrentPosition()` to ask permission to collect user's location. Calls the `getLatLong()` function and `userError()` as default error function. Initated on window.onload().            |
+| getLatLong()                   | user_position           | void             | Collects the user latitude and longitude, calls the AJAX function `sendUserLocation()` to send user location to backend. Called by `getUserLocation()`            |
+| userError()                    | Exception e           |  void            | Error function for `navigator.geolocation.GetCurrentPosition()`. Logs if location is not given by user or if process is not supported by current browser.            |
+| hideSuggestedMessages()        | N/A           | void             | Changes suggested message button display to none if the chat text box is not empty. Triggered when first message is sent or first suggested message is clicked            |
+| sendSuggestedMessage()         | HTML button - suggested message object           | void             | Fills the chat text box with the value from the given suggested message button, sends message and calls `hideSuggestedMessages()`            |
+| showPopUpMsg()                 | N/A            |  void            | Toggles the location-info popup when the popup button is clicked. Currently commented out and waiting for more nuanced styling.             |
 
 ## /carebot/chat/templates/chat/dashboard.html
 **Purpose:** TODO (Kittson)
