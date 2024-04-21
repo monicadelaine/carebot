@@ -168,6 +168,13 @@ root
 
 ## /carebot/chat/views.py
 **Purpose:** TODO (Scott)
+| Function Name | Parameters | Return Value | Other Notes |
+| ------------- | ---------- | ------------ | ----------- |
+| storeUserLocation()             | HTTP Request           | JSON Response             |             |
+| chat_view()            |                 |                 |                 |
+| limited_chat_view()    |                 |                 |                 |
+| rate_limited_error_view()    |                 |                 |                 |
+
 
 # /carebot/chat/migrations/
 **Purpose:** The files in this folder are used by Django to process changes to models. Its contents were automatically generated when changes were made, but migrations can also be manually created. The specific contents of this folder are out of scope for this documentation. See [Django documentation](https://docs.djangoproject.com/en/5.0/topics/migrations/).
@@ -223,12 +230,16 @@ root
 **Purpose:** This is the page for chatting with Carebot, the main portion of the project.
 
 TODO (Scott) Input box resizing and suggested message JS
-TODO (Quillen) Location and suggested message JS
 TODO (Kittson) Other JS
 
 | Function Name | Parameters | Return Value | Other Notes |
 | ------------- | ---------- | ------------ | ----------- |
-|               |            |              |             |
+| getUserLocation()              | N/A           |  void            |             |
+| getLatLong()                   | user_position           | void             |             |
+| userError()                    | Exception e           |  void            |             |
+| hideSuggestedMessages()        | N/A           | void             |             |
+| sendSuggestedMessage()         | HTML button - suggested message object           | void             |             |
+| showPopUpMsg()                 | N/A            |  void            |             |
 
 ## /carebot/chat/templates/chat/dashboard.html
 **Purpose:** TODO (Kittson)
