@@ -171,10 +171,10 @@ root
 **Purpose:** TODO (Scott)
 | Function Name | Parameters | Return Value | Other Notes |
 | ------------- | ---------- | ------------ | ----------- |
-| storeUserLocation()             | HTTP Request           | JSON Response  |             |
-| chat_view()            |  HTTP Request               |   render() HTML page / JSON Reponse   |                 |
-| limited_chat_view()    |  HTTP Request                | render() HTML page / JSON Reponse  |                 |
-| rate_limited_error_view()    |  HTTP Request                |  render() HTML page / JSON Reponse |                 |
+| storeUserLocation()             | HTTP Request           | JSON Response  | Loads the JSON data from `sendUserLocation()`, stores the user's latitude and longitude in tuple, appends to array `user_coords`. Often raises Exception due to accessing the HTTP Request multiple times. Catches exception and passes. Needs to be stored within external database for persistance of user location data. Planned to be used within the dashboard heatmap to track where most popular queries are coming from.            |
+| chat_view()            |  HTTP Request               |   render() HTML page / JSON Reponse   | **Rate Limting:** This main Django view takes advantage of the Django `@ratelimting` decorator to limit users to a certain number of queries/minute. Current rate limiting is set at 10 requests/minute and limits by client IP address. For further Django rate limiting documentation, see [Django Ratelimiting](https://django-ratelimit.readthedocs.io/en/stable/).
+| limited_chat_view()    |  HTTP Request, Exception                | render() HTML page / JSON Reponse  | Django view specific to catching the Django rate limiting exception in order to trigger the traditional `error.html` page rather than the 403 Forbidden page. Checks if passed exception is an instance of Ratelimited Exception from the ratelimit.exceptions class. Configured by Middleware and triggered by `RATELIMIT_VIEW` within `settings.py`.               |
+| rate_limited_error_view()    |  HTTP Request                |  render() HTML page / JSON Reponse | Django view specific to catching the Django rate limiting exception. Also has commented out functionality to add any rate limited IP addresses to the list of blacklisted IPs to avoid future malicious users. Renders the standard `error.html` view.                |
 
 
 # /carebot/chat/migrations/
