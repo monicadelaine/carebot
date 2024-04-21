@@ -186,7 +186,7 @@ root
 
 | Function Name | Parameters | Return Value | Other Notes |
 | ------------- | ---------- | ------------ | ----------- |
-|               |            |              |             |
+| sendUserLocation() |             |            |              |             |
 
 ## /carebot/chat/static/chat/elderly_person_image.png
 **Purpose:** This file is an eyecatching image used in `home.html`.
