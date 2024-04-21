@@ -186,7 +186,8 @@ root
 
 | Function Name | Parameters | Return Value | Other Notes |
 | ------------- | ---------- | ------------ | ----------- |
-| sendUserLocation() | user_latitude, user_longitude | response.json() | Uses AJAX fetch() and HTTP POST methods to send the user coordinates from the frontend to backend |             
+| sendUserLocation() | user_latitude, user_longitude | response.json() | Uses AJAX fetch() and HTTP POST methods to send the user coordinates from the frontend to backend. Imported by `chat.html`, called by `getLatLong()`. |   
+|                   |               |                       |         
 
 ## /carebot/chat/static/chat/elderly_person_image.png
 **Purpose:** This file is an eyecatching image used in `home.html`.
