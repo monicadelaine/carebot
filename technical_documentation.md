@@ -11,6 +11,7 @@ root
 |   docker-compose.yml
 |   docker-entrypoint.sh
 |   Dockerfile
+|   modify&extend_documentation.md
 |   Pipfile (out of scope)
 |   README.md
 |   requirements.txt
@@ -170,10 +171,10 @@ root
 **Purpose:** TODO (Scott)
 | Function Name | Parameters | Return Value | Other Notes |
 | ------------- | ---------- | ------------ | ----------- |
-| storeUserLocation()             | HTTP Request           | JSON Response             |             |
-| chat_view()            |                 |                 |                 |
-| limited_chat_view()    |                 |                 |                 |
-| rate_limited_error_view()    |                 |                 |                 |
+| storeUserLocation()             | HTTP Request           | JSON Response  |             |
+| chat_view()            |  HTTP Request               |   render() HTML page / JSON Reponse   |                 |
+| limited_chat_view()    |  HTTP Request                | render() HTML page / JSON Reponse  |                 |
+| rate_limited_error_view()    |  HTTP Request                |  render() HTML page / JSON Reponse |                 |
 
 
 # /carebot/chat/migrations/
