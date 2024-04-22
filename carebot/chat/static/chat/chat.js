@@ -21,18 +21,19 @@ function sendUserLocation(user_latitude, user_longitude) {
         {"user_longitude": user_longitude}
     ];
 
-    fetch('/chat/', { 
-        method: 'POST',
-        body: JSON.stringify(user_location),
-        headers: {
-            'X-Requested-With': 'XMLHttpRequest',
-            'X-CSRFToken': formData.get('csrfmiddlewaretoken'),
-        },
-    })
-    .then(response => {
-        return response.json()
-    })
-}
+//     fetch('/chat/', { 
+//         method: 'POST',
+//         body: JSON.stringify(user_location),
+//         headers: {
+//             'X-Requested-With': 'XMLHttpRequest',
+//             'X-CSRFToken': formData.get('csrfmiddlewaretoken'),
+//         },
+//     })
+//     .then(response => {
+//         // console.log("about to return json");
+//         return response.json()
+//     })
+// }
 
 document.addEventListener('DOMContentLoaded', function() {
     const chatForm = document.getElementById('chat-form');
