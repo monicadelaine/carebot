@@ -1,21 +1,22 @@
 :root {
-    --color-1: #f1dac4;
-    --color-2: #928e96;
-    --color-3: #474973;
-    --color-4: #161b33;
-    --color-5: #0d0c1d;
-    --primary-color: var(--color-3);
-    --secondary-color: var(--color-2);
+    --color-1: #FFFFFF;
+    --color-2: #828a8f9d;
+    --color-3: #9E1B32;
+    --color-4: #0d0c1d; 
+    --color-5: #FFFFFF; 
+    --primary-color: var(--color-3); 
+    --secondary-color: var(--color-4); 
     --tertiary-color: var(--color-1);
-    --accent-color: var(--color-4);
-    --text-color: var(--color-5);
-    --background-color: #e8e9ea;
-    --border-color: #ccc;
-    --user-text-color: #fff;
-    --user-bubble-color: var(--accent-color);
-    --ai-bubble-color: #d6d6d6;
-    --ai-text-color: var(--color-5);
+    --accent-color: #FFFFFF; 
+    --text-color: var(--color-4); 
+    --background-color: var(--color-2); 
+    --border-color: var(--color-3); 
+    --user-text-color: var(--color-4); 
+    --user-bubble-color: var(--color-5);
+    --ai-bubble-color: #9E1B32; 
+    --ai-text-color: var(--color-5); 
 }
+
 
 body, html {
     height: 100%;
@@ -36,34 +37,38 @@ footer {
     margin-top: auto;
 }
 
-
 .carebot-header {
     display: flex;
-    position: relative;
+    position: fixed;
     flex-direction: row;
-    justify-content: center;
     align-items: center;
     background-color: var(--primary-color);
     color: white;
     padding: 10px 0px;
-    font-size: 30pt;
+    font-size: xx-large;
     width: 100%;
     box-shadow: 0px 0px 20px 5px rgba(0, 0, 0, 0.5);
-    position: fixed; 
-    top: 0; 
-    left: 0; 
+    top: 0;
+    z-index: 10000;
 }
 
 .carebot-header a {
     position: absolute;
     margin: 0 20px;
-    left: 0;
-    top: 50%;
-    transform: translateY(-50%); /* Center vertically */
     color: white;
     text-decoration: none;
-    align-content: left;
     text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+
+}
+
+.carebot-header a.left {
+    left: 0px;
+
+}
+
+.carebot-header a.right {
+    right: 0px;
+
 }
 
 .carebot-header h1 {
@@ -72,35 +77,105 @@ footer {
     width: 100%;
     color: white;
     text-decoration: none;
-    font-size: 30pt;
+    font-size: larger;
     text-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+
 }
 
 .caregiver-connect {
     color: white;
     position: absolute;
-    font-size: 16pt;
-    margin: 0 200px;
-    right: -10px;
-    top: 50%;
-    transform: translateY(-50%); /*Center vertically*/
-    text-align: right;
     box-shadow: 0px -3px 5px rgba(0, 0, 0, 0.5);
 }
 
-.caregiver-connect a {
-    color: white;
-    text-decoration: none;
+.carebot-header a:hover {
+    color: #242729;
 }
 
-.caregiver-connect a:hover {
-    color: #6bc1f0
-}
+/*from .popup to @webFrame FadeIn is styling for the popup message used to alert users on why we use their location
+ /* Popup container - can be anything you want */
+ /* .popup {
+    position: relative;
+    height: 7%;
+    width: 18%;
+    display: inline-block;
+    cursor: pointer;
+    font-size: larger;
+    user-select: none;
+    border-radius: 20px;
+    margin-top: 7%;
+    margin-left: 10%;
+    -webkit-animation: fadeIn 3s;
+    animation: fadeIn 3s;
+  }
+
+  .popup:hover {
+      background-color: #6bc1f0;
+  }
+
+  /* .popup::before {
+    content: "";
+    position: absolute;
+    top: 100%;
+    right: 50%;
+    margin-bottom: -5px;
+    border-width: 10px;
+    border-style: solid;
+    border-color: #555 transparent transparent transparent;
+  }
+  
+  /* The actual popup 
+  .popup .popuptext {
+    visibility: hidden;
+    width: 250px;
+    background-color: #555;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 8px 0;
+    position: absolute;
+    z-index: 1;
+    bottom: 125%;
+    left: 12%;
+    font-size: larger;
+    /* margin-left: 10%; 
+  }
+  
+  /* Popup arrow
+  .popup .popuptext::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #555 transparent transparent transparent;
+  }
+  
+  /* Toggle this class - hide and show the popup 
+  .popup .show {
+      visibility: visible;
+      -webkit-animation: fadeIn 1s;
+      animation: fadeIn 1s;
+  }
+  
+  /* Add animation (fade in the popup) 
+  @-webkit-keyframes fadeIn {
+    from {opacity: 0;} 
+    to {opacity: 1;}
+  }
+  
+  @keyframes fadeIn {
+    from {opacity: 0;}
+    to {opacity:1 ;}
+  } */
+
 
 .carebot-footer {
     background-color: var(--primary-color);
     color: white;
-    padding: 10px;
+    padding: 10px 0px;
     min-width: 100vw;
     text-align: center;
     font-size: 12pt;
@@ -109,19 +184,19 @@ footer {
     bottom: 0; 
     left: 0; 
 }
+
 .carebot-footer a {
     color: white;
     text-decoration: none;
-    
 }
 
 .carebot-footer a:hover {
-    color: #6bc1f0;
+    color: #242729;
 }
 
 /* Chat page styles */
 #chatbot-container {
-    height: 100vh; 
+    height: 100vh;
     width: 100vw; 
     background-color: var(--background-color);
     display: flex;
@@ -131,15 +206,17 @@ footer {
 
 #chatbot-container header {
     margin-top: 8vh;
+    z-index: 0;
+
 }
 
 #chat-messages {
-    padding: 20px;
+    padding: 2vw;
     overflow-y: auto;
     flex-grow: 1;
     display: flex;
     flex-direction: column;
-    font-size: 20px;
+    font-size: large;
 }
 
 .user-message {
@@ -151,7 +228,7 @@ footer {
     padding-top: 3px;
     padding-bottom: 3px;
     border-radius: 15px;
-    margin-right: 10%;
+    margin-left: 10%;
     margin-right: 4%;
     box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.5), -3px -3px 5px rgba(255, 255, 255, 0.2);
 }
@@ -182,7 +259,14 @@ footer {
     border-radius: 15px;
 }
 
+textarea {
+    height: 50px;
+    resize: none;
+    overflow-y: auto;
+}
+
 .form-group {
+    bottom: 0px;
     display: flex;
     padding: 20px;
     background-color: var(--primary-color);
@@ -190,26 +274,35 @@ footer {
     box-shadow: 0px 3px 20px 5px rgba(0, 0, 0, 0.5);
 }
 
-.form-group input[type="text"] {
+textarea.form-control {
+    height: 35px;
+    max-height: 15vh;
+    width: 95%; 
+    text-align: left;
+    font-size: x-large;
+    resize: none;   /* Disable manual resizing */
+    overflow-y: scroll; /* Enable vertical scrollbar when needed */
+    font-family: 'Roboto', sans-serif;
     flex-grow: 1;
     margin-right: 10px;
     border: 2px solid var(--border-color);
     border-radius: 20px;
-    padding: 10px;
-    font-size: 20px
+    padding: calc(min(0.5vw, 10px));
 }
 
 .btn-send {
-    padding: 10px 15px;
+    padding: 10px 20px;
     border-radius: 20px;
     background-color: var(--accent-color);
     color: white;
     cursor: pointer;
-    font-size: 20px
+    margin-left: 10px;
 }
 
 .btn-send:hover {
-    background-color: var(--border-color);
+    /* background-color: var(--border-color); */
+    background-color: #242729;
+    color: black;
 }
 
 .btn-send.suggested-message {
@@ -230,6 +323,15 @@ footer {
     margin-right: 20px;
 }
 
+.suggested-messages {
+    overflow-x: auto;
+    white-space: nowrap;
+    overflow-y: hidden;
+    min-height: 55px;
+    padding-bottom: 5px;
+    padding-top: 0px;
+}
+
 /* Generic button styles */
 .link-button {
     padding: 10px 20px;
@@ -239,19 +341,11 @@ footer {
     border-radius: 10px;
     background-color: var(--accent-color);
     color: white;
+    font-size: x-large;
     text-decoration: none;
     cursor: pointer;
     box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.5), -3px -3px 5px rgba(255, 255, 255, 0.2);
 }
-
-/* Is this necessary? */
-/* .link-button {
-    padding: 10px 15px;
-    border-radius: 20px;
-    background-color: var(--accent-color);
-    color: white;
-    cursor: pointer;
-} */
 
 .link-button:hover {
     background-color: var(--primary-color);
@@ -266,8 +360,9 @@ footer {
     justify-content: flex-start;
     width: 100vw;
     background-color: var(--color-1);
-    overflow: hidden; 
-    padding-bottom: 1px; 
+    overflow: hidden;
+    padding-top: 8vh;
+    padding-bottom: 8vh;
 }
 
 #home-container p {
@@ -280,43 +375,32 @@ footer {
     padding-bottom: 1px; 
 }
 
-#home-container header {
-    margin-top: 100px;
-}
-
-#home-container footer {
-    margin-bottom: 50px;
-}
-
 .home-header {
     margin: 0;
     text-align: center;
     width: 100%;
     text-decoration: none;
     font-size: 18pt;
+    z-index: 0;
+
     /* text-shadow: 0 0 10px rgba(0, 0, 0, 0.3); */
 }
-
-/* Just makes a thing for multiple buttons vertically */
-#button-menu-col {
-    display: flex;
+/* Lays out buttons in a 2x2 or 1 column based on screen width */
+.adjusting-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100%, 1fr));
+    gap: 10px;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     gap: 10px;
-    font-size: 15pt;
-    margin: 10px
 }
 
-#button-menu-row {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    gap: 10px;
-    font-size: 15pt;
-    margin: 0, 10px;
-}
+@media (min-width: 725px) {
+    .adjusting-grid {
+      grid-template-columns: repeat(2, 1fr); /* Creates a 2x2 grid */
+    }
+  }
 
 .spacer {
     flex-grow: 1;
@@ -421,9 +505,9 @@ animation-delay: 0.2s;
     margin-bottom: -15px;
 }
 
-#elderly-person-image {
-    width: 300px; /* adjust as necessary */
-    margin: 10px;
+#owl-image {
+    width: 350px; /* adjust as necessary */
+    margin: 6px;
 }
 
 /* Testing stuff with box shadows */
@@ -452,8 +536,32 @@ animation-delay: 0.2s;
 }
 
 #heatmap {
-    border: 2px solid var(--border-color);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    height: 60vh;
+    width: 80vw;
+    margin: auto;
+    margin-top: 100px; 
     border-radius: 15px;
-    overflow: hidden; 
+    box-shadow: var(--box-shadow);
 }
+@media (max-width: 600px) {
+    #heatmap {
+        margin-top: 150px; 
+    }
+}
+#data-table {
+    margin-top: 20px;
+  }
+  
+  #resources-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  #resources-table, #resources-table th, #resources-table td {
+    border: 1px solid #ddd;
+  }
+  
+  #resources-table th, #resources-table td {
+    padding: 8px;
+    text-align: left;
+  }

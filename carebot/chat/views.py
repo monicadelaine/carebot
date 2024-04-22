@@ -1,5 +1,6 @@
 import logging
 import re
+import json
 
 from django import forms
 from django.conf import settings
@@ -9,9 +10,14 @@ from django.shortcuts import redirect, render
 from django.template import RequestContext
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
+from django_ratelimit.decorators import ratelimit
+from django.db.models import Count
+
+
 from openai import OpenAI
 from django.core.serializers import serialize
 import json
+
 
 from .forms import QueryForm
 from .models import Message, MessageType, ChatRequestGeoData
@@ -24,23 +30,78 @@ from django.conf import settings
 city_to_county_path = os.path.join(settings.STATIC_ROOT, 'chat/city-to-county.json')
 county_centroids_path = os.path.join(settings.STATIC_ROOT, 'chat/county_centroids.json')
 
+user_coords = []
+user_ip_addrs = {}
+blacklist_ips = []
 
 class QueryFormNoAutofill(forms.Form):
     query = forms.CharField(widget=forms.TextInput(attrs={'autocomplete': 'off'}))
-    is_sql = forms.BooleanField(required=False, widget=forms.CheckboxInput())
 
+
+#function to store user coordinates as tuple in array of coords, can use to populate dashboard heatmap
+# def storeUserLocation(request):
+#     #grab user's location from ajax function from chat.js
+#     try:
+#         data = json.loads(request.body.decode('utf-8'))
+#         user_latitude = data[0]['user_latitude']
+#         user_longitude = data[1]['user_longitude']
+#         user_loc = (user_latitude, user_longitude)
+#         user_coords.append(user_loc)
+#         # for coord in user_coords:
+#         #     print(coord)
+#         return JsonResponse({'status': 'success'})
+    
+#     #catch the exception of "cannot access request body more than once", make sure it does not affect chatbot
+#     except Exception as e:
+#         # print(e)
+#         pass
+
+def limited_chat_view(request, exception):
+    if isinstance(exception, ratelimit.exceptions.Ratelimited):
+        return rate_limited_error_view(request, exception)
+    else:
+        return chat_view(request)
+
+
+@ratelimit(key='ip', rate='10/m', block=True)
 def chat_view(request):
+    
+    #try/except statements to store malicious IPs in blacklisted IPs
+    #also builds a dict of IP: # of queries/IP, need to store in DB for persistance
+    # try:
+    #     user_ip = request.META.get('REMOTE_ADDR')
+
+    #     if user_ip in blacklist_ips:
+    #         return render(request, 'chat/error.html', {'error': 'Blacklisted IP.'})
+
+    #     else:
+    #         if user_ip not in user_ip_addrs:
+    #             user_ip_addrs[user_ip] = 1
+    #         else:
+    #             user_ip_addrs[user_ip] += 1
+    #         # for key, value in user_ip_addrs.items():
+    #         #     print(f'{key}: {value}')
+
+    # except Exception as e:
+    #     print(e)
+
+
     # Initialize chat_history_ids from session or start with an empty list
     chat_history_ids = request.session.get('chat_history_ids', [])
 
+    # storeUserLocation(request)
+
     if request.method == 'POST':
         form = QueryFormNoAutofill(request.POST)
-        
+
         if form.is_valid():
+
             query = form.cleaned_data.get('query', '') 
 
             client = OpenAI(api_key=settings.OPENAI_API_KEY)
             query = form.cleaned_data['query']
+            if len(query) > 1000:
+                query = query[:1000]    # truncate the query to 1000 characters if it is longer
 
             chat_history = Message.objects.filter(id__in=chat_history_ids).order_by('created_at')
 
@@ -220,13 +281,20 @@ def chat_view(request):
     chat_history = Message.objects.filter(id__in=chat_history_ids).order_by('created_at')
 
     return render(request, 'chat/chat.html', {'form': form, 'chat_history': chat_history})
-
+    
 
 def log_location_for_heatmap(city, county, resource_type):
+    if (city and city.lower() == "unknown") or (county and county.lower() == "unknown") or (resource_type and resource_type.lower() == "unknown"):        
+        logging.info("Invalid location name encountered, skipping logging.")
+        return
+    if not city and not county and not resource_type:
+        logging.info("Invalid location name encountered, skipping logging.")
+        return
     latitude, longitude = geocode_city(city)
     if latitude is not None and longitude is not None:
-        ChatRequestGeoData.objects.create(latitude=latitude, longitude=longitude)
-        logging.info(f"Logged location for heatmap: {latitude}, {longitude}")
+        # Now also saving the county name
+        ChatRequestGeoData.objects.create(latitude=latitude, longitude=longitude, county=county)
+        logging.info(f"Logged location for heatmap: {latitude}, {longitude}, {county}")
 
 def load_json_data(file_path):
     with open(file_path, 'r') as file:
@@ -254,7 +322,18 @@ def geocode_city(city_name):
 def geolocation_data(request):
     data = ChatRequestGeoData.objects.all().values('latitude', 'longitude')
     data_list = list(data)
+    logging.info(f"Geolocation data: {data_list}")
     return JsonResponse(data_list, safe=False)  
+
+
+def table_data(request):
+    table_data = (ChatRequestGeoData.objects
+                  .exclude(county__iexact='unknown')  # Exclude entries where county is 'Unknown'
+                  .values('county')
+                  .annotate(request_count=Count('id'))
+                  .filter(county__isnull=False))
+    logging.info(f"Table data: {table_data}")
+    return JsonResponse({'table_data': list(table_data)}, safe=False)
 
 def clear_session(request):
     if request.method == 'POST':
@@ -262,6 +341,11 @@ def clear_session(request):
         return JsonResponse({'status': 'session_cleared'})
     else:
         return JsonResponse({'error': 'Method not allowed'}, status=405)
+
+def rate_limited_error_view(request):
+    #if user is rate limited, they are probably malicious, blacklist their IP
+    # blacklist_ips.append(request.META.get('REMOTE_ADDR'))
+    return render(request, 'chat/error.html', {'error': 'Rate limit reached.'})
 
 def error_view(request, *args):
     return render(request, 'chat/error.html', {'error': 'Page not found.'})

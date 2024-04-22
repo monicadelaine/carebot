@@ -16,10 +16,6 @@ from pathlib import Path
 from dotenv import load_dotenv
 
 # get path to parent of parent directory
-# dotenv_path = Path(__file__).resolve().parent
-# dotenv_path = dotenv_path.parent
-# print(f"path: {dotenv_path}")
-# load_dotenv(dotenv_path=dotenv_path)
 load_dotenv()
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
@@ -31,10 +27,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-u-&)&0cj+f9z_m(0=@hleo2f9ck0h0qlnv)sja@qq+wi8!#trz'
+SECRET_KEY = os.getenv("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv("DEBUG", "False") == "True"
+DEBUG = os.getenv("DEBUG", "False") == "False"
 
 ALLOWED_HOSTS = [
     'localhost',
@@ -62,7 +58,10 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django_ratelimit.middleware.RatelimitMiddleware'
 ]
+
+RATELIMIT_VIEW = 'chat.views.limited_chat_view'
 
 ROOT_URLCONF = 'carebot.urls'
 
@@ -128,13 +127,15 @@ LOGGING = {
         },
     },
     'loggers': {
-        'carebot.chat.views': {
+        '': {  # This is the root logger
             'handlers': ['console'],
-            'level': 'INFO',
-            'propagate': False,
+            'level': 'INFO',  # Adjust as needed
+            'propagate': True,
         },
     },
 }
+
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
@@ -157,16 +158,6 @@ STATIC_ROOT = os.path.join(BASE_DIR, "static")
 STATICFILES_DIRS  = [
     os.path.join(BASE_DIR, "static/chat/"),
 ]
-# print(f"BASE_DIR: {BASE_DIR}")
-# print(f"STATIC_ROOT: {STATIC_ROOT}")
-# # print all static files in STATIC_ROOT
-# for root, dirs, files in os.walk(STATIC_ROOT):
-#     for file in files:
-#         # print(root)
-#         print(os.path.join(root, file))
-#         if root in STATICFILES_DIRS:
-#             print(f"{root} is in STATICFILES_DIRS")
-# print(f"STATICFILES_DIRS: {STATICFILES_DIRS}")
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field

@@ -3,16 +3,15 @@ document.addEventListener('DOMContentLoaded', function() {
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '© OpenStreetMap contributors'
     }).addTo(map);
-
+    
     fetch('/api/geolocation-data/')
     .then(response => response.json())
     .then(data => {
         var heatLayerData = data.map(function(item) {
-            return [item.latitude, item.longitude, 1];
+            return [item.latitude, item.longitude, 10];
         });
         L.heatLayer(heatLayerData, {radius: 25, blur: 15, maxZoom: 17}).addTo(map);
     })
     .catch(error => console.error('Error loading geolocation data:', error));
-
+    console.log('Requesting table data...');
 });
-

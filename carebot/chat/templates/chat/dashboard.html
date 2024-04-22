@@ -5,20 +5,33 @@
     <title>Chat Request Heatmap</title>
     {% load static %}
     <link rel="stylesheet" href="{% static 'chat/styles.css' %}">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"/>
-    <style>
-        #heatmap { height: 60vh; width: 80vw; margin: auto; margin-top: 20px; border-radius: 15px; box-shadow: var(--box-shadow); }
-    </style>
+
 </head>
 <body>
     {% include "chat/header.html" %}
     <div id="heatmap"></div>
-    <div style="text-align: center; margin-top: 20px;">
+    <div style="text-align: center; margin-top: 2px;">
         <p>This heatmap visualizes chat request locations across the United States. Darker areas indicate a higher concentration of requests.</p>
     </div>
+    <div id="data-table">
+        <table id="resources-table">
+          <thead>
+            <tr>
+              <th>County</th> 
+              <th>Number of Requests</th> 
+            </tr>
+          </thead>
+          <tbody>
+          </tbody>
+        </table>
+      </div>
     {% include "chat/footer.html" %}
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.heat/0.2.0/leaflet-heat.js"></script>
     <script src="{% static 'chat/dashboard.js' %}"></script>
+    <script src="{% static 'chat/table.js' %}"></script>
 </body>
 </html>

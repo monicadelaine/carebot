@@ -5,12 +5,22 @@
     {% load static %}
     <link rel="stylesheet" href="{% static 'chat/styles.css' %}">
     <meta name="csrf-token" content="{{ csrf_token }}">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 </head>
 <body>
+
     <div id="chatbot-container">
         <header>
             {% include "chat/header.html" %}
         </header>
+
+        <!-- commented out the popup button used to alert users why we need their location -->
+        <!-- <button class="popup" id="pop-click" onclick="showPopUpMsg()">Wondering why we use your location? Click Here!
+            <span class="popuptext" id="PopUp">We use your general location to study where Carebot is used most. You can see this data for yourself within our Dashboard page!</span>    
+        </button> -->
+        
         <div id="chat-messages">
             {% for message in chat_history %}
                 {% if message.message_type == 0 %}
@@ -30,7 +40,7 @@
                 {% endif %}
             {% endfor %}
         </div>
-        <div id="suggested-messages">
+        <div class="suggested-messages">
             <button id="suggested_1" type="button" class="btn-send suggested-message" value="Help me find counseling services in my area.">Help me find counseling services in my area.</button>
             <button id="suggested_2" type="button" class="btn-send suggested-message" value="Help me find food banks in my area.">Help me find food banks in my area.</button>
         </div>
@@ -38,10 +48,7 @@
             {% csrf_token %}
             <div class="form-group">
                 {{ form.query }}
-                <label>
-                   <!-- <input type="checkbox" name="is_sql" id="is_sql"> This is an SQL query -->
-                </label>
-                <button type="submit" onclick="hideSuggestedMessages()" class="btn-send">Send</button>
+                <button id="send-button" type="submit" onclick="hideSuggestedMessages()" class="btn-send">Send</button>
             </div>
         </form>
         <div id="loading" style="display: none;">
@@ -50,18 +57,58 @@
     </div>
     <script src="{% static 'chat/chat.js' %}"></script>
     <script>
+        user_query_box = document.getElementById("user-query");
+
+        // function getUserLocation() {
+        //     if (navigator.geolocation) {
+        //         navigator.geolocation.getCurrentPosition(getLatLong, userError)
+        //     }
+        // }
+
+        // function showPopUpMsg() {
+        //     var user_location_info_popup = document.getElementById("PopUp");
+        //     user_location_info_popup.classList.toggle("show");
+        // }
+
+        // function getLatLong(user_position) {
+        //     var user_latitude = user_position.coords.latitude;
+        //     var user_longitude = user_position.coords.longitude;
+        //     console.log("User Latitude, Longitude: " + user_latitude + ", " + user_longitude);
+        //     sendUserLocation(user_latitude, user_longitude);
+        // }
+
+        // function userError(e) {
+        //     switch(e.code) {
+        //         case e.PERMISSION_DENIED:
+        //             console.log("Permission Denied");
+        //             break;
+        //         case e.POSITION_UNAVAILABLE:
+        //             console.log("User Location Unavailable");
+        //             break;
+        //         default:
+        //             console.log("Unknown error");
+        //             break;
+        //     }
+        // }
+
         function hideSuggestedMessages() {
-            suggested_1.style.display = "none";
-            suggested_2.style.display = "none";
+            if (user_query_box.value != ""){
+                suggested_1.style.display = "none";
+                suggested_2.style.display = "none";
+                var user_location_info_popup = document.getElementById("pop-click");
+                user_location_info_popup.style.display = "none";
+            }
         }
+
         function sendSuggestedMessage(button) {
             const text = button.value;
-            const form = document.getElementById("chat-form");
-            const input = form.querySelector("input[name='query']");
-            input.value = text;
-            //messages disappear after clicking first one
+            user_query_box.value = text;
+            document.getElementById("send-button").click()
+            user_query_box.value = '';
+            // messages disappear after clicking first one
             hideSuggestedMessages();
         }
+
         var suggested_1 = document.getElementById("suggested_1");
         suggested_1.addEventListener('click', function() {
             sendSuggestedMessage(suggested_1);
@@ -84,13 +131,26 @@
             const csrfToken = getCsrfToken();
             const data = new FormData();
             data.append('csrfmiddlewaretoken', csrfToken);
-
             // Asynchronously clear the session
             navigator.sendBeacon('/clear-session/', data);
             return  // Do not alert the user about leaving the page
         });
-        const chat_box = document.getElementById("chat-form");
-        chat_box.autocomplete = "off"
+        // text box expands when user input reaches end of line
+        user_query_box.addEventListener('input', function() {
+            this.style.height = 'auto';
+            this.style.height = (this.scrollHeight) + 'px';
+        })
+        user_query_box.addEventListener("keydown", function (key) {
+            if (key.code === "Enter") {
+                key.preventDefault();
+                document.getElementById("send-button").click();
+                this.style.height = 'auto';
+                user_query_box.value='';
+            }
+        });
+        // window.onload = function() {
+        //     getUserLocation();
+        // }
     </script>
 </body>
 </html>
