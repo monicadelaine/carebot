@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Carebot Documentation</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'chat/styles.css' %}">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+    <header>
+        {% include "chat/header.html" %}
+    </header>
+    <div id="home-container">
+        <div class="home-header">
+            <h1>Documentation</h1>
+        </div>
+        <div>
+            <div id="button-menu-col">
+                <a href="{% url 'faq' %}" class="link-button">Frequently Asked Questions</a>
+                <a href="https://github.com/KyberCritter/carebot/blob/main/README.md" class="link-button">How to Install</a>
+                <a href="https://github.com/KyberCritter/carebot/blob/main/technical_documentation.md" class="link-button">Technical Documentation</a>
+                <a href="https://github.com/KyberCritter/carebot/blob/main/modify&extend_documentation.md" class="link-button">How to Modify and Extend</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

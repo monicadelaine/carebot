@@ -13,7 +13,6 @@ function getCsrfToken() {
     return csrfToken;
 }
 
-//use as AJAX function with getUserLocation() functions in chat.html
 // function sendUserLocation(user_latitude, user_longitude) {
 //     const chatForm = document.getElementById('chat-form');
 //     const formData = new FormData(chatForm);
@@ -21,7 +20,6 @@ function getCsrfToken() {
 //         {"user_latitude": user_latitude},
 //         {"user_longitude": user_longitude}
 //     ];
-
 //     fetch('/chat/', { 
 //         method: 'POST',
 //         body: JSON.stringify(user_location),

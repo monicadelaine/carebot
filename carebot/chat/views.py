@@ -62,18 +62,14 @@ def limited_chat_view(request, exception):
     else:
         return chat_view(request)
 
-
 @ratelimit(key='ip', rate='10/m', block=True)
 def chat_view(request):
-    
     #try/except statements to store malicious IPs in blacklisted IPs
     #also builds a dict of IP: # of queries/IP, need to store in DB for persistance
     # try:
     #     user_ip = request.META.get('REMOTE_ADDR')
-
     #     if user_ip in blacklist_ips:
     #         return render(request, 'chat/error.html', {'error': 'Blacklisted IP.'})
-
     #     else:
     #         if user_ip not in user_ip_addrs:
     #             user_ip_addrs[user_ip] = 1
@@ -81,10 +77,8 @@ def chat_view(request):
     #             user_ip_addrs[user_ip] += 1
     #         # for key, value in user_ip_addrs.items():
     #         #     print(f'{key}: {value}')
-
     # except Exception as e:
     #     print(e)
-
 
     # Initialize chat_history_ids from session or start with an empty list
     chat_history_ids = request.session.get('chat_history_ids', [])
@@ -364,6 +358,12 @@ def about_us_view(request):
 
 def deliverables_view(request):
     return render(request, 'chat/deliverables.html')
+
+def documentation_view(request):
+    return render(request, 'chat/documentation.html')
+
+def faq_view(request):
+    return render(request, 'chat/faq.html')
 
 # unused
 def handler404(request, *args):
