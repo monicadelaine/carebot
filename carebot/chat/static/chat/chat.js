@@ -13,14 +13,13 @@ function getCsrfToken() {
     return csrfToken;
 }
 
-function sendUserLocation(user_latitude, user_longitude) {
-    const chatForm = document.getElementById('chat-form');
-    const formData = new FormData(chatForm);
-    var user_location = [
-        {"user_latitude": user_latitude},
-        {"user_longitude": user_longitude}
-    ];
-
+// function sendUserLocation(user_latitude, user_longitude) {
+//     const chatForm = document.getElementById('chat-form');
+//     const formData = new FormData(chatForm);
+//     var user_location = [
+//         {"user_latitude": user_latitude},
+//         {"user_longitude": user_longitude}
+//     ];
 //     fetch('/chat/', { 
 //         method: 'POST',
 //         body: JSON.stringify(user_location),

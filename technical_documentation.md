@@ -16,6 +16,7 @@ root
 |   README.md
 |   requirements.txt
 |   technical_documentation.md
+|   modify&extend_documentation.md
 │
 └───carebot
 │   │   manage.py
@@ -61,6 +62,7 @@ root
 |       |       |   dashboard.html
 |       |       |   deliverables.html
 |       |       |   error.html
+|       |       |   faq.html
 |       |       |   footer.html
 |       |       |   header.html
 |       |       |   home.html
@@ -255,6 +257,9 @@ TODO (Kittson) Other JS
 
 ## /carebot/chat/templates/chat/error.html
 **Purpose:** This is the generic error message page. For security purposes, all types of HTTP/HTTPS errors are directed to this page without exposing the specific error to the user.
+
+## /carebot/chat/templates/chat/faq.html
+**Purpose:** This is the frequently asked questions page.
 
 ## /carebot/chat/templates/chat/footer.html
 **Purpose:** This Django HTML snippet for a footer is included on many pages in the project. It provides a link to the privacy policy.
