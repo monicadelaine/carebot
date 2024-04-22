@@ -7,9 +7,10 @@ CS 495 Senior Design Project
 ## Setup
 1. Clone the repository.
 2. Create a file called `.env` in the root of the repository.
-3. Add the following text to `.env`. Place your OpenAI API key between the quotation marks. `OPENAI_API_KEY=""`
-4. Add `DEBUG="False"` to `.env`.
+3. Add `OPENAI_API_KEY="[your OpenAI API key]"` to `.env`.
+4. Add `DEBUG="True"` to `.env`.
 5. Add `INSECURE_FLAG=""` to `.env`.
+6. Add `SECRET_KEY="[your secret key]"` to `.env`.
 
 ## Hosting Locally with Docker
 1. If you have not ever run this command, run `docker-compose build`.
