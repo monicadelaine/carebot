@@ -11,14 +11,25 @@ from django.template import RequestContext
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 from django_ratelimit.decorators import ratelimit
+from django.db.models import Count
+
+
 from openai import OpenAI
+from django.core.serializers import serialize
+import json
 
 
 from .forms import QueryForm
-from .models import Message, MessageType
+from .models import Message, MessageType, ChatRequestGeoData
 
 logger = logging.getLogger(__name__)
 chat_history = []
+import os
+from django.conf import settings
+
+city_to_county_path = os.path.join(settings.STATIC_ROOT, 'chat/city-to-county.json')
+county_centroids_path = os.path.join(settings.STATIC_ROOT, 'chat/county_centroids.json')
+
 user_coords = []
 user_ip_addrs = {}
 blacklist_ips = []
@@ -205,6 +216,12 @@ def chat_view(request):
                         logger.info(f"Executing SQL query: {sql_statement}")
                         cursor.execute(sql_statement)
                         rows = cursor.fetchall()
+                        for row in rows:
+                            row_with_none = [value if value else None for value in row]
+                            row_with_none += [None] * (7 - len(row_with_none))
+                            agency_name, addr1, addr2, city, county, id_cms_other, resource_type = row_with_none
+                            logger.info(f"Logging location for heatmap: {city}, {county}, {resource_type}")
+                            log_location_for_heatmap(city, county, resource_type)
                         response_text = str(rows) 
                         logger.info(f"SQL query result: {response_text}")
                 except Exception as e:
@@ -259,6 +276,59 @@ def chat_view(request):
 
     return render(request, 'chat/chat.html', {'form': form, 'chat_history': chat_history})
     
+
+def log_location_for_heatmap(city, county, resource_type):
+    if (city and city.lower() == "unknown") or (county and county.lower() == "unknown") or (resource_type and resource_type.lower() == "unknown"):        
+        logging.info("Invalid location name encountered, skipping logging.")
+        return
+    if not city and not county and not resource_type:
+        logging.info("Invalid location name encountered, skipping logging.")
+        return
+    latitude, longitude = geocode_city(city)
+    if latitude is not None and longitude is not None:
+        # Now also saving the county name
+        ChatRequestGeoData.objects.create(latitude=latitude, longitude=longitude, county=county)
+        logging.info(f"Logged location for heatmap: {latitude}, {longitude}, {county}")
+
+def load_json_data(file_path):
+    with open(file_path, 'r') as file:
+        return json.load(file)
+
+def geocode_city(city_name):
+    city_to_county = load_json_data(city_to_county_path)
+    county_centroids = load_json_data(county_centroids_path)
+    county_name = None
+    for city, county in city_to_county.items():
+        if city.lower() == city_name.lower():
+            county_name = county
+            break
+    if not county_name:
+        logging.info(f"County not found for city: {city_name}")
+        return None, None
+    
+    centroid = county_centroids.get(county_name)
+    if not centroid:
+        return None, None 
+    
+    return centroid[0], centroid[1]
+
+
+def geolocation_data(request):
+    data = ChatRequestGeoData.objects.all().values('latitude', 'longitude')
+    data_list = list(data)
+    logging.info(f"Geolocation data: {data_list}")
+    return JsonResponse(data_list, safe=False)  
+
+
+def table_data(request):
+    table_data = (ChatRequestGeoData.objects
+                  .exclude(county__iexact='unknown')  # Exclude entries where county is 'Unknown'
+                  .values('county')
+                  .annotate(request_count=Count('id'))
+                  .filter(county__isnull=False))
+    logging.info(f"Table data: {table_data}")
+    return JsonResponse({'table_data': list(table_data)}, safe=False)
+
 def clear_session(request):
     if request.method == 'POST':
         request.session.flush()

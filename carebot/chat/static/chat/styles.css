@@ -1,29 +1,25 @@
 :root {
-    --color-1: #f1dac4;
-    --color-2: #928e96;
-    --color-3: #474973;
-    --color-4: #161b33;
-    --color-5: #0d0c1d;
-    --primary-color: var(--color-3);
-    --secondary-color: var(--color-2);
-    --tertiary-color: var(--color-1);
-    --accent-color: var(--color-4);
-    --text-color: var(--color-5);
-    --background-color: #e8e9ea;
-    --border-color: #ccc;
-    --user-text-color: #fff;
-    --user-bubble-color: var(--accent-color);
-    --ai-bubble-color: #d6d6d6;
-    --ai-text-color: var(--color-5);
-    --mobile-view-max-width: 725px;
+    --primary-color: #9E1B32;
+    --secondary-color: #0d0c1d;
+    --tertiary-color: #ffffff;
+    --accent-color: #ffffff;
+    --text-color: #000000;
+    --background-color: #828a8f9d;
+    --border-color: #9E1B32;
+    --user-text-color: #0d0c1d;
+    --user-bubble-color: #ffffff;
+    --ai-bubble-color: #9E1B32;
+    --ai-text-color: #ffffff;
+    --button-color: var(--primary-color);
 }
+
 
 body, html {
     height: 100%;
     margin: 0;
     padding: 0;
     font-family: 'Roboto', sans-serif;
-    background-color: var(--color-1);
+    background-color: #ffffff;
 }
 
 h2 {
@@ -49,6 +45,7 @@ footer {
     width: 100%;
     box-shadow: 0px 0px 20px 5px rgba(0, 0, 0, 0.5);
     top: 0;
+    z-index: 10000;
 }
 
 .carebot-header a {
@@ -57,14 +54,17 @@ footer {
     color: white;
     text-decoration: none;
     text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+
 }
 
 .carebot-header a.left {
     left: 0px;
+
 }
 
 .carebot-header a.right {
     right: 0px;
+
 }
 
 .carebot-header h1 {
@@ -75,6 +75,7 @@ footer {
     text-decoration: none;
     font-size: larger;
     text-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+
 }
 
 .caregiver-connect {
@@ -84,7 +85,7 @@ footer {
 }
 
 .carebot-header a:hover {
-    color: #6bc1f0;
+    color: #242729;
 }
 
 /*from .popup to @webFrame FadeIn is styling for the popup message used to alert users on why we use their location
@@ -186,7 +187,7 @@ footer {
 }
 
 .carebot-footer a:hover {
-    color: #6bc1f0;
+    color: #242729;
 }
 
 /* Chat page styles */
@@ -201,6 +202,8 @@ footer {
 
 #chatbot-container header {
     margin-top: 8vh;
+    z-index: 0;
+
 }
 
 #chat-messages {
@@ -286,15 +289,16 @@ textarea.form-control {
 .btn-send {
     padding: 10px 20px;
     border-radius: 20px;
-    background-color: var(--accent-color);
-    color: white;
+    background-color: var(--user-bubble-color);
+    color: var(--user-text-color);
+    font-size: x-large;
     cursor: pointer;
     margin-left: 10px;
 }
 
 .btn-send:hover {
     /* background-color: var(--border-color); */
-    background-color: #6bc1f0;
+    background-color: var(--background-color);
     color: black;
 }
 
@@ -332,7 +336,7 @@ textarea.form-control {
     text-align: center;
     margin: 0px 5px;
     border-radius: 10px;
-    background-color: var(--accent-color);
+    background-color: var(--button-color);
     color: white;
     font-size: x-large;
     text-decoration: none;
@@ -352,10 +356,9 @@ textarea.form-control {
     align-items: center;
     justify-content: flex-start;
     width: 100vw;
-    background-color: var(--color-1);
+    background-color: #ffffff;
     overflow: hidden;
     padding-top: 8vh;
-    padding-bottom: 8vh;
 }
 
 #home-container p {
@@ -374,6 +377,8 @@ textarea.form-control {
     width: 100%;
     text-decoration: none;
     font-size: 18pt;
+    z-index: 0;
+
     /* text-shadow: 0 0 10px rgba(0, 0, 0, 0.3); */
 }
 /* Lays out buttons in a 2x2 or 1 column based on screen width */
@@ -496,9 +501,9 @@ animation-delay: 0.2s;
     margin-bottom: -15px;
 }
 
-#elderly-person-image {
-    width: 300px; /* adjust as necessary */
-    margin: 10px;
+#owl-image {
+    width: 350px; /* adjust as necessary */
+    margin: 6px;
 }
 
 /* Testing stuff with box shadows */
@@ -525,3 +530,34 @@ animation-delay: 0.2s;
     justify-content: center;
     padding-top: 1px; 
 }
+
+#heatmap {
+    height: 60vh;
+    width: 80vw;
+    margin: auto;
+    margin-top: 100px; 
+    border-radius: 15px;
+    box-shadow: var(--box-shadow);
+}
+@media (max-width: 600px) {
+    #heatmap {
+        margin-top: 150px; 
+    }
+}
+#data-table {
+    margin-top: 20px;
+  }
+  
+  #resources-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  #resources-table, #resources-table th, #resources-table td {
+    border: 1px solid #ddd;
+  }
+  
+  #resources-table th, #resources-table td {
+    padding: 8px;
+    text-align: left;
+  }

@@ -30,7 +30,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv("DEBUG", "False") == "True"
+DEBUG = os.getenv("DEBUG", "False") == "False"
 
 ALLOWED_HOSTS = [
     'localhost',
@@ -127,13 +127,15 @@ LOGGING = {
         },
     },
     'loggers': {
-        'carebot.chat.views': {
+        '': {  # This is the root logger
             'handlers': ['console'],
-            'level': 'INFO',
-            'propagate': False,
+            'level': 'INFO',  # Adjust as needed
+            'propagate': True,
         },
     },
 }
+
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
