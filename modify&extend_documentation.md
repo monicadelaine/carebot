@@ -3,7 +3,7 @@
 ## 3. How to Modify/Extend Software
 The current version of the application is built using Docker and a Python backend, so there is no need for a compiler. 
 Anytime changes are made to the project, they are often automatically updated through the running Docker image. 
-If your changes are made to any static files, you create any new models, URL paths, or input forms, or any other changes are not adapted, you may need to restart the application by running “docker-compose down”, “docker-compose build” and “docker-compose up”. 
+If your changes are made to any static files, you create any new models, URL paths, or input forms, or any other changes are not adapted, you may need to restart the application by running `docker compose down`, `docker compose build` and `docker compose up`. 
 Any changes to the construction of the project’s build protocol, including port numbers, database passwords, version numbers, and paths to files can be made within the `docker-compose.yml` file, which configures both the Carebot application and the PostgreSQL database that the application is connected to.
 
 ### 3.1. Views.py
@@ -11,14 +11,14 @@ After cloning the GitHub repository, any changes to the Chatbot itself, includin
 This file contains the bulk of the backend processing needed to store user chat history, process user input, make OpenAI API calls, generate SQL queries, fetch data from the database, and return the data to the user. 
 Any updates to the OpenAI model or a different API call can be made from the `chat_view()` function within `views.py`. 
 If you would like to include additional URL views, the function that renders each corresponding view should be placed within the `views.py` file. 
-Any changes to this file while the application is running should be applied automatically. If you do not see changes to the code, you can run “docker-compose down”, “docker-compose build” and “docker-compose up” to restart the application. 
+Any changes to this file while the application is running should be applied automatically. If you do not see changes to the code, you can run `docker compose down`, `docker compose build` and `docker compose up` to restart the application. 
 For additional documentation on the purpose of the `views.py` file and its role within the Django structure, refer to this [link](https://docs.djangoproject.com/en/5.0/topics/http/views/).
 
 ### 3.2. Urls.py
 To add future pages/URL’s to the application, you can create an additional path to your desired URL within the `urls.py` file. 
 You will need to include the relative path or the URL, the `views.py` function that renders the view for that URL, and a common name the URL can be referred to.
 Any changes to this file while the application is running should be applied automatically. 
-If you do not see changes to the code, you can run “docker-compose down”, “docker-compose build” and “docker-compose up” to restart the application. 
+If you do not see changes to the code, you can run `docker compose down`, `docker compose build` and `docker compose up` to restart the application. 
 For additional documentation on the purpose of the `urls.py` file and its role within the Django structure, refer to this [link](https://docs.djangoproject.com/en/5.0/topics/http/urls/).
 
 ### 3.3. Tests.py
@@ -29,17 +29,17 @@ For additional documentation on the purpose of the `tests.py` file and its role 
 
 #### 3.3.1. Running Unit Tests
 To test the application with a particular test suite, you must navigate to the docker container of the application. 
-While the application is running, you can either open a new terminal and run the commands “docker ps” (to list each current docker process running) and “docker exec -it <docker_container_id> /bin/bash” to create a shell within the Carebot docker container. 
+While the application is running, you can either open a new terminal and run the commands `docker ps` (to list each current docker process running) and `docker exec -it <docker_container_id> /bin/bash` to create a shell within the Carebot docker container. 
 Make sure to use the container ID for the Carebot container rather than the database container. 
 If you are using Docker Desktop, you can simply use that to access the Carebot container shell. 
-Then you can navigate to the `/carebot` directory (whichever directory contains the `manage.py` file) and run the command “python manage.py test <path_to_test_suite>”. 
-The current path to the `tests.py` file is `chat.tests`, so an example command would be “python manage.py test chat.tests.ChatViewTests” to execute each test in the `ChatViewTests` class. 
-You can also run a single test function by appending the function name to the path, such as “python manage.py test chat.tests.ChatViewTests.test_chat_view_post_request_valid_data”.
+Then you can navigate to the `/carebot` directory (whichever directory contains the `manage.py` file) and run the command `python manage.py test <path_to_test_suite>`. 
+The current path to the `tests.py` file is `chat.tests`, so an example command would be `python manage.py test chat.tests.ChatViewTests` to execute each test in the `ChatViewTests` class. 
+You can also run a single test function by appending the function name to the path, such as "python manage.py test chat.tests.ChatViewTests.test_chat_view_post_request_valid_data".
 
 ### 3.4. Models.py
 If you would like to create any future models that describe a particular type of data you’d like to store, you can make the modification to `models.py`. 
 Each new model is a single class that can represent a new data type or behavior. Any additional model must be imported into the `admin.py` file. 
-You can run “docker-compose down”, “docker-compose build” and “docker-compose up” to restart the application if a new model is added. 
+You can run `docker compose down`, `docker compose build` and `docker compose up` to restart the application if a new model is added. 
 For additional documentation on the purpose of the `models.py` file and its role within the Django structure, refer to this [link](https://docs.djangoproject.com/en/5.0/topics/db/models/).
 
 ### 3.5. Forms.py
@@ -57,7 +57,7 @@ Any modifications or additions to the existing environment variables, such as th
 They can then be loaded into the application within the `settings.py` file.
 
 ### 3.6. Dependencies
-The current list of dependencies is stored within the `requirements.txt` file and is executed on any new system to ensure each new environment has all necessary dependencies. Anytime you need to add a new dependency, you can add it to the list within the `requirements.txt` file and then rebuild the project with “docker-compose build”. This will automatically install any additional dependencies that are not present in the current environment.
+The current list of dependencies is stored within the `requirements.txt` file and is executed on any new system to ensure each new environment has all necessary dependencies. Anytime you need to add a new dependency, you can add it to the list within the `requirements.txt` file and then rebuild the project with `docker compose build`. This will automatically install any additional dependencies that are not present in the current environment.
 
 ### 3.7. Updating the Database
 The current PostgreSQL database that is connected to the Chatbot is built with the data from the `database_dump.sql` file. 
