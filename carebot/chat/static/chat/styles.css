@@ -1,20 +1,16 @@
 :root {
-    --color-1: #FFFFFF;
-    --color-2: #828a8f9d;
-    --color-3: #9E1B32;
-    --color-4: #0d0c1d; 
-    --color-5: #FFFFFF; 
-    --primary-color: var(--color-3); 
-    --secondary-color: var(--color-4); 
-    --tertiary-color: var(--color-1);
-    --accent-color: #FFFFFF; 
-    --text-color: var(--color-4); 
-    --background-color: var(--color-2); 
-    --border-color: var(--color-3); 
-    --user-text-color: var(--color-4); 
-    --user-bubble-color: var(--color-5);
-    --ai-bubble-color: #9E1B32; 
-    --ai-text-color: var(--color-5); 
+    --primary-color: #9E1B32;
+    --secondary-color: #0d0c1d;
+    --tertiary-color: #ffffff;
+    --accent-color: #ffffff;
+    --text-color: #000000;
+    --background-color: #828a8f9d;
+    --border-color: #9E1B32;
+    --user-text-color: #0d0c1d;
+    --user-bubble-color: #ffffff;
+    --ai-bubble-color: #9E1B32;
+    --ai-text-color: #ffffff;
+    --button-color: var(--primary-color);
 }
 
 
@@ -23,7 +19,7 @@ body, html {
     margin: 0;
     padding: 0;
     font-family: 'Roboto', sans-serif;
-    background-color: var(--color-1);
+    background-color: #ffffff;
 }
 
 h2 {
@@ -293,15 +289,16 @@ textarea.form-control {
 .btn-send {
     padding: 10px 20px;
     border-radius: 20px;
-    background-color: var(--accent-color);
-    color: white;
+    background-color: var(--user-bubble-color);
+    color: var(--user-text-color);
+    font-size: x-large;
     cursor: pointer;
     margin-left: 10px;
 }
 
 .btn-send:hover {
     /* background-color: var(--border-color); */
-    background-color: #242729;
+    background-color: var(--background-color);
     color: black;
 }
 
@@ -339,7 +336,7 @@ textarea.form-control {
     text-align: center;
     margin: 0px 5px;
     border-radius: 10px;
-    background-color: var(--accent-color);
+    background-color: var(--button-color);
     color: white;
     font-size: x-large;
     text-decoration: none;
@@ -359,10 +356,9 @@ textarea.form-control {
     align-items: center;
     justify-content: flex-start;
     width: 100vw;
-    background-color: var(--color-1);
+    background-color: #ffffff;
     overflow: hidden;
     padding-top: 8vh;
-    padding-bottom: 8vh;
 }
 
 #home-container p {
