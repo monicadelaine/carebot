@@ -34,27 +34,24 @@ user_coords = []
 user_ip_addrs = {}
 blacklist_ips = []
 
-class QueryFormNoAutofill(forms.Form):
-    query = forms.CharField(widget=forms.TextInput(attrs={'autocomplete': 'off'}))
 
-
-#function to store user coordinates as tuple in array of coords, can use to populate dashboard heatmap
-# def storeUserLocation(request):
-#     #grab user's location from ajax function from chat.js
-#     try:
-#         data = json.loads(request.body.decode('utf-8'))
-#         user_latitude = data[0]['user_latitude']
-#         user_longitude = data[1]['user_longitude']
-#         user_loc = (user_latitude, user_longitude)
-#         user_coords.append(user_loc)
-#         # for coord in user_coords:
-#         #     print(coord)
-#         return JsonResponse({'status': 'success'})
+# function to store user coordinates as tuple in array of coords, can use to populate dashboard heatmap
+def storeUserLocation(request):
+    # grab user's location from ajax function from chat.js
+    try:
+        data = json.loads(request.body.decode('utf-8'))
+        user_latitude = data[0]['user_latitude']
+        user_longitude = data[1]['user_longitude']
+        user_loc = (user_latitude, user_longitude)
+        user_coords.append(user_loc)
+        # for coord in user_coords:
+        #     print(coord)
+        return JsonResponse({'status': 'success'})
     
-#     #catch the exception of "cannot access request body more than once", make sure it does not affect chatbot
-#     except Exception as e:
-#         # print(e)
-#         pass
+    # catch the exception of "cannot access request body more than once", make sure it does not affect chatbot
+    except Exception as e:
+        # print(e)
+        pass
 
 def limited_chat_view(request, exception):
     if isinstance(exception, ratelimit.exceptions.Ratelimited):
@@ -64,8 +61,8 @@ def limited_chat_view(request, exception):
 
 @ratelimit(key='ip', rate='10/m', block=True)
 def chat_view(request):
-    #try/except statements to store malicious IPs in blacklisted IPs
-    #also builds a dict of IP: # of queries/IP, need to store in DB for persistance
+    # try/except statements to store malicious IPs in blacklisted IPs
+    # also builds a dict of IP: # of queries/IP, need to store in DB for persistance
     # try:
     #     user_ip = request.META.get('REMOTE_ADDR')
     #     if user_ip in blacklist_ips:
@@ -86,7 +83,7 @@ def chat_view(request):
     # storeUserLocation(request)
 
     if request.method == 'POST':
-        form = QueryFormNoAutofill(request.POST)
+        form = QueryForm(request.POST)
 
         if form.is_valid():
 
@@ -276,7 +273,6 @@ def chat_view(request):
 
     return render(request, 'chat/chat.html', {'form': form, 'chat_history': chat_history})
     
-
 def log_location_for_heatmap(city, county, resource_type):
     if (city and city.lower() == "unknown") or (county and county.lower() == "unknown") or (resource_type and resource_type.lower() == "unknown"):        
         logging.info("Invalid location name encountered, skipping logging.")
@@ -294,7 +290,7 @@ def load_json_data(file_path):
     with open(file_path, 'r') as file:
         return json.load(file)
 
-def geocode_city(city_name):
+def geocode_city(city_name) -> tuple:
     city_to_county = load_json_data(city_to_county_path)
     county_centroids = load_json_data(county_centroids_path)
     county_name = None
@@ -312,13 +308,11 @@ def geocode_city(city_name):
     
     return centroid[0], centroid[1]
 
-
 def geolocation_data(request):
     data = ChatRequestGeoData.objects.all().values('latitude', 'longitude')
     data_list = list(data)
     logging.info(f"Geolocation data: {data_list}")
     return JsonResponse(data_list, safe=False)  
-
 
 def table_data(request):
     table_data = (ChatRequestGeoData.objects
