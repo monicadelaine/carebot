@@ -46,13 +46,18 @@ root
 |       |   └───chat
 |       |       |   caregiver_connect_icon.svg
 |       |       |   chat.js
-|       |       |   elderly_person_image.png
+|       |       |   city-to-county.json
+|       |       |   county_centroids.json
+|       |       |   dashboard.js
 |       |       |   home_icon.png
 |       |       |   jake.jpg
 |       |       |   kittson_short.jpg
+|       |       |   owl_png.png
 |       |       |   q.png
 |       |       |   scott.jpg
+|       |       |   server.js
 |       |       |   styles.css
+|       |       |   table.js
 |       |
 |       └───templates
 |       |   |
@@ -197,11 +202,20 @@ TODO (Scott): remove format
 
 | Function Name | Parameters | Return Value | Other Notes |
 | ------------- | ---------- | ------------ | ----------- |
-| sendUserLocation() | user_latitude, user_longitude | response.json() | Uses AJAX fetch() and HTTP POST methods to send the user coordinates from the frontend to backend. Imported by `chat.html`, called by `getLatLong()`. |   
-|                   |               |                       |         
+| sendUserLocation() | user_latitude, user_longitude | response.json() | Uses AJAX fetch() and HTTP POST methods to send the user coordinates from the frontend to backend. Imported by `chat.html`, called by `getLatLong()`. |
 
-## /carebot/chat/static/chat/elderly_person_image.png
-**Purpose:** This file is an eyecatching image used in `home.html`.
+## /carebot/chat/static/chat/city-to-county.json
+**Purpose:** TODO (Kittson)
+
+## /carebot/chat/static/chat/city_centroids.json
+**Purpose:** TODO (Kittson)
+
+## /carebot/chat/static/chat/dashboard.js
+**Purpose:** TODO (Kittson)
+
+| Function Name | Parameters | Return Value | Other Notes |
+| ------------- | ---------- | ------------ | ----------- |
+|               |            |              |             |
 
 ## /carebot/chat/static/chat/home_icon.png
 **Purpose:** This file is an icon used for a link to `home.html` from `chat.html`.
@@ -212,14 +226,31 @@ TODO (Scott): remove format
 ## /carebot/chat/static/chat/kittson_short.jpg
 **Purpose:** This file is an image of Kittson Hamill (B.S. in Computer Science, 2024). Kittson is a member of the first Carebot senior design team.
 
+## /carebot/chat/static/chat/owl_png.png
+**Purpose:** This file is an eyecatching image used in `home.html`.
+
 ## /carebot/chat/static/chat/q.jpg
 **Purpose:** This file is an image of Quillen Flanigan (B.S. in Computer Science, 2024). Quillen is a member of the first Carebot senior design team.
 
 ## /carebot/chat/static/chat/scott.jpg
 **Purpose:** This file is an image of Scott Ratchford (B.S. in Computer Science, 2024). Scott is a member of the first Carebot senior design team.
 
+## /carebot/chat/static/chat/server.js
+**Purpose:** TODO (Kittson)
+
+| Function Name | Parameters | Return Value | Other Notes |
+| ------------- | ---------- | ------------ | ----------- |
+|               |            |              |             |
+
 ## /carebot/chat/static/chat/styles.css
 **Purpose:** This file contains nearly all of the CSS styles used throughout the website.
+
+## /carebot/chat/static/chat/table.js
+**Purpose:** TODO (Kittson)
+
+| Function Name | Parameters | Return Value | Other Notes |
+| ------------- | ---------- | ------------ | ----------- |
+|               |            |              |             |
 
 # /carebot/chat/templates/
 **Purpose:** This file contains the Django HTML templates for all the webpages in the project. See [Django documentation](https://docs.djangoproject.com/en/5.0/topics/templates/).
