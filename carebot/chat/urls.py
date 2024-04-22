@@ -10,5 +10,4 @@ urlpatterns = [
     path('deliverables/', views.deliverables_view, name='deliverables'),
     path('api/geolocation-data/', views.geolocation_data, name='geolocation_data'),
     path('api/table-data/', views.table_data, name='table-data'),
-
 ]
