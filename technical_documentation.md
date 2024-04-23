@@ -46,13 +46,19 @@ root
 |       |   └───chat
 |       |       |   caregiver_connect_icon.svg
 |       |       |   chat.js
+|       |       |   city-to-county.json
+|       |       |   county_centroids.json
+|       |       |   dashboard.js
 |       |       |   elderly_person_image.png
 |       |       |   home_icon.png
 |       |       |   jake.jpg
 |       |       |   kittson_short.jpg
+|       |       |   owl_png.png
 |       |       |   q.png
 |       |       |   scott.jpg
+|       |       |   server.js
 |       |       |   styles.css
+|       |       |   table.js
 |       |
 |       └───templates
 |       |   |
@@ -61,6 +67,7 @@ root
 |       |       |   chat.html
 |       |       |   dashboard.html
 |       |       |   deliverables.html
+|       |       |   documentation.html
 |       |       |   error.html
 |       |       |   faq.html
 |       |       |   footer.html
@@ -165,7 +172,7 @@ TODO (Scott): remove format
 **Purpose:** TODO (Scott)
 
 ## /carebot/chat/tests.py
-**Purpose:** TODO (Kittson)
+**Purpose:** This file contains Django test cases for testing chat view functionalities, AJAX requests, session management, and database interactions within a chat application.See [Django documentation](https://docs.djangoproject.com/en/5.0/topics/testing/overview/).
 
 ## /carebot/chat/urls.py
 **Purpose:** This file contains the url patterns for the `chat` Django app. See [Django documentation](https://docs.djangoproject.com/en/5.0/topics/http/urls/).
@@ -193,15 +200,23 @@ TODO (Scott): remove format
 **Purpose:** This file is an icon used for a link to the Caregiver Connect website from `chat.html`.
 
 ## /carebot/chat/static/chat/chat.js
-**Purpose:** TODO (Kittson)
+**Purpose:** Manages the chat interface's interactivity, including sending user messages, displaying system and AI responses, and handling CSRF token for secure AJAX requests within the Carebot application.
 
 | Function Name | Parameters | Return Value | Other Notes |
 | ------------- | ---------- | ------------ | ----------- |
 | sendUserLocation() | user_latitude, user_longitude | response.json() | Uses AJAX fetch() and HTTP POST methods to send the user coordinates from the frontend to backend. Imported by `chat.html`, called by `getLatLong()`. |   
 |                   |               |                       |         
+## /carebot/chat/static/chat/city-to-county.json
+**Purpose:** Maps cities to their corresponding counties, used for data processing or lookup functionalities within the Carebot application in the dashboard.
+
+## /carebot/chat/static/chat/county_centroids.json
+**Purpose:**  Provides the geographical center (centroid) coordinates for each county, used for mapping or geolocation features in the Carebot application in the dashboard.
+
+## /carebot/chat/static/chat/dashboard.js
+**Purpose:** Initializes and manages the interactive map on the dashboard page, including fetching and displaying geolocation data as a heat map.
 
 ## /carebot/chat/static/chat/elderly_person_image.png
-**Purpose:** This file is an eyecatching image used in `home.html`.
+**Purpose:** This file is an eyecatching image originally used in `home.html`.
 
 ## /carebot/chat/static/chat/home_icon.png
 **Purpose:** This file is an icon used for a link to `home.html` from `chat.html`.
@@ -212,14 +227,23 @@ TODO (Scott): remove format
 ## /carebot/chat/static/chat/kittson_short.jpg
 **Purpose:** This file is an image of Kittson Hamill (B.S. in Computer Science, 2024). Kittson is a member of the first Carebot senior design team.
 
+## /carebot/chat/static/chat/owl_png.png
+**Purpose:**  This file is used as a decorative or branding image within the Carebot application  on the 'home.html'.
+
 ## /carebot/chat/static/chat/q.jpg
 **Purpose:** This file is an image of Quillen Flanigan (B.S. in Computer Science, 2024). Quillen is a member of the first Carebot senior design team.
 
 ## /carebot/chat/static/chat/scott.jpg
 **Purpose:** This file is an image of Scott Ratchford (B.S. in Computer Science, 2024). Scott is a member of the first Carebot senior design team.
 
+## /carebot/chat/static/chat/server.js
+**Purpose:** Sets up a simple Express server to serve static files and provide an API endpoint for geolocation data, used for development or demonstration purposes.
+
 ## /carebot/chat/static/chat/styles.css
 **Purpose:** This file contains nearly all of the CSS styles used throughout the website.
+
+## /carebot/chat/static/chat/table.js
+**Purpose:**  Fetches and displays table data from an API endpoint, sorting and inserting the data into an HTML table, used to show resource requests or other data in the Carebot application in the dashboard.
 
 # /carebot/chat/templates/
 **Purpose:** This file contains the Django HTML templates for all the webpages in the project. See [Django documentation](https://docs.djangoproject.com/en/5.0/topics/templates/).
@@ -246,7 +270,7 @@ TODO (Kittson) Other JS
 | showPopUpMsg()                 | N/A            |  void            | Toggles the location-info popup when the popup button is clicked. Currently commented out and waiting for more nuanced styling.             |
 
 ## /carebot/chat/templates/chat/dashboard.html
-**Purpose:** TODO (Kittson)
+**Purpose:** Displays a dashboard featuring a heatmap visualization of chat request locations across the United States and a table listing the number of requests by county, utilizing Leaflet for mapping and custom scripts for dynamic data presentation.
 
 | Function Name | Parameters | Return Value | Other Notes |
 | ------------- | ---------- | ------------ | ----------- |
@@ -254,6 +278,9 @@ TODO (Kittson) Other JS
 
 ## /carebot/chat/templates/chat/deliverables.html
 **Purpose:** This page contains deliverables for the Spring 2024 Computer Science senior design Carebot team. The included presentation links are to PowerPoint files on the University of Alabama Sharepoint. The links are viewable by anyone with a UA Microsoft account, but they expire before May 2025. The source code is hosted in a private repository under Scott Ratchford's personal GitHub account.
+
+## /carebot/chat/templates/chat/documentation.html
+**Purpose:** Serves as the documentation page for the Carebot application, providing links to various resources such as FAQs, installation instructions, technical documentation, and guides on modifying and extending the application, all styled with a consistent look and feel through shared CSS.
 
 ## /carebot/chat/templates/chat/error.html
 **Purpose:** This is the generic error message page. For security purposes, all types of HTTP/HTTPS errors are directed to this page without exposing the specific error to the user.
