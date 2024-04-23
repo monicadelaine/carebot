@@ -67,6 +67,7 @@ root
 |       |       |   chat.html
 |       |       |   dashboard.html
 |       |       |   deliverables.html
+|       |       |   documentation.html
 |       |       |   error.html
 |       |       |   faq.html
 |       |       |   footer.html
@@ -193,7 +194,7 @@ root
 
 ## /carebot/chat/tests.py
 
- TODO (Kittson)
+**Purpose:** This file contains Django test cases for testing chat view functionalities, AJAX requests, session management, and database interactions within a chat application.See [Django documentation](https://docs.djangoproject.com/en/5.0/topics/testing/overview/).
 
 ## /carebot/chat/urls.py
 
@@ -243,27 +244,11 @@ root
 
 ## /carebot/chat/static/chat/chat.js
 
- TODO (Kittson)
+**Purpose:** Manages the chat interface's interactivity, including sending user messages, displaying system and AI responses, and handling CSRF token for secure AJAX requests within the Carebot application.
 
 | Function Name | Parameters | Return Value | Other Notes |
 | ------------- | ---------- | ------------ | ----------- |
 | sendUserLocation() | user_latitude, user_longitude | response.json() | Uses AJAX fetch() and HTTP POST methods to send the user coordinates from the frontend to backend. Imported by `chat.html`, called by `getLatLong()`. |
-
-## /carebot/chat/static/chat/city-to-county.json
-
- TODO (Kittson)
-
-## /carebot/chat/static/chat/city_centroids.json
-
- TODO (Kittson)
-
-## /carebot/chat/static/chat/dashboard.js
-
- TODO (Kittson)
-
-| Function Name | Parameters | Return Value | Other Notes |
-| ------------- | ---------- | ------------ | ----------- |
-|               |            |              |             |
 
 ## /carebot/chat/static/chat/home_icon.png
 
@@ -275,11 +260,7 @@ root
 
 ## /carebot/chat/static/chat/kittson_short.jpg
 
- This file is an image of Kittson Hamill (B.S. in Computer Science, 2024). Kittson is a member of the first Carebot senior design team.
-
-## /carebot/chat/static/chat/owl_png.png
-
- This file is an eyecatching image used in `home.html`.
+**Purpose:** This file is an image of Kittson Hamill (B.S. in Computer Science, 2024). Kittson is a member of the first Carebot senior design team.
 
 ## /carebot/chat/static/chat/q.jpg
 
@@ -287,27 +268,11 @@ root
 
 ## /carebot/chat/static/chat/scott.jpg
 
- This file is an image of Scott Ratchford (B.S. in Computer Science, 2024). Scott is a member of the first Carebot senior design team.
-
-## /carebot/chat/static/chat/server.js
-
- TODO (Kittson)
-
-| Function Name | Parameters | Return Value | Other Notes |
-| ------------- | ---------- | ------------ | ----------- |
-|               |            |              |             |
+**Purpose:** This file is an image of Scott Ratchford (B.S. in Computer Science, 2024). Scott is a member of the first Carebot senior design team.
 
 ## /carebot/chat/static/chat/styles.css
 
- This file contains nearly all of the CSS styles used throughout the website.
-
-## /carebot/chat/static/chat/table.js
-
- TODO (Kittson)
-
-| Function Name | Parameters | Return Value | Other Notes |
-| ------------- | ---------- | ------------ | ----------- |
-|               |            |              |             |
+**Purpose:** This file contains nearly all of the CSS styles used throughout the website.
 
 # /carebot/chat/templates/
 
@@ -336,15 +301,15 @@ root
 
 ## /carebot/chat/templates/chat/dashboard.html
 
- TODO (Kittson)
-
-| Function Name | Parameters | Return Value | Other Notes |
-| ------------- | ---------- | ------------ | ----------- |
-|               |            |              |             |
+**Purpose:** Displays a dashboard featuring a heatmap visualization of chat request locations across the United States and a table listing the number of requests by county, utilizing Leaflet for mapping and custom scripts for dynamic data presentation.
 
 ## /carebot/chat/templates/chat/deliverables.html
 
- This page contains deliverables for the Spring 2024 Computer Science senior design Carebot team. The included presentation links are to PowerPoint files on the University of Alabama Sharepoint. The links are viewable by anyone with a UA Microsoft account, but they expire before May 2025. The source code is hosted in a private repository under Scott Ratchford's personal GitHub account.
+**Purpose:** This page contains deliverables for the Spring 2024 Computer Science senior design Carebot team. The included presentation links are to PowerPoint files on the University of Alabama Sharepoint. The links are viewable by anyone with a UA Microsoft account, but they expire before May 2025. The source code is hosted in a private repository under Scott Ratchford's personal GitHub account.
+
+## /carebot/chat/templates/chat/documentation.html
+
+**Purpose:** Serves as the documentation page for the Carebot application, providing links to various resources such as FAQs, installation instructions, technical documentation, and guides on modifying and extending the application, all styled with a consistent look and feel through shared CSS.
 
 ## /carebot/chat/templates/chat/error.html
 
