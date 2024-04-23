@@ -131,5 +131,6 @@ class DatabaseInteractionTests(TestCase):
         message = Message.objects.first()
         self.assertEqual(message.text, 'Test message')
         self.assertEqual(message.message_type, MessageType.USER)
+        ```
 
 
