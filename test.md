@@ -15,6 +15,10 @@ Then you can navigate to the `/carebot` directory (whichever directory contains 
 The current path to the `tests.py` file is `chat.tests`, so an example command would be `python manage.py test chat.tests.ChatViewTests` to execute each test in the `ChatViewTests` class.
 You can also run a single test function by appending the function name to the path, such as "python manage.py test chat.tests.ChatViewTests.test_chat_view_post_request_valid_data".
 
+#### High Risk Features
+
+This application is built using API calls and prepared SQL statements that retrieve information from a PostgreSQL database. Given these properties, there are no high risk features that needed testing, such as creating accounts, logging in, credential storage, financial service operations, CRUD operations on the database, etc. Our only security concern that we directly needed to test was the rate limiting functionality to prevent Denial of Service attacks, which is documented within the `technical_documentation.md` file within the root directory of this repository.
+
 ## Complete List of Unit Tests
 #### ChatViewTests
 
