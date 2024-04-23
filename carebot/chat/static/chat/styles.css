@@ -350,7 +350,7 @@ textarea.form-control {
 }
 
 /* Homepage styles */
-#home-container {
+.home-container {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -359,28 +359,24 @@ textarea.form-control {
     background-color: #ffffff;
     overflow: hidden;
     padding-top: 8vh;
+    padding-bottom: 8vh;
 }
 
-#home-container p {
+.home-container p {
     color: var(--text-color);
-    margin: 15px;
+    /* margin: 15px; */
     padding-left: 50px;
     padding-right: 50px;
     font-size: 18pt;
     text-align: center;
-    padding-bottom: 1px; 
+    padding-bottom: 1px;
 }
 
-.home-header {
-    margin: 0;
+.home-container h1 {
     text-align: center;
-    width: 100%;
-    text-decoration: none;
-    font-size: 18pt;
-    z-index: 0;
-
-    /* text-shadow: 0 0 10px rgba(0, 0, 0, 0.3); */
+    font-size: xx-large;
 }
+
 /* Lays out buttons in a 2x2 or 1 column based on screen width */
 .adjusting-grid {
     display: grid;
@@ -502,8 +498,7 @@ animation-delay: 0.2s;
 }
 
 #owl-image {
-    width: 350px; /* adjust as necessary */
-    margin: 6px;
+    width: 250px;
 }
 
 /* Testing stuff with box shadows */
