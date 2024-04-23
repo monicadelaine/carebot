@@ -269,6 +269,10 @@ root
 
 **Purpose:** This file is an image of Kittson Hamill (B.S. in Computer Science, 2024). Kittson is a member of the first Carebot senior design team.
 
+## /carebot/chat/static/chat/owl_png.png
+
+**Purpose:** This is an eyecatching image of a wise owl using the Carebot website from its comfy chair. It also serves as the favicon for the website. The image was drawn by the illustrious Kittson.
+
 ## /carebot/chat/static/chat/q.jpg
 
  This file is an image of Quillen Flanigan (B.S. in Computer Science, 2024). Quillen is a member of the first Carebot senior design team.
