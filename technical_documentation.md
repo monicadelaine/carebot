@@ -5,17 +5,15 @@
 ```text
 root
 │   .dockerignore
-│   .env
+│   .env    (not in repository)
 |   .gitattributes
 |   .gitignore
-|   CS 495 API Research.xlsx
 |   database_dump.sql
 |   docker-compose.yml
 |   docker-entrypoint.sh
 |   Dockerfile
 |   FAQ.md
 |   modify&extend_documentation.md
-|   notes.txt
 |   Pipfile (out of scope)
 |   README.md
 |   requirements.txt
@@ -85,7 +83,7 @@ root
 
 **Purpose:** This file tells Docker which files to ignore (i.e.: not to copy to the image). These are mostly machine-generated files like the Python cache.
 
-## /.env
+## /.env (not in repository)
 
 **Purpose:** This file contains the environment variables required to setup the Docker image and run Django. This file must be created manually. It is not included in the repository. This file should **never** be uploaded to any kind of repository for security purposes. Use environment variables and secrets according to best security practices.
 
@@ -119,6 +117,14 @@ root
 ## /Dockerfile
 
  This is the file Docker uses to set up the image upon build. Ours includes Python, PostgreSQL, and Django, among others. See the [Docker documentation](https://docs.docker.com/reference/dockerfile/).
+
+## /FAQ.md
+
+ This file provides frequently asked questions and answers about the project.
+
+## /modify&extend_documentation.md
+
+ This file provides instructions for modifying and extending the software.
 
 ## /README.md
 
