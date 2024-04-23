@@ -230,7 +230,6 @@ root
 | about_us_view() | HTTP request | render() of HTML page | This function renders `about-us.html`. |
 | deliverables_view() | HTTP request | render() of HTML page | This function renders `deliverables.html`. |
 | documentation_view() | HTTP request | render() of HTML page | This function renders `documentation.html`. |
-| faq_view() | HTTP request | render() of HTML page | This function renders `faq.html`. |
 | handler404() | HTTP request, *args | render() of HTML page | This function renders the generic error page `error.html` with additional 404 information. See [Django documentation](https://docs.djangoproject.com/en/5.0/ref/views/#error-views) for more on error handlers. |
 | handler500() | HTTP request, *args | render() of HTML page | This function renders the generic error page `error.html` with additional 500 information. See [Django documentation](https://docs.djangoproject.com/en/5.0/ref/views/#error-views) for more on error handlers. |
 

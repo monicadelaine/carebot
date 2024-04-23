@@ -356,9 +356,6 @@ def deliverables_view(request):
 def documentation_view(request):
     return render(request, 'chat/documentation.html')
 
-def faq_view(request):
-    return render(request, 'chat/faq.html')
-
 # unused
 def handler404(request, *args):
     return render(request, 'chat/error.html', {'error': 'Page not found.'})
