@@ -97,7 +97,7 @@ class MessageModelTests(TestCase):
         message = Message.objects.create(message_type=MessageType.USER, text="Test message")
         self.assertTrue(isinstance(message, Message))
         self.assertEqual(message.__str__(), "Test message")
-
+```
 - **AJAXChatViewTests:**
 ```python
 class AJAXChatViewTests(TestCase):
@@ -118,14 +118,19 @@ class AJAXChatViewTests(TestCase):
         response = self.client.post(self.chat_url, {}, **self.headers)
         self.assertEqual(response.status_code, 400)
         self.assertIn('error', response.json())
-
+```
+- **SessionManagementTests:**
+```python
 class SessionManagementTests(TestCase):
     def test_clear_session(self):
         session_clear_url = reverse('clear_session')
         response = self.client.post(session_clear_url, {}, **{'HTTP_X_REQUESTED_WITH': 'XMLHttpRequest'})
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json(), {'status': 'session_cleared'})
+```
 
+- **DatabaseInteractionTests:**
+```python
 class DatabaseInteractionTests(TestCase):
     def test_message_storage(self):
         chat_url = reverse('chat')
@@ -135,6 +140,6 @@ class DatabaseInteractionTests(TestCase):
         message = Message.objects.first()
         self.assertEqual(message.text, 'Test message')
         self.assertEqual(message.message_type, MessageType.USER)
-        ```
+```
 
 
