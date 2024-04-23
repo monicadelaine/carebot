@@ -8,16 +8,18 @@ root
 │   .env
 |   .gitattributes
 |   .gitignore
+|   CS 495 API Research.xlsx
 |   database_dump.sql
 |   docker-compose.yml
 |   docker-entrypoint.sh
 |   Dockerfile
+|   FAQ.md
 |   modify&extend_documentation.md
+|   notes.txt
 |   Pipfile (out of scope)
 |   README.md
 |   requirements.txt
 |   technical_documentation.md
-|   modify&extend_documentation.md
 │
 └───carebot
 │   │   manage.py
