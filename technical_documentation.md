@@ -272,10 +272,6 @@ TODO (Kittson) Other JS
 ## /carebot/chat/templates/chat/dashboard.html
 **Purpose:** Displays a dashboard featuring a heatmap visualization of chat request locations across the United States and a table listing the number of requests by county, utilizing Leaflet for mapping and custom scripts for dynamic data presentation.
 
-| Function Name | Parameters | Return Value | Other Notes |
-| ------------- | ---------- | ------------ | ----------- |
-|               |            |              |             |
-
 ## /carebot/chat/templates/chat/deliverables.html
 **Purpose:** This page contains deliverables for the Spring 2024 Computer Science senior design Carebot team. The included presentation links are to PowerPoint files on the University of Alabama Sharepoint. The links are viewable by anyone with a UA Microsoft account, but they expire before May 2025. The source code is hosted in a private repository under Scott Ratchford's personal GitHub account.
 
