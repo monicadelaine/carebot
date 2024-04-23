@@ -88,7 +88,9 @@ You can also run a single test function by appending the function name to the pa
           response = self.client.post(self.chat_url, {})
           self.assertEqual(response.status_code, 400)
           self.assertIn('error', response.json())
-
+  
+- **MessageModelTests:**
+```python
 class MessageModelTests(TestCase):
     def test_message_creation(self):
         # Test message creation
@@ -96,6 +98,8 @@ class MessageModelTests(TestCase):
         self.assertTrue(isinstance(message, Message))
         self.assertEqual(message.__str__(), "Test message")
 
+- **AJAXChatViewTests:**
+```python
 class AJAXChatViewTests(TestCase):
     def setUp(self):
         # Mimic an AJAX request
