@@ -5,7 +5,8 @@ CS 495 Senior Design Project
 ## Prerequisites and Paid Services
 
 1. [Docker](https://docs.docker.com/engine/install/)
-2. [OpenAI API key](https://platform.openai.com/docs/introduction) for ChatGPT v3.5 (paid)
+2. [Docker Compose](https://docs.docker.com/compose/)
+3. [OpenAI API key](https://platform.openai.com/docs/introduction) for ChatGPT v3.5 (paid)
 
 ## Setup
 
