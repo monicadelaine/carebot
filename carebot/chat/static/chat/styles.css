@@ -377,7 +377,7 @@ textarea.form-control {
     font-size: xx-large;
 }
 
-/* Lays out buttons in a 2x2 or 1 column based on screen width */
+/* Lays out buttons in 1 or 2 columns based on screen width */
 .adjusting-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(100%, 1fr));
@@ -388,16 +388,14 @@ textarea.form-control {
     gap: 10px;
 }
 
+.adjusting-grid :nth-last-child(1):nth-child(odd) {
+    grid-column: 1 / -1; /* Makes the item span all columns */
+}
+
 @media (min-width: 725px) {
     .adjusting-grid {
-      grid-template-columns: repeat(2, 1fr); /* Creates a 2x2 grid */
+        grid-template-columns: repeat(2, 1fr); /* Creates a 2x2 grid */
     }
-  }
-
-.spacer {
-    flex-grow: 1;
-    flex-shrink: 1;
-    flex-basis: 20px;
 }
 
 /* Just a section that separates some stuff */
