@@ -12,9 +12,9 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 from django_ratelimit.decorators import ratelimit
 from django.db.models import Count
+import google.generativeai as genai
+from google.genai import types
 
-
-from openai import OpenAI
 from django.core.serializers import serialize
 import json
 
@@ -87,9 +87,10 @@ def chat_view(request):
 
         if form.is_valid():
 
-            query = form.cleaned_data.get('query', '') 
+            query = form.cleaned_data.get('query', '')
+            client = genai.configure(api_key=settings.GOOGLE_API_KEY) 
 
-            client = OpenAI(api_key=settings.OPENAI_API_KEY)
+            #client = OpenAI(api_key=settings.OPENAI_API_KEY)
             query = form.cleaned_data['query']
             if len(query) > 1000:
                 query = query[:1000]    # truncate the query to 1000 characters if it is longer
@@ -106,17 +107,15 @@ def chat_view(request):
                     else:
                         # This should never occur. It is a fallback.
                         return JsonResponse({'query': query, 'response': "Let's try something new."})
-
+            messages_parameter={}
             # All additional AI instructions should be added here.
-            messages_parameter = [
-                {"role": "system", "content": "You connect Alabama residents users to healthcare services in Alabama based on their needs. If the user is looking for healthcare outside of Alabama, tell them you cannot help. Do not use any special characters in your responses except for \\n. You assist another program by giving the correct parameters for an SQL query. When appropriate, you can tell the program to execute the SQL query by giving it a command using exactly the following format: SQL: SELECT * FROM providers WHERE resource_type = value AND city = city_name OR county = county_name\nIf the user leaves out 1 or 2 of those 3 criteria, leave it out of your SQL statement. The program will then execute the SQL query and return the results to the user. You should not execute the SQL query yourself. You should only give the command to the program to execute the SQL query. When doing this, never include any non-SQL text in the same message as the SQL command. The SQL command should be the only content in the message. If you do not have any of these (resource type, city, or county), ask the user for this information. If you have at least one of those, DO NOT message the user. Remember to use the data you have to create the query as the instructions require. These are the only resource types you can use: support_groups, food_stamps, training, infrastr_chgs, home_maintain, drug_assist, counseling, reimbursement, medicare, house_cleaning, personal_care, home_meals, daycare, respite_care, incontinence_items, medical_supplies, nursing, medic_alerting, durable_equip, bill_assist, supplier_research, medicare_providers, geriatricians, pyschiatrist, neurologists, specialists, nursing_home, rehabilitation_facility, memory_care, legal_assist, hospice_advd_care, transportation, death_burial, food_pantry, physical_therapy, occupational_therapy, devices_prosthetics, studies_traisl, procedures, illness_disease, vision_aids, hearing_aids, oral_dentures, technology, oxygen, referral, medicare_waivers, food_vouches, activity_enrichment, housing_directory, housing_assistance, veterans_affairs, financial_general, senior_discount, job_training, substance_abuse, pain_management, tax_help, clinics.\nIf the user asks for all healthcare resources in a particular area, make the query."}
-            ]
+            model = genai.GenerativeModel("models/gemini-2.0-flash",system_instruction="You connect Alabama residents users to healthcare services in Alabama based on their needs. If the user is looking for healthcare outside of Alabama, tell them you cannot help. Do not use any special characters in your responses except for \\n. You assist another program by giving the correct parameters for an SQL query. When appropriate, you can tell the program to execute the SQL query by giving it a command using exactly the following format: SQL: SELECT * FROM providers WHERE resource_type = value AND city = city_name OR county = county_name\nIf the user leaves out 1 or 2 of those 3 criteria, leave it out of your SQL statement. The program will then execute the SQL query and return the results to the user. You should not execute the SQL query yourself. You should only give the command to the program to execute the SQL query. When doing this, never include any non-SQL text in the same message as the SQL command. The SQL command should be the only content in the message. If you do not have any of these (resource type, city, or county), ask the user for this information. If you have at least one of those, DO NOT message the user. Remember to use the data you have to create the query as the instructions require. These are the only resource types you can use: support_groups, food_stamps, training, infrastr_chgs, home_maintain, drug_assist, counseling, reimbursement, medicare, house_cleaning, personal_care, home_meals, daycare, respite_care, incontinence_items, medical_supplies, nursing, medic_alerting, durable_equip, bill_assist, supplier_research, medicare_providers, geriatricians, pyschiatrist, neurologists, specialists, nursing_home, rehabilitation_facility, memory_care, legal_assist, hospice_advd_care, transportation, death_burial, food_pantry, physical_therapy, occupational_therapy, devices_prosthetics, studies_traisl, procedures, illness_disease, vision_aids, hearing_aids, oral_dentures, technology, oxygen, referral, medicare_waivers, food_vouches, activity_enrichment, housing_directory, housing_assistance, veterans_affairs, financial_general, senior_discount, job_training, substance_abuse, pain_management, tax_help, clinics.\nIf the user asks for all healthcare resources in a particular area, make the query.")
             if chat_history.exists():   # add the previous 6 messages to the messages_parameter, limiting token usage
                 for message in chat_history.order_by('created_at').reverse()[:6][::-1]: # reverse the last 6 messages
                     if message.message_type == MessageType.USER:
-                        messages_parameter.append({"role": "user", "content": message.text})
+                        messages_parameter.append({"text": "user:"+message.text})
                     elif message.message_type == MessageType.CHATBOT:
-                        messages_parameter.append({"role": "assistant", "content": message.text})
+                        messages_parameter.append({"text": "model:"+message.text})
                     # leave out system messages
 
             messages_parameter.append({"role": "user", "content": query})
@@ -124,12 +123,18 @@ def chat_view(request):
             user_message = Message.objects.create(message_type=MessageType.USER, text=query)   # this must be done before the AI response is generated to maintain the order of messages
 
             try:
-                completion = client.chat.completions.create(
-                    model="gpt-3.5-turbo",
-                    messages=messages_parameter,    # uses system directions, previous messages, and the latest user message
-                )
+                print("sending message")
+                print(query)
+
+                response = model.generate_content(query)
+                #completion = client.chat.completions.create(
+                    #model="gpt-3.5-turbo",
+                    #messages=messages_parameter,    # uses system directions, previous messages, and the latest user message
+                #)
                 
-                ai_response = completion.choices[0].message.content
+                #ai_response = completion.choices[0].message.content
+                ai_response = response.text
+                print(response.model_dump_json(exclude_none=True, indent=4))
             except Exception as e:
                 # create Messages object for the error
                 error_message = Message.objects.create(message_type=MessageType.SYSTEM, text="There was an error processing your request. Please try again.")
@@ -230,17 +235,19 @@ def chat_view(request):
                     return JsonResponse({'query': query, 'response': error_message.text})
                 finally:    # have the chatbot explain the results
                     if len(rows) <= 0:
-                        completion = client.chat.completions.create(
-                            model="gpt-3.5-turbo",
-                            messages=[{"role": "system", "content": f"Explain to the user that you could not find {resource_type if resource_type is not None else "the healthcare resource"} like they were looking for. Tell them that if they provide a resource type, you should be able to find the resources. If they include a city or a county, you should be able to find the resources in that area. If they just include a city or county, you can find all healthcare resources in that area."}],
-                        )
-                        ai_response = completion.choices[0].message.content
+                        response = client.models.generate_content(model='gemini-2.0-flash', contents=f"Explain to the user that you could not find {resource_type if resource_type is not None else "the healthcare resource"} like they were looking for. Tell them that if they provide a resource type, you should be able to find the resources. If they include a city or a county, you should be able to find the resources in that area. If they just include a city or county, you can find all healthcare resources in that area.")
+                        #completion = client.chat.completions.create(
+                            #model="gpt-3.5-turbo",
+                            #messages=[{"role": "system", "content": f"Explain to the user that you could not find {resource_type if resource_type is not None else "the healthcare resource"} like they were looking for. Tell them that if they provide a resource type, you should be able to find the resources. If they include a city or a county, you should be able to find the resources in that area. If they just include a city or county, you can find all healthcare resources in that area."}],
+                        #)
+                        ai_response = response.text#completion.choices[0].message.content
                     try:
-                        completion = client.chat.completions.create(
-                            model="gpt-3.5-turbo",
-                            messages=[{"role": "system", "content": f"Explain the following results of a PostgreSQL query as if you are telling the user about healthcare providers you found in Alabama. Do not mention anything related to SQL by name, including row ID values. Mention that you found {len(rows)} results matching the request. Output the first 20 results, at most. Preface each result with a number and period, starting with 1. Each {resource_type} found in {city} is in the following format:\n{columns_to_select}\nresults: {response_text}"}],
-                        )
-                        ai_response = completion.choices[0].message.content
+                        response = client.models.generate_content(model='gemini-2.0-flash', contents='Tell me a story in 300 words.')
+                        #completion = client.chat.completions.create(
+                            #model="gpt-3.5-turbo",
+                            #messages=[{"role": "system", "content": f"Explain the following results of a PostgreSQL query as if you are telling the user about healthcare providers you found in Alabama. Do not mention anything related to SQL by name, including row ID values. Mention that you found {len(rows)} results matching the request. Output the first 20 results, at most. Preface each result with a number and period, starting with 1. Each {resource_type} found in {city} is in the following format:\n{columns_to_select}\nresults: {response_text}"}],
+                        #)
+                        ai_response = response.text#completion.choices[0].message.content
                         # regex to find all instances of a number followed by a period and a space, and add a newline before each one
                         regex_pattern = r'(\d+\.\s)'
                         ai_response = re.sub(regex_pattern, r'<br>\1', ai_response)
@@ -250,11 +257,12 @@ def chat_view(request):
                         request.session['chat_history_ids'] = chat_history_ids + [error_message.id]
                         return JsonResponse({'query': query, 'response': error_message.text})
             elif ai_response.upper().find("SQL:") != -1:
-                completion = client.chat.completions.create(
-                    model="gpt-3.5-turbo",
-                    messages=[{"role": "system", "content": f"Explain to the user that you could not find the healthcare resource {resource_type if resource_type is not None else ''} they were looking for. Tell them that if they provide a resource type, you should be able to find the resources. If they include a city or a county, you should be able to find the resources in that area. If they just include a city or county, you can find all healthcare resources in that area."}],
-                )
-                ai_response = completion.choices[0].message.content
+                response = client.models.generate_content(model='gemini-2.0-flash', contents=f"Explain to the user that you could not find the healthcare resource {resource_type if resource_type is not None else ''} they were looking for. Tell them that if they provide a resource type, you should be able to find the resources. If they include a city or a county, you should be able to find the resources in that area. If they just include a city or county, you can find all healthcare resources in that area.")
+                #completion = client.chat.completions.create(
+                    #model="gpt-3.5-turbo",
+                    #messages=[{"role": "system", "content": f"Explain to the user that you could not find the healthcare resource {resource_type if resource_type is not None else ''} they were looking for. Tell them that if they provide a resource type, you should be able to find the resources. If they include a city or a county, you should be able to find the resources in that area. If they just include a city or county, you can find all healthcare resources in that area."}],
+                #)
+                ai_response = response.text#completion.choices[0].message.content
             
             # create Messages object for the AI response
             ai_message = Message.objects.create(message_type=MessageType.CHATBOT, text=ai_response)
